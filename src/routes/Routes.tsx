@@ -40,7 +40,7 @@ const Routes = () => {
   if (auth === null || showSplash) {
     return <SplashScreen />;
   }
-
+ 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
     {auth.user ? (

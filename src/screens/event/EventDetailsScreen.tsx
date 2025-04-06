@@ -97,8 +97,26 @@ const EventDetailsScreen = ({ route, navigation }: Props) => {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>{event.name}</Text>
-      <Text style={styles.detail}><Text style={styles.label}>Data:</Text> {event.day}</Text>
-      <Text style={styles.detail}><Text style={styles.label}>Horário:</Text> {event.startTime} - {event.endTime}</Text>
+      <Text style={styles.detail}>
+      <Text style={styles.label}>Data:</Text>{" "}
+      {new Date(event.day).toLocaleDateString("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })}
+      </Text>
+      <Text style={styles.detail}>
+      <Text style={styles.label}>Horário:</Text>{" "}
+        {new Date(`1970-01-01T${event.startTime}`).toLocaleTimeString("pt-BR", {
+          hour: "2-digit",
+          minute: "2-digit",
+        })}{" "}
+        -{" "}
+        {new Date(`1970-01-01T${event.endTime}`).toLocaleTimeString("pt-BR", {
+          hour: "2-digit",
+          minute: "2-digit",
+        })}
+      </Text>
       <Text style={styles.detail}><Text style={styles.label}>Tema:</Text> {event.theme}</Text>
       <Text style={styles.detail}><Text style={styles.label}>Público-alvo:</Text> {event.targetAudience}</Text>
       <Text style={styles.detail}><Text style={styles.label}>Modalidade:</Text> {event.mode}</Text>
@@ -116,8 +134,14 @@ const EventDetailsScreen = ({ route, navigation }: Props) => {
       <Text style={styles.detail}><Text style={styles.label}>Status:</Text> {event.status}</Text>
       <Text style={styles.detail}><Text style={styles.label}>Prioridade:</Text> {event.priority}</Text>
       <Text style={styles.detail}><Text style={styles.label}>Duração da Limpeza:</Text> {event.cleanupDuration}</Text>
-      <Text style={styles.detail}><Text style={styles.label}>Criado em:</Text> {new Date(event.createdAt).toLocaleString()}</Text>
-      <Text style={styles.detail}><Text style={styles.label}>Última Modificação:</Text> {new Date(event.lastModifiedAt).toLocaleString()}</Text>
+      <Text style={styles.detail}><Text style={styles.label}>Criado em:</Text> {new Date(event.createdAt).toLocaleString("pt-BR", {
+        timeZone: "America/Sao_Paulo",
+        hour12: false
+      })}</Text>
+      <Text style={styles.detail}><Text style={styles.label}>Última Modificação:</Text> {new Date(event.lastModifiedAt).toLocaleString("pt-BR", {
+        timeZone: "America/Sao_Paulo",
+        hour12: false
+      })}</Text>
       
       <View style={styles.buttonContainer}>
   <Button title="Editar Evento" onPress={() => navigation.navigate("EventEditForm", { eventId })} color="orange" />
