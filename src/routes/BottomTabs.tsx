@@ -3,10 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/HomeScreen";
 import EventScreen from "../screens/event/EventScreen";
 import CalendarScreen from "../screens/calendar/CalendarScreen";
-
-import HomeIcon from "../assets/icons/home.svg";
-import EventIcon from "../assets/icons/event.svg";
-import CalendarIcon from "../assets/icons/calendar.svg";
+import RemoteSvgIcon from "../components/RemoteSvgIcon";
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -21,14 +18,14 @@ const BottomTabs = () => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
-          let IconComponent = HomeIcon; 
+          let uri = "";
         
-          if (route.name === "Home") IconComponent = HomeIcon;
-          else if (route.name === "Events") IconComponent = EventIcon;
-          else if (route.name === "Calendar") IconComponent = CalendarIcon;
+          if (route.name === "Home") uri = "https://www.svgrepo.com/show/362110/house.svg";
+          else if (route.name === "Events") uri = "https://www.svgrepo.com/show/362044/bullhorn.svg";
+          else if (route.name === "Calendar") uri = "https://www.svgrepo.com/show/362042/calendar-clock.svg";
         
-          return <IconComponent width={size} height={size} fill={color} />;
-        },               
+          return <RemoteSvgIcon uri={uri} size={size} color={color} />;
+        },             
         headerShown: false,
       })}
     >
