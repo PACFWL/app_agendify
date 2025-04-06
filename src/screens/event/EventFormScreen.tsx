@@ -1,10 +1,13 @@
 import React, { useState, useContext } from "react";
-import { View, Text, TextInput, Button, Alert, ScrollView } from "react-native";
+import { View, Text, TextInput, Button, Alert, ScrollView, Platform, TouchableOpacity } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { AuthContext } from "../../contexts/AuthContext";
 import { createEvent } from "../../api/event";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../routes/Routes";
 import styles from "../../styles/EventFormScreenStyles";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 type Props = NativeStackScreenProps<RootStackParamList, "EventForm">;
 
@@ -36,17 +39,59 @@ const EventFormScreen = ({ navigation }: Props) => {
     observation: "",
   });
 
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showStartTimePicker, setShowStartTimePicker] = useState(false);
+  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
+  const [selectedDay, setSelectedDay] = useState<Date | null>(null);
+  
+  const handleDateChange = (_: any, selectedDate?: Date) => {
+    setShowDatePicker(false);
+    if (!selectedDate) return;
+  
+    setSelectedDay(selectedDate);
+    setEventData((prev) => ({
+      ...prev,
+      day: format(selectedDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR }),
+    }));
+  };
+  
+  const handleStartTimeChange = (_: any, selectedDate?: Date) => {
+    setShowStartTimePicker(false);
+    if (!selectedDate) return;
+  
+    setEventData((prev) => ({
+      ...prev,
+      startTime: format(selectedDate, "HH:mm"),
+    }));
+  };
+  
+  const handleEndTimeChange = (_: any, selectedDate?: Date) => {
+    setShowEndTimePicker(false);
+    if (!selectedDate) return;
+  
+    setEventData((prev) => ({
+      ...prev,
+      endTime: format(selectedDate, "HH:mm"),
+    }));
+  };  
+
+  const showPicker = (type: "date" | "start" | "end") => {
+    if (type === "date") setShowDatePicker(true);
+    else if (type === "start") setShowStartTimePicker(true);
+    else if (type === "end") setShowEndTimePicker(true);
+  };
+
   const handleChange = (field: string, value: string) => {
     setEventData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = async () => {
     if (!auth?.user) return;
-    
+  
     try {
       const formattedData = {
         ...eventData,
-        day: new Date(eventData.day).toISOString().split("T")[0],
+        day: selectedDay ? selectedDay.toISOString().split("T")[0] : "",
         startTime: eventData.startTime + ":00",
         endTime: eventData.endTime + ":00",
         resourcesDescription: eventData.resourcesDescription.split(","),
@@ -56,7 +101,7 @@ const EventFormScreen = ({ navigation }: Props) => {
         location: { name: eventData.locationName, floor: eventData.locationFloor },
         cleanupDuration: `PT${eventData.cleanupDuration}M`,
       };
-
+  
       await createEvent(auth.user.token, formattedData);
       Alert.alert("Sucesso", "Evento criado com sucesso!");
       navigation.goBack();
@@ -64,6 +109,7 @@ const EventFormScreen = ({ navigation }: Props) => {
       Alert.alert("Erro", "Erro ao criar evento.");
     }
   };
+  
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 30 }}>
@@ -72,16 +118,44 @@ const EventFormScreen = ({ navigation }: Props) => {
   
       <Text style={styles.label}>Nome:</Text>
       <TextInput style={styles.input} placeholder="Nome" onChangeText={(text) => handleChange("name", text)} />
-  
-      <Text style={styles.label}>Data (YYYY-MM-DD):</Text>
-      <TextInput style={styles.input} placeholder="Data" onChangeText={(text) => handleChange("day", text)} />
-  
-      <Text style={styles.label}>Horário de Início (HH:MM):</Text>
-      <TextInput style={styles.input} placeholder="Horário de Início" onChangeText={(text) => handleChange("startTime", text)} />
-  
-      <Text style={styles.label}>Horário de Término (HH:MM):</Text>
-      <TextInput style={styles.input} placeholder="Horário de Término" onChangeText={(text) => handleChange("endTime", text)} />
-  
+      <Text style={styles.label}>Data:</Text>
+            <TouchableOpacity onPress={() => showPicker("date")}>
+              <Text style={styles.input}>{eventData.day || "Selecionar data"}</Text>
+            </TouchableOpacity>
+            {showDatePicker && (
+              <DateTimePicker
+                mode="date"
+                display="default"
+                value={selectedDay ?? new Date()}
+                onChange={handleDateChange}
+              />
+            )}
+            <Text style={styles.label}>Horário de Início:</Text>
+            <TouchableOpacity onPress={() => showPicker("start")}>
+              <Text style={styles.input}>{eventData.startTime || "Selecionar horário"}</Text>
+            </TouchableOpacity>
+            {showStartTimePicker && (
+              <DateTimePicker
+                mode="time"
+                display="default"
+                value={new Date()}
+                onChange={handleStartTimeChange}
+                is24Hour={true}
+              />
+            )}
+            <Text style={styles.label}>Horário de Término:</Text>
+            <TouchableOpacity onPress={() => showPicker("end")}>
+              <Text style={styles.input}>{eventData.endTime || "Selecionar horário"}</Text>
+            </TouchableOpacity>
+            {showEndTimePicker && (
+              <DateTimePicker
+                mode="time"
+                display="default"
+                value={new Date()}
+                onChange={handleEndTimeChange}
+                is24Hour={true}
+              />
+            )}  
       <Text style={styles.label}>Tema:</Text>
       <TextInput style={styles.input} placeholder="Tema" onChangeText={(text) => handleChange("theme", text)} />
   
