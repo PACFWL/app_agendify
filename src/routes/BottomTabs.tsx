@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/HomeScreen";
 import EventScreen from "../screens/event/EventScreen";
 import CalendarScreen from "../screens/calendar/CalendarScreen";
+import PendingEventScreen from "../screens/pendingEvent/PendingEventScreen";
 import RemoteSvgIcon from "../components/RemoteSvgIcon";
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
@@ -11,6 +12,7 @@ export type BottomTabParamList = {
   Home: undefined;
   Events: undefined;
   Calendar: undefined;
+  PendingsEvents: undefined;
 };
 
 const BottomTabs = () => {
@@ -23,6 +25,7 @@ const BottomTabs = () => {
           if (route.name === "Home") uri = "https://www.svgrepo.com/show/362110/house.svg";
           else if (route.name === "Events") uri = "https://www.svgrepo.com/show/362044/bullhorn.svg";
           else if (route.name === "Calendar") uri = "https://www.svgrepo.com/show/362042/calendar-clock.svg";
+          else if (route.name === "PendingsEvents") uri = "https://www.svgrepo.com/show/434146/mailbox.svg";
         
           return <RemoteSvgIcon uri={uri} size={size} color={color} />;
         },             
@@ -43,6 +46,11 @@ const BottomTabs = () => {
           name="Calendar"
           component={CalendarScreen}
           options={{ title: "Calendário" }}
+        />
+        <Tab.Screen
+          name="PendingsEvents"
+          component={PendingEventScreen}
+          options={{ title: "Eventos Pendentes" }}
         />
     </Tab.Navigator>
   );

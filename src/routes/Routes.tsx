@@ -15,6 +15,7 @@ export type RootStackParamList = {
   Register: undefined;
   Home: undefined;
   Events: undefined;
+  PendingsEvents: undefined;
   EventDetails: { eventId: string };
   EventForm: { event?: any } | undefined;
   EventEditForm: { eventId: string };
