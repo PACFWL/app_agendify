@@ -25,14 +25,6 @@ const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.welcome}>Bem-vindo à Home!</Text>
-
-      <View style={styles.button}>
-      <Button title="Ver Eventos" onPress={() => navigation.navigate("Events")} />
-      </View>
-      <View style={styles.button}>
-      <Button title="Ver Calendário" onPress={() => navigation.navigate("Calendar")} />
-      </View>
-
       <View style={styles.button}>
         <Button title="Sair" onPress={handleSignOut} />
       </View>

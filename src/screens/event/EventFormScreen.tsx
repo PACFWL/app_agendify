@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { View, Text, TextInput, Button, Alert, ScrollView, Platform, TouchableOpacity } from "react-native";
+import { Text, TextInput, Button, Alert, ScrollView, TouchableOpacity } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { AuthContext } from "../../contexts/AuthContext";
 import { createEvent } from "../../api/event";
