@@ -136,13 +136,22 @@ const PendingEventScreen = () => {
           </TouchableOpacity>
         </View>
       )}
-
-      {!isMaster && (
-        <Text style={{ fontWeight: "bold", marginBottom: 16 }}>
-          Meus eventos pendentes
-        </Text>
-      )}
-
+          {!isMaster && (
+            <View style={{
+              backgroundColor: "#6200ee",
+              padding: 10,
+              borderRadius: 8,
+              marginBottom: 16,
+            }}>
+              <Text style={{
+                color: "#fff",
+                fontWeight: "bold",
+                textAlign: "center",
+              }}>
+                Meus eventos pendentes
+              </Text>
+            </View>
+          )}
       {renderList()}
     </View>
   );
