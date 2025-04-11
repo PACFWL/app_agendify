@@ -6,7 +6,7 @@ import { login } from "../api/auth";
 
 type UserType = {
   token: string;
-  role: "MASTER" | "REQUESTER";
+  role: "MASTER" | "REQUESTER" | "USER";
 };
 
 type AuthContextType = {
@@ -31,9 +31,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       const role = await AsyncStorage.getItem("role");
       console.log("🔹 Token armazenado:", token);
       console.log("🔹 Role armazenada:", role);
-      if (token && role) {
-        setUser({ token, role: role as "MASTER" | "REQUESTER" });
-      }
+      if (token && role && ["MASTER", "REQUESTER", "USER"].includes(role)) {
+        setUser({ token, role: role as "MASTER" | "REQUESTER" | "USER" });
+      }      
       setLoading(false);
     };
     loadUser();

@@ -81,9 +81,12 @@ const EventScreen = ({ navigation }: Props) => {
           </View>
         )}
       />
-        <Button
+          {auth?.user?.role === "MASTER" && (
+            <Button
               title="Criar um Evento"
-              onPress={() => navigation.navigate("EventForm")}/>
+              onPress={() => navigation.navigate("EventForm")}
+            />
+          )}
     </View>
   );
 };

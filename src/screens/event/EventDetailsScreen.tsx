@@ -142,12 +142,23 @@ const EventDetailsScreen = ({ route, navigation }: Props) => {
         timeZone: "America/Sao_Paulo",
         hour12: false
       })}</Text>
-      
-      <View style={styles.buttonContainer}>
-  <Button title="Editar Evento" onPress={() => navigation.navigate("EventEditForm", { eventId })} color="orange" />
-  <Button title="Voltar" onPress={() => navigation.goBack()} color="#6200ee" />
-  <Button title="Deletar Evento" onPress={handleDelete} color="red" />
-</View>
+        <View style={styles.buttonContainer}>
+          {auth?.user?.role === "MASTER" && (
+            <>
+              <Button
+                title="Editar Evento"
+                onPress={() => navigation.navigate("EventEditForm", { eventId })}
+                color="orange"
+              />
+              <Button
+                title="Deletar Evento"
+                onPress={handleDelete}
+                color="red"
+              />
+            </>
+          )}
+          <Button title="Voltar" onPress={() => navigation.goBack()} color="#6200ee" />
+        </View>
     </ScrollView>
   );
 };

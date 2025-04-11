@@ -50,7 +50,9 @@ const CalendarScreen = () => {
     setMarkedDates(marks);
   };
 
-  const eventsForSelectedDate = events.filter((event) => event.day === selectedDate);
+  const eventsForSelectedDate = events
+  .filter((event) => event.day === selectedDate)
+  .sort((a, b) => a.startTime.localeCompare(b.startTime));
 
   return (
     <View style={styles.container}>
