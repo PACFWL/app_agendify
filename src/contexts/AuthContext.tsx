@@ -3,8 +3,14 @@ import { View, Text, ActivityIndicator } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { login } from "../api/auth";
 
+
+type UserType = {
+  token: string;
+  role: "MASTER" | "REQUESTER";
+};
+
 type AuthContextType = {
-  user: { token: string } | null;
+  user: UserType | null;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
 };
@@ -16,26 +22,33 @@ type AuthProviderProps = {
 };
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [user, setUser] = useState<{ token: string } | null>(null);
+  const [user, setUser] = useState<UserType | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadUser = async () => {
       const token = await AsyncStorage.getItem("token");
-      if (token) setUser({ token });
+      const role = await AsyncStorage.getItem("role");
+      console.log("🔹 Token armazenado:", token);
+      console.log("🔹 Role armazenada:", role);
+      if (token && role) {
+        setUser({ token, role: role as "MASTER" | "REQUESTER" });
+      }
       setLoading(false);
     };
     loadUser();
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    const data = await login(email, password);
+    const data = await login(email, password); 
+    console.log("🔹 Dados retornados do backend:", data);
     await AsyncStorage.setItem("token", data.token);
+    await AsyncStorage.setItem("role", data.role);
     setUser(data);
   };
 
   const signOut = async () => {
-    await AsyncStorage.removeItem("token");
+    await AsyncStorage.multiRemove(["token", "role"]);
     setUser(null);
   };
 

@@ -5,7 +5,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../routes/Routes";
 import styles from "../../styles/LoginScreenStyles";
 
-type Props = NativeStackScreenProps<RootStackParamList, "Login">;
+type Props = NativeStackScreenProps<RootStackParamList, "Login">;    
 
 const LoginScreen = ({ navigation }: Props) => {
   const auth = useContext(AuthContext);

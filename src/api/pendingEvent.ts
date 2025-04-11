@@ -27,7 +27,7 @@ export const getAllPendingEvents = async (token: string) => {
 };
 
 export const getMyPendingEvents = async (token: string) => {
-  const response = await fetch(`${API_URL}/pending-events/my-requests`, {
+  const response = await fetch(`${API_URL}/pending-events/my-pending-events`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
