@@ -25,9 +25,6 @@ const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.welcome}>Bem-vindo à Home!</Text>
-      <View style={styles.button}>
-        <Button title="Sair" onPress={handleSignOut} />
-      </View>
     </View>
   );
 };
