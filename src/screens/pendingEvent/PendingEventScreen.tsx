@@ -3,6 +3,9 @@ import {View,Text,FlatList,ActivityIndicator,Alert,TouchableOpacity} from "react
 import { AuthContext } from "../../contexts/AuthContext";
 import {getAllPendingEvents,getMyPendingEvents} from "../../api/pendingEvent";
 import styles from "../../styles/PendingEventScreenStyles";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../routes/Routes";
 
 type PendingEvent = {
   id: string;
@@ -14,14 +17,22 @@ type PendingEvent = {
   organizer: string;
 };
 
-const EventCard = ({ event }: { event: PendingEvent }) => (
-  <View style={styles.eventCard}>
-    <Text style={styles.eventName}>{event.name}</Text>
-    <Text>{`Data: ${event.day} - ${event.startTime} às ${event.endTime}`}</Text>
-    <Text>{`Tema: ${event.theme}`}</Text>
-    <Text>{`Organizador: ${event.organizer}`}</Text>
-  </View>
-);
+const EventCard = ({ event }: { event: PendingEvent }) => {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  return (
+    <TouchableOpacity
+      onPress={() => navigation.navigate("PendingEventDetails", { eventId: event.id })}
+      style={styles.eventCard}
+    >
+      <Text style={styles.eventName}>{event.name}</Text>
+      <Text>{`Data: ${event.day} - ${event.startTime} às ${event.endTime}`}</Text>
+      <Text>{`Tema: ${event.theme}`}</Text>
+      <Text>{`Organizador: ${event.organizer}`}</Text>
+    </TouchableOpacity>
+  );
+};
+
 
 const Loading = () => (
   <View style={styles.loadingContainer}>
