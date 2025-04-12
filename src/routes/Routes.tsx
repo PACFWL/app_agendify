@@ -7,6 +7,7 @@ import SplashScreen from "../screens/SplashScreen";
 import EventDetailsScreen from "../screens/event/EventDetailsScreen";
 import EventFormScreen from "../screens/event/EventFormScreen";
 import EventEditFormScreen from "../screens/event/EventEditFormScreen";
+import UserDetailsScreen from "../screens/user/UserDetailsScreen";
 import BottomTabs from "./BottomTabs";
 import PendingEventDetailsScreen from "../screens/pendingEvent/PendingEventDetailsScreen";
 
@@ -21,6 +22,7 @@ export type RootStackParamList = {
   EventDetails: { eventId: string };
   EventForm: { event?: any } | undefined;
   EventEditForm: { eventId: string };
+  UserDetails: { userId: string };
   Calendar: undefined;
   Tabs: undefined;
 };
@@ -52,6 +54,7 @@ const Routes = () => {
     <Stack.Screen name="EventForm" component={EventFormScreen} />
     <Stack.Screen name="EventEditForm" component={EventEditFormScreen} />
     <Stack.Screen name="PendingEventDetails" component={PendingEventDetailsScreen} />
+    <Stack.Screen name="UserDetails" component={UserDetailsScreen} />
   </>
 ) : (
   <>
