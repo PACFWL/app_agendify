@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import {View,Text,FlatList,ActivityIndicator,Alert,TouchableOpacity} from "react-native";
 import { AuthContext } from "../../contexts/AuthContext";
-import {getAllPendingEvents,getMyPendingEvents} from "../../api/pendingEvent";
+import { getAllPendingEvents, getMyPendingEvents} from "../../api/pendingEvent";
 import styles from "../../styles/PendingEventScreenStyles";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -18,11 +18,14 @@ type PendingEvent = {
 };
 
 const EventCard = ({ event }: { event: PendingEvent }) => {
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate("PendingEventDetails", { eventId: event.id })}
+      onPress={() =>
+        navigation.navigate("PendingEventDetails", { eventId: event.id })
+      }
       style={styles.eventCard}
     >
       <Text style={styles.eventName}>{event.name}</Text>
@@ -32,7 +35,6 @@ const EventCard = ({ event }: { event: PendingEvent }) => {
     </TouchableOpacity>
   );
 };
-
 
 const Loading = () => (
   <View style={styles.loadingContainer}>
@@ -89,7 +91,6 @@ const PendingEventScreen = () => {
 
   const renderList = () => {
     if (loading) return <Loading />;
-
     const data = activeTab === "my" ? myEvents : allEvents;
 
     return (
@@ -106,63 +107,57 @@ const PendingEventScreen = () => {
       <Text style={styles.title}>Eventos Pendentes</Text>
 
       {isMaster && (
-        <View style={{ flexDirection: "row", marginBottom: 16 }}>
+        <View style={styles.tabContainer}>
           <TouchableOpacity
             onPress={() => setActiveTab("my")}
-            style={{
-              flex: 1,
-              backgroundColor: activeTab === "my" ? "#6200ee" : "#e0e0e0",
-              padding: 10,
-              borderTopLeftRadius: 8,
-              borderBottomLeftRadius: 8,
-            }}
+            style={[
+              styles.tabButton,
+              styles.tabButtonLeft,
+              activeTab === "my"
+                ? styles.tabButtonActive
+                : styles.tabButtonInactive,
+            ]}
           >
             <Text
-              style={{
-                color: activeTab === "my" ? "#fff" : "#000",
-                textAlign: "center",
-              }}
+              style={
+                activeTab === "my"
+                  ? styles.tabButtonTextActive
+                  : styles.tabButtonTextInactive
+              }
             >
               Meus eventos
             </Text>
           </TouchableOpacity>
+
           <TouchableOpacity
             onPress={() => setActiveTab("all")}
-            style={{
-              flex: 1,
-              backgroundColor: activeTab === "all" ? "#6200ee" : "#e0e0e0",
-              padding: 10,
-              borderTopRightRadius: 8,
-              borderBottomRightRadius: 8,
-            }}
+            style={[
+              styles.tabButton,
+              styles.tabButtonRight,
+              activeTab === "all"
+                ? styles.tabButtonActive
+                : styles.tabButtonInactive,
+            ]}
           >
             <Text
-              style={{
-                color: activeTab === "all" ? "#fff" : "#000",
-                textAlign: "center",
-              }}
+              style={
+                activeTab === "all"
+                  ? styles.tabButtonTextActive
+                  : styles.tabButtonTextInactive
+              }
             >
               Todos os eventos
             </Text>
           </TouchableOpacity>
         </View>
       )}
-          {!isMaster && (
-            <View style={{
-              backgroundColor: "#6200ee",
-              padding: 10,
-              borderRadius: 8,
-              marginBottom: 16,
-            }}>
-              <Text style={{
-                color: "#fff",
-                fontWeight: "bold",
-                textAlign: "center",
-              }}>
-                Meus eventos pendentes
-              </Text>
-            </View>
-          )}
+
+      {!isMaster && (
+        <View style={styles.myEventsHeader}>
+          <Text style={styles.myEventsHeaderText}>Meus eventos pendentes</Text>
+        </View>
+      )}
+
       {renderList()}
     </View>
   );

@@ -54,6 +54,7 @@ const Routes = () => {
     <Stack.Screen name="EventForm" component={EventFormScreen} />
     <Stack.Screen name="EventEditForm" component={EventEditFormScreen} />
     <Stack.Screen name="PendingEventDetails" component={PendingEventDetailsScreen} />
+   
     <Stack.Screen name="UserDetails" component={UserDetailsScreen} />
   </>
 ) : (

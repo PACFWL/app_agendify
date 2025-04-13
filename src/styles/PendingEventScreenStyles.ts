@@ -29,4 +29,45 @@ export default StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 4,
   },
+  tabContainer: {
+    flexDirection: "row",
+    marginBottom: 16,
+  },
+  tabButton: {
+    flex: 1,
+    padding: 10,
+  },
+  tabButtonLeft: {
+    borderTopLeftRadius: 8,
+    borderBottomLeftRadius: 8,
+  },
+  tabButtonRight: {
+    borderTopRightRadius: 8,
+    borderBottomRightRadius: 8,
+  },
+  tabButtonActive: {
+    backgroundColor: "#6200ee",
+  },
+  tabButtonInactive: {
+    backgroundColor: "#e0e0e0",
+  },
+  tabButtonTextActive: {
+    color: "#fff",
+    textAlign: "center",
+  },
+  tabButtonTextInactive: {
+    color: "#000",
+    textAlign: "center",
+  },
+  myEventsHeader: {
+    backgroundColor: "#6200ee",
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 16,
+  },
+  myEventsHeaderText: {
+    color: "#fff",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
 });
