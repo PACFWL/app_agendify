@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext,useCallback } from "react";
 import {View,Text,FlatList,ActivityIndicator,Alert,TouchableOpacity} from "react-native";
 import { AuthContext } from "../../contexts/AuthContext";
 import { getAllPendingEvents, getMyPendingEvents} from "../../api/pendingEvent";
 import styles from "../../styles/PendingEventScreenStyles";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation,useFocusEffect } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../routes/Routes";
 
@@ -49,6 +49,7 @@ const PendingEventScreen = () => {
   const [allEvents, setAllEvents] = useState<PendingEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"my" | "all">("my");
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   if (!auth?.user) {
     return (
@@ -79,15 +80,18 @@ const PendingEventScreen = () => {
     }
   };
 
-  useEffect(() => {
-    const load = async () => {
-      setLoading(true);
-      await fetchMyEvents();
-      if (isMaster) await fetchAllEvents();
-      setLoading(false);
-    };
-    load();
-  }, [user]);
+  useFocusEffect(
+    useCallback(() => {
+      const load = async () => {
+        setLoading(true);
+        await fetchMyEvents();
+        if (isMaster) await fetchAllEvents();
+        setLoading(false);
+      };
+
+      load();
+    }, [user])
+  );
 
   const renderList = () => {
     if (loading) return <Loading />;
@@ -159,6 +163,16 @@ const PendingEventScreen = () => {
       )}
 
       {renderList()}
+
+      {(user.role === "MASTER" || user.role === "REQUESTER") && (
+  <TouchableOpacity
+    style={styles.createButton}
+    onPress={() => navigation.navigate("PendingEventForm")}
+  >
+    <Text style={styles.createButtonText}>+ Criar Evento Pendente</Text>
+  </TouchableOpacity>
+)}
+
     </View>
   );
 };

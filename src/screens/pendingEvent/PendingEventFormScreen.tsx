@@ -1,0 +1,222 @@
+import React, { useState, useContext } from "react";
+import { Text, TextInput, Button, Alert, ScrollView, TouchableOpacity } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { AuthContext } from "../../contexts/AuthContext";
+import { createPendingEvent } from "../../api/pendingEvent";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../routes/Routes";
+import styles from "../../styles/EventFormScreenStyles";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+
+type Props = NativeStackScreenProps<RootStackParamList, "PendingEventForm">;
+
+const PendingEventFormScreen = ({ navigation }: Props) => {
+  const auth = useContext(AuthContext);
+
+  const [eventData, setEventData] = useState({
+    name: "",
+    day: "",
+    startTime: "",
+    endTime: "",
+    theme: "",
+    targetAudience: "",
+    mode: "",
+    environment: "",
+    organizer: "",
+    resourcesDescription: "",
+    disclosureMethod: "",
+    relatedSubjects: "",
+    teachingStrategy: "",
+    authors: "",
+    courses: "",
+    disciplinaryLink: "",
+    locationName: "",
+    locationFloor: "",
+    status: "",
+    priority: "",
+    cleanupDuration: "",
+    observation: "",
+    eventRequesterId: "",
+  });
+
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showStartTimePicker, setShowStartTimePicker] = useState(false);
+  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
+  const [selectedDay, setSelectedDay] = useState<Date | null>(null);
+
+  const handleDateChange = (_: any, selectedDate?: Date) => {
+    setShowDatePicker(false);
+    if (!selectedDate) return;
+
+    setSelectedDay(selectedDate);
+    setEventData((prev) => ({
+      ...prev,
+      day: format(selectedDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR }),
+    }));
+  };
+
+  const handleStartTimeChange = (_: any, selectedDate?: Date) => {
+    setShowStartTimePicker(false);
+    if (!selectedDate) return;
+
+    setEventData((prev) => ({
+      ...prev,
+      startTime: format(selectedDate, "HH:mm"),
+    }));
+  };
+
+  const handleEndTimeChange = (_: any, selectedDate?: Date) => {
+    setShowEndTimePicker(false);
+    if (!selectedDate) return;
+
+    setEventData((prev) => ({
+      ...prev,
+      endTime: format(selectedDate, "HH:mm"),
+    }));
+  };
+
+  const showPicker = (type: "date" | "start" | "end") => {
+    if (type === "date") setShowDatePicker(true);
+    else if (type === "start") setShowStartTimePicker(true);
+    else if (type === "end") setShowEndTimePicker(true);
+  };
+
+  const handleChange = (field: string, value: string) => {
+    setEventData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = async () => {
+    if (!auth?.user) return;
+
+    try {
+      const formattedData = {
+        ...eventData,
+        day: selectedDay ? selectedDay.toISOString().split("T")[0] : "",
+        startTime: eventData.startTime + ":00",
+        endTime: eventData.endTime + ":00",
+        resourcesDescription: eventData.resourcesDescription.split(","),
+        relatedSubjects: eventData.relatedSubjects.split(","),
+        authors: eventData.authors.split(","),
+        courses: eventData.courses.split(","),
+        location: { name: eventData.locationName, floor: eventData.locationFloor },
+        cleanupDuration: `PT${eventData.cleanupDuration}M`,
+        eventRequesterId: auth.user.id,
+      };
+
+      await createPendingEvent(auth.user.token, formattedData);
+      Alert.alert("Sucesso", "Evento pendente criado com sucesso!");
+      navigation.goBack();
+    } catch (error) {
+      Alert.alert("Erro", "Erro ao criar evento pendente.");
+    }
+  };
+
+  return (
+    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 30 }}>
+      <Text style={styles.title}>Criar Evento Pendente</Text>
+
+      <Text style={styles.label}>Nome:</Text>
+      <TextInput style={styles.input} placeholder="Nome" onChangeText={(text) => handleChange("name", text)} />
+
+      <Text style={styles.label}>Data:</Text>
+      <TouchableOpacity onPress={() => showPicker("date")}>
+        <Text style={styles.input}>{eventData.day || "Selecionar data"}</Text>
+      </TouchableOpacity>
+      {showDatePicker && (
+        <DateTimePicker
+          mode="date"
+          display="default"
+          value={selectedDay ?? new Date()}
+          onChange={handleDateChange}
+        />
+      )}
+
+      <Text style={styles.label}>Horário de Início:</Text>
+      <TouchableOpacity onPress={() => showPicker("start")}>
+        <Text style={styles.input}>{eventData.startTime || "Selecionar horário"}</Text>
+      </TouchableOpacity>
+      {showStartTimePicker && (
+        <DateTimePicker
+          mode="time"
+          display="default"
+          value={new Date()}
+          onChange={handleStartTimeChange}
+          is24Hour
+        />
+      )}
+
+      <Text style={styles.label}>Horário de Término:</Text>
+      <TouchableOpacity onPress={() => showPicker("end")}>
+        <Text style={styles.input}>{eventData.endTime || "Selecionar horário"}</Text>
+      </TouchableOpacity>
+      {showEndTimePicker && (
+        <DateTimePicker
+          mode="time"
+          display="default"
+          value={new Date()}
+          onChange={handleEndTimeChange}
+          is24Hour
+        />
+      )}
+
+      <Text style={styles.label}>Tema:</Text>
+      <TextInput style={styles.input} placeholder="Tema" onChangeText={(text) => handleChange("theme", text)} />
+
+      <Text style={styles.label}>Público-alvo:</Text>
+      <TextInput style={styles.input} placeholder="Público-alvo" onChangeText={(text) => handleChange("targetAudience", text)} />
+
+      <Text style={styles.label}>Modalidade:</Text>
+      <TextInput style={styles.input} placeholder="Modalidade" onChangeText={(text) => handleChange("mode", text)} />
+
+      <Text style={styles.label}>Ambiente:</Text>
+      <TextInput style={styles.input} placeholder="Ambiente" onChangeText={(text) => handleChange("environment", text)} />
+
+      <Text style={styles.label}>Organizador:</Text>
+      <TextInput style={styles.input} placeholder="Organizador" onChangeText={(text) => handleChange("organizer", text)} />
+
+      <Text style={styles.label}>Recursos (separados por vírgula):</Text>
+      <TextInput style={styles.input} placeholder="Recursos" onChangeText={(text) => handleChange("resourcesDescription", text)} />
+
+      <Text style={styles.label}>Forma de Divulgação:</Text>
+      <TextInput style={styles.input} placeholder="Forma de Divulgação" onChangeText={(text) => handleChange("disclosureMethod", text)} />
+
+      <Text style={styles.label}>Disciplinas Relacionadas (separadas por vírgula):</Text>
+      <TextInput style={styles.input} placeholder="Disciplinas" onChangeText={(text) => handleChange("relatedSubjects", text)} />
+
+      <Text style={styles.label}>Estratégia de Ensino:</Text>
+      <TextInput style={styles.input} placeholder="Estratégia de Ensino" onChangeText={(text) => handleChange("teachingStrategy", text)} />
+
+      <Text style={styles.label}>Autores (separados por vírgula):</Text>
+      <TextInput style={styles.input} placeholder="Autores" onChangeText={(text) => handleChange("authors", text)} />
+
+      <Text style={styles.label}>Cursos (separados por vírgula):</Text>
+      <TextInput style={styles.input} placeholder="Cursos" onChangeText={(text) => handleChange("courses", text)} />
+
+      <Text style={styles.label}>Vínculo Disciplinar:</Text>
+      <TextInput style={styles.input} placeholder="Vínculo Disciplinar" onChangeText={(text) => handleChange("disciplinaryLink", text)} />
+
+      <Text style={styles.label}>Local do Evento:</Text>
+      <TextInput style={styles.input} placeholder="Local" onChangeText={(text) => handleChange("locationName", text)} />
+
+      <Text style={styles.label}>Andar do Local:</Text>
+      <TextInput style={styles.input} placeholder="Andar" onChangeText={(text) => handleChange("locationFloor", text)} />
+
+      <Text style={styles.label}>Status do Evento:</Text>
+      <TextInput style={styles.input} placeholder="Status" onChangeText={(text) => handleChange("status", text)} />
+
+      <Text style={styles.label}>Prioridade:</Text>
+      <TextInput style={styles.input} placeholder="Prioridade" onChangeText={(text) => handleChange("priority", text)} />
+
+      <Text style={styles.label}>Duração da Limpeza (minutos):</Text>
+      <TextInput style={styles.input} placeholder="Duração da Limpeza" onChangeText={(text) => handleChange("cleanupDuration", text)} />
+
+      <Text style={styles.label}>Observação:</Text>
+      <TextInput style={styles.input} placeholder="Observação" onChangeText={(text) => handleChange("observation", text)} />
+
+      <Button title="Criar Evento Pendente" onPress={handleSubmit} />
+    </ScrollView>
+  );
+};
+
+export default PendingEventFormScreen;

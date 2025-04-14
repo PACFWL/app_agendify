@@ -5,6 +5,7 @@ import { login } from "../api/auth";
 
 
 type UserType = {
+  id: string;
   token: string;
   role: "MASTER" | "REQUESTER" | "USER";
 };
@@ -31,9 +32,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       const role = await AsyncStorage.getItem("role");
       console.log("🔹 Token armazenado:", token);
       console.log("🔹 Role armazenada:", role);
-      if (token && role && ["MASTER", "REQUESTER", "USER"].includes(role)) {
-        setUser({ token, role: role as "MASTER" | "REQUESTER" | "USER" });
-      }      
+      const id = await AsyncStorage.getItem("id");
+      if (token && role && id && ["MASTER", "REQUESTER", "USER"].includes(role)) {
+        setUser({ id, token, role: role as "MASTER" | "REQUESTER" | "USER" });
+      }            
       setLoading(false);
     };
     loadUser();

@@ -1,10 +1,11 @@
+
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
   container: {
-    flex: 1,
     padding: 20,
     backgroundColor: "#fff",
+    flexGrow: 1,
   },
   title: {
     fontSize: 22,
@@ -18,15 +19,16 @@ export default StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 8,
     padding: 12,
-    marginBottom: 12,
+    marginBottom: 15,
   },
-  button: {
+  submitButton: {
     backgroundColor: "#6200ee",
     padding: 15,
     borderRadius: 8,
     alignItems: "center",
+    marginTop: 10,
   },
-  buttonText: {
+  submitButtonText: {
     color: "#fff",
     fontWeight: "bold",
   },

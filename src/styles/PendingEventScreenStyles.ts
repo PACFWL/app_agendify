@@ -70,4 +70,26 @@ export default StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
+  createButton: {
+    backgroundColor: "#6200ee",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 10,
+    marginHorizontal: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  
+  createButtonText: {
+    color: "#ffffff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  
 });
