@@ -1,8 +1,8 @@
 
 import React, { useEffect, useState, useContext } from "react";
-import { View, Text, ActivityIndicator, Alert, ScrollView } from "react-native";
+import { View, Text, ActivityIndicator, Alert, ScrollView, Button } from "react-native";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { getPendingEventById } from "../../api/pendingEvent";
+import { getPendingEventById,deletePendingEvent } from "../../api/pendingEvent";
 import { AuthContext } from "../../contexts/AuthContext";
 import { RootStackParamList } from "../../routes/Routes";
 import styles from "../../styles/PendingEventDetailsScreenStyles";
@@ -81,6 +81,24 @@ const PendingEventDetailsScreen = () => {
   
     fetchRequester();
   }, [pendingEvent?.eventRequesterId]);
+
+  const handleDelete = async () => {
+    if (!auth?.user) {
+      Alert.alert("Erro", "Usuário não autenticado.");
+      return;
+    }
+  
+    try {
+      await deletePendingEvent(auth.user.token, eventId);
+      Alert.alert("Sucesso", "Evento deletado com sucesso!", [
+        { text: "OK", onPress: () => navigation.goBack() },
+      ]);
+    } catch (error) {
+      Alert.alert("Erro", "Erro ao deletar evento.");
+    }
+  };
+  
+  
 
   if (loading) {
     return (
@@ -212,6 +230,25 @@ const PendingEventDetailsScreen = () => {
           })}
         </Text>
       </View>
+
+      <View style={styles.buttonContainer}>
+      {auth?.user?.role && ["MASTER", "REQUESTER"].includes(auth.user.role) && (
+  <>
+     <Button
+      title="Editar Evento"
+      onPress={() => navigation.navigate("PendingEventEditForm", { eventId })}
+      color="orange"
+    />
+    <Button
+      title="Deletar Evento"
+      onPress={handleDelete}
+      color="red"
+    />
+  </>
+)}
+  <Button title="Voltar" onPress={() => navigation.goBack()} color="#6200ee" />
+</View>
+
     </ScrollView>
   );
 };

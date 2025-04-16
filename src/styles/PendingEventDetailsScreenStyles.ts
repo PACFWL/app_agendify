@@ -48,5 +48,13 @@ export default StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 2,
   },
-
+  buttonContainer: {
+    marginTop: 20,
+    paddingHorizontal: 16,
+    gap: 10,
+  },
+  buttonWrapper: {
+    marginBottom: 10,
+  },
+  
 });

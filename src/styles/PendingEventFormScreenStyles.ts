@@ -32,4 +32,10 @@ export default StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
   },
+  label: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 5,
+    color: "#333",
+  },
 });

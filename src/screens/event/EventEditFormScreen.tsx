@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, TextInput, Button, Alert, ScrollView } from "react-native";
+import { Text, TextInput, Button, Alert, ScrollView } from "react-native";
 import { AuthContext } from "../../contexts/AuthContext";
 import { getEventById, updateEvent } from "../../api/event";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../routes/Routes";
 import styles from "../../styles/EventFormScreenStyles";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { TouchableOpacity } from "react-native";
 
 type Props = NativeStackScreenProps<RootStackParamList, "EventEditForm">;
 
@@ -37,6 +41,13 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
     observation: "",
   });
 
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showStartTimePicker, setShowStartTimePicker] = useState(false);
+  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
+  const [selectedDay, setSelectedDay] = useState<Date | null>(null);
+  const [startTimeDate, setStartTimeDate] = useState<Date | null>(null);
+  const [endTimeDate, setEndTimeDate] = useState<Date | null>(null);
+  
   useEffect(() => {
     const fetchEvent = async () => {
       if (!auth?.user) return;
@@ -45,9 +56,9 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
         const event = await getEventById(auth.user.token, eventId);
         setEventData({
           name: event.name,
-          day: event.day,
-          startTime: event.startTime.slice(0, 5),
-          endTime: event.endTime.slice(0, 5),
+          day: format(new Date(event.day), "dd 'de' MMMM 'de' yyyy", { locale: ptBR }),
+          startTime: format(new Date(`${event.day}T${event.startTime}`), "HH:mm"),
+          endTime: format(new Date(`${event.day}T${event.endTime}`), "HH:mm"),
           theme: event.theme,
           targetAudience: event.targetAudience,
           mode: event.mode,
@@ -67,6 +78,12 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
           cleanupDuration: event.cleanupDuration.replace("PT", "").replace("M", ""),
           observation: event.observation,
         });
+
+        setSelectedDay(new Date(event.day));
+        setStartTimeDate(new Date(`${event.day}T${event.startTime}`));
+        setEndTimeDate(new Date(`${event.day}T${event.endTime}`));
+
+
       } catch (error) {
         Alert.alert("Erro", "Erro ao carregar evento.");
       }
@@ -74,6 +91,27 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
 
     fetchEvent();
   }, [auth, eventId]);
+
+  const handleDateChange = (_: any, selectedDate?: Date) => {
+    setShowDatePicker(false);
+    if (!selectedDate) return;
+    setSelectedDay(selectedDate);
+    handleChange("day", format(selectedDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR }));
+  };
+  
+  const handleStartTimeChange = (_: any, selectedDate?: Date) => {
+    setShowStartTimePicker(false);
+    if (!selectedDate) return;
+    setStartTimeDate(selectedDate);
+    handleChange("startTime", format(selectedDate, "HH:mm"));
+  };
+  
+  const handleEndTimeChange = (_: any, selectedDate?: Date) => {
+    setShowEndTimePicker(false);
+    if (!selectedDate) return;
+    setEndTimeDate(selectedDate);
+    handleChange("endTime", format(selectedDate, "HH:mm"));
+  };
 
   const handleChange = (field: string, value: string) => {
     setEventData((prev) => ({ ...prev, [field]: value }));
@@ -85,9 +123,9 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
     try {
       const formattedData = {
         ...eventData,
-        day: new Date(eventData.day).toISOString().split("T")[0],
-        startTime: eventData.startTime + ":00",
-        endTime: eventData.endTime + ":00",
+        day: selectedDay ? selectedDay.toISOString().split("T")[0] : "",
+        startTime: startTimeDate ? format(startTimeDate, "HH:mm:ss") : eventData.startTime + ":00",
+        endTime: endTimeDate ? format(endTimeDate, "HH:mm:ss") : eventData.endTime + ":00",        
         resourcesDescription: eventData.resourcesDescription.split(","),
         relatedSubjects: eventData.relatedSubjects.split(","),
         authors: eventData.authors.split(","),
@@ -111,14 +149,46 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
       <Text style={styles.label}>Nome:</Text>
       <TextInput style={styles.input} value={eventData.name} placeholder="Nome" onChangeText={(text) => handleChange("name", text)} />
 
-      <Text style={styles.label}>Data (YYYY-MM-DD):</Text>
-      <TextInput style={styles.input} value={eventData.day} placeholder="Data" onChangeText={(text) => handleChange("day", text)} />
+      <Text style={styles.label}>Data:</Text>
+      <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+        <Text style={styles.input}>{eventData.day || "Selecionar data"}</Text>
+      </TouchableOpacity>
+      {showDatePicker && (
+        <DateTimePicker
+          mode="date"
+          display="default"
+          value={selectedDay ?? new Date()}
+          onChange={handleDateChange}
+        />
+      )}
 
-      <Text style={styles.label}>Horário de Início (HH:MM):</Text>
-      <TextInput style={styles.input} value={eventData.startTime} placeholder="Horário de Início" onChangeText={(text) => handleChange("startTime", text)} />
+      <Text style={styles.label}>Horário de Início:</Text>
+      <TouchableOpacity onPress={() => setShowStartTimePicker(true)}>
+        <Text style={styles.input}>{eventData.startTime || "Selecionar horário"}</Text>
+      </TouchableOpacity>
+      {showStartTimePicker && (
+        <DateTimePicker
+          mode="time"
+          display="default"
+          value={startTimeDate ?? new Date()}
+          onChange={handleStartTimeChange}
+          is24Hour={true}
+        />
+      )}
 
-      <Text style={styles.label}>Horário de Término (HH:MM):</Text>
-      <TextInput style={styles.input} value={eventData.endTime} placeholder="Horário de Término" onChangeText={(text) => handleChange("endTime", text)} />
+      <Text style={styles.label}>Horário de Término:</Text>
+      <TouchableOpacity onPress={() => setShowEndTimePicker(true)}>
+        <Text style={styles.input}>{eventData.endTime || "Selecionar horário"}</Text>
+      </TouchableOpacity>
+      {showEndTimePicker && (
+        <DateTimePicker
+          mode="time"
+          display="default"
+          value={endTimeDate ?? new Date()}
+          onChange={handleEndTimeChange}
+          is24Hour={true}
+        />
+      )}
 
       <Text style={styles.label}>Tema:</Text>
       <TextInput style={styles.input} value={eventData.theme} placeholder="Tema" onChangeText={(text) => handleChange("theme", text)} />
