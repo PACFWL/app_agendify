@@ -1,5 +1,4 @@
-
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext,useCallback } from "react";
 import { View, Text, ActivityIndicator, Alert, ScrollView, Button } from "react-native";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { getPendingEventById,deletePendingEvent } from "../../api/pendingEvent";
@@ -9,6 +8,7 @@ import styles from "../../styles/PendingEventDetailsScreenStyles";
 import { getUserById } from "../../api/user"; 
 import { useNavigation } from "@react-navigation/native"; 
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useFocusEffect } from '@react-navigation/native';
 
 type PendingEventDetailsRouteProp = RouteProp<RootStackParamList, "PendingEventDetails">;
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, "PendingEventDetails">;
@@ -50,37 +50,43 @@ const PendingEventDetailsScreen = () => {
   const navigation = useNavigation<NavigationProp>();
   const [requesterName, setRequesterName] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchPendingEvent = async () => {
-      try {
-        if (auth?.user) {
-          const data = await getPendingEventById(auth.user.token, eventId);
-          setPendingEvent(data);
-        }
-      } catch (error) {
-        Alert.alert("Erro", "Erro ao carregar detalhes do evento pendente.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPendingEvent();
-  }, [eventId]);
-
-  useEffect(() => {
-    const fetchRequester = async () => {
-      if (auth?.user && pendingEvent?.eventRequesterId) {
+  useFocusEffect(
+    useCallback(() => {
+      
+      const fetchPendingEvent = async () => {
         try {
-          const user = await getUserById(auth.user.token, pendingEvent.eventRequesterId);
-          setRequesterName(user.name);
+          if (auth?.user) {
+            const data = await getPendingEventById(auth.user.token, eventId);
+            setPendingEvent(data);
+          }
         } catch (error) {
-          console.warn("Erro ao buscar solicitante:", error);
+          Alert.alert("Erro", "Erro ao carregar detalhes do evento pendente.");
+        } finally {
+          setLoading(false);
         }
-      }
-    };
+      };
+      fetchPendingEvent();
+    }, [eventId])
+  );
+
+
+  useFocusEffect(
+    useCallback(() => {
+      const fetchRequester = async () => {
+        if (auth?.user && pendingEvent?.eventRequesterId) {
+          try {
+            const user = await getUserById(auth.user.token, pendingEvent.eventRequesterId);
+            setRequesterName(user.name);
+          } catch (error) {
+            console.warn("Erro ao buscar solicitante:", error);
+          }
+        }
+      };
   
-    fetchRequester();
-  }, [pendingEvent?.eventRequesterId]);
+      fetchRequester();
+    }, [pendingEvent?.eventRequesterId])
+  );
+  
 
   const handleDelete = async () => {
     if (!auth?.user) {
