@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext,useCallback } from "react";
+import React, { useState, useContext,useCallback } from "react";
 import {View,Text,FlatList,ActivityIndicator,Alert,TouchableOpacity} from "react-native";
 import { AuthContext } from "../../contexts/AuthContext";
 import { getAllPendingEvents, getMyPendingEvents} from "../../api/pendingEvent";
