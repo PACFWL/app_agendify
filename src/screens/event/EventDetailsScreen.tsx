@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useCallback } from "react";
+import React, {useState, useContext, useCallback } from "react";
 import { View, Text, ActivityIndicator, Button, ScrollView, Alert } from "react-native";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useFocusEffect } from "@react-navigation/native";
@@ -34,6 +34,62 @@ type Event = {
   cleanupDuration: string;
   createdAt: string;
   lastModifiedAt: string;
+};
+
+const formatMode = (mode: string) => {
+  switch (mode) {
+    case "PRESENCIAL":
+      return "Presencial";
+    case "ONLINE":
+      return "Online";
+    case "HIBRIDO":
+      return "Híbrido";
+    default:
+      return mode;
+  }
+};
+
+const formatStatus = (status: string) => {
+  const map: { [key: string]: string } = {
+    PLANEJADO: "Planejado",
+    EM_BREVE: "Em Breve",
+    EM_ANDAMENTO: "Em Andamento",
+    EM_PAUSA: "Em Pausa",
+    URGENTE: "Urgente",
+    FINALIZADO: "Finalizado",
+    CANCELADO: "Cancelado",
+    ADIADO: "Adiado",
+    ATRASADO: "Atrasado",
+    INDEFINIDO: "Indefinido",
+    APROVADO: "Aprovado",
+    PENDENTE: "Pendente"
+  };
+  return map[status] || status;
+};
+
+const formatPriority = (priority: string) => {
+  const map: { [key: string]: string } = {
+    MUITO_BAIXA: "Muito Baixa",
+    BAIXA: "Baixa",
+    MEDIA: "Média",
+    ALTA: "Alta",
+    CRITICA: "Crítica"
+  };
+  return map[priority] || priority;
+};
+
+const formatDuration = (isoDuration: string): string => {
+  const match = isoDuration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+  if (!match) return isoDuration;
+
+  const [, hours, minutes, seconds] = match.map(v => v ? parseInt(v) : 0);
+
+  const parts = [];
+  if (hours) parts.push(`${hours} hora${hours > 1 ? 's' : ''}`);
+  if (minutes) parts.push(`${minutes} minuto${minutes > 1 ? 's' : ''}`);
+  if (seconds) parts.push(`${seconds} segundo${seconds > 1 ? 's' : ''}`);
+
+  return parts.length ? parts.join(" e ") : "0 minuto";
 };
 
 const EventDetailsScreen = ({ route, navigation }: Props) => {
@@ -106,20 +162,22 @@ const EventDetailsScreen = ({ route, navigation }: Props) => {
       })}
       </Text>
       <Text style={styles.detail}>
-      <Text style={styles.label}>Horário:</Text>{" "}
-        {new Date(`1970-01-01T${event.startTime}`).toLocaleTimeString("pt-BR", {
-          hour: "2-digit",
-          minute: "2-digit",
-        })}{" "}
-        -{" "}
-        {new Date(`1970-01-01T${event.endTime}`).toLocaleTimeString("pt-BR", {
-          hour: "2-digit",
-          minute: "2-digit",
-        })}
-      </Text>
+      <Text style={styles.label}>Horário:</Text>
+      <Text style={styles.value}>
+         <Text style={styles.label}>Início:</Text> {new Date(`1970-01-01T${event.startTime}`).toLocaleTimeString("pt-BR", {
+             hour: "2-digit",
+             minute: "2-digit",
+           })}{" "}
+           -{" "}
+         <Text style={styles.label}>Término:</Text> {new Date(`1970-01-01T${event.endTime}`).toLocaleTimeString("pt-BR", {
+             hour: "2-digit",
+             minute: "2-digit",
+           })}
+         </Text>
+         </Text>
       <Text style={styles.detail}><Text style={styles.label}>Tema:</Text> {event.theme}</Text>
       <Text style={styles.detail}><Text style={styles.label}>Público-alvo:</Text> {event.targetAudience}</Text>
-      <Text style={styles.detail}><Text style={styles.label}>Modalidade:</Text> {event.mode}</Text>
+      <Text style={styles.detail}><Text style={styles.label}>Modalidade:</Text> {formatMode(event.mode)}</Text>
       <Text style={styles.detail}><Text style={styles.label}>Ambiente:</Text> {event.environment}</Text>
       <Text style={styles.detail}><Text style={styles.label}>Organizador:</Text> {event.organizer}</Text>
       <Text style={styles.detail}><Text style={styles.label}>Recursos:</Text> {event.resourcesDescription.join(", ")}</Text>
@@ -131,9 +189,11 @@ const EventDetailsScreen = ({ route, navigation }: Props) => {
       <Text style={styles.detail}><Text style={styles.label}>Vínculo Disciplinar:</Text> {event.disciplinaryLink}</Text>
       <Text style={styles.detail}><Text style={styles.label}>Localização:</Text> {event.location.name} - {event.location.floor}</Text>
       <Text style={styles.detail}><Text style={styles.label}>Observação:</Text> {event.observation}</Text>
-      <Text style={styles.detail}><Text style={styles.label}>Status:</Text> {event.status}</Text>
-      <Text style={styles.detail}><Text style={styles.label}>Prioridade:</Text> {event.priority}</Text>
-      <Text style={styles.detail}><Text style={styles.label}>Duração da Limpeza:</Text> {event.cleanupDuration}</Text>
+      <Text style={styles.detail}><Text style={styles.label}>Status:</Text> {formatStatus(event.status)}</Text>
+      <Text style={styles.detail}><Text style={styles.label}>Prioridade:</Text> {formatPriority(event.priority)}</Text>
+      <Text style={styles.detail}>
+  <Text style={styles.label}>Duração da Limpeza:</Text> {formatDuration(event.cleanupDuration)}
+</Text>
       <Text style={styles.detail}><Text style={styles.label}>Criado em:</Text> {new Date(event.createdAt).toLocaleString("pt-BR", {
         timeZone: "America/Sao_Paulo",
         hour12: false

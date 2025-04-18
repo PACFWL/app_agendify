@@ -41,6 +41,62 @@ export type PendingEvent = {
   eventRequesterId?: string;
 }
 
+const formatMode = (mode: string) => {
+  switch (mode) {
+    case "PRESENCIAL":
+      return "Presencial";
+    case "ONLINE":
+      return "Online";
+    case "HIBRIDO":
+      return "Híbrido";
+    default:
+      return mode;
+  }
+};
+
+const formatStatus = (status: string) => {
+  const map: { [key: string]: string } = {
+    PLANEJADO: "Planejado",
+    EM_BREVE: "Em Breve",
+    EM_ANDAMENTO: "Em Andamento",
+    EM_PAUSA: "Em Pausa",
+    URGENTE: "Urgente",
+    FINALIZADO: "Finalizado",
+    CANCELADO: "Cancelado",
+    ADIADO: "Adiado",
+    ATRASADO: "Atrasado",
+    INDEFINIDO: "Indefinido",
+    APROVADO: "Aprovado",
+    PENDENTE: "Pendente"
+  };
+  return map[status] || status;
+};
+
+const formatPriority = (priority: string) => {
+  const map: { [key: string]: string } = {
+    MUITO_BAIXA: "Muito Baixa",
+    BAIXA: "Baixa",
+    MEDIA: "Média",
+    ALTA: "Alta",
+    CRITICA: "Crítica"
+  };
+  return map[priority] || priority;
+};
+
+const formatDuration = (isoDuration: string): string => {
+  const match = isoDuration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+  if (!match) return isoDuration;
+
+  const [, hours, minutes, seconds] = match.map(v => v ? parseInt(v) : 0);
+
+  const parts = [];
+  if (hours) parts.push(`${hours} hora${hours > 1 ? 's' : ''}`);
+  if (minutes) parts.push(`${minutes} minuto${minutes > 1 ? 's' : ''}`);
+  if (seconds) parts.push(`${seconds} segundo${seconds > 1 ? 's' : ''}`);
+
+  return parts.length ? parts.join(" e ") : "0 minuto";
+};
+
 const PendingEventDetailsScreen = () => {
   const route = useRoute<PendingEventDetailsRouteProp>();
   const { eventId } = route.params;
@@ -160,7 +216,7 @@ const PendingEventDetailsScreen = () => {
         <Text style={styles.value}>{pendingEvent.targetAudience}</Text>
 
         <Text style={styles.label}>Modalidade:</Text>
-        <Text style={styles.value}>{pendingEvent.mode}</Text>
+        <Text style={styles.value}>{formatMode(pendingEvent.mode)}</Text>
 
         <Text style={styles.label}>Ambiente:</Text>
         <Text style={styles.value}>{pendingEvent.environment}</Text>
@@ -198,13 +254,13 @@ const PendingEventDetailsScreen = () => {
         <Text style={styles.value}><Text style={styles.label}>Local:</Text> {pendingEvent.location.name} - <Text style={styles.label}>Andar:</Text> {pendingEvent.location.floor}</Text>
 
         <Text style={styles.label}>Status:</Text>
-        <Text style={styles.value}>{pendingEvent.status}</Text>
+        <Text style={styles.value}>{formatStatus(pendingEvent.status)}</Text>
 
         <Text style={styles.label}>Prioridade:</Text>
-        <Text style={styles.value}>{pendingEvent.priority}</Text>
+        <Text style={styles.value}>{formatPriority(pendingEvent.priority)}</Text>
 
         <Text style={styles.label}>Tempo de Intervalo:</Text>
-        <Text style={styles.value}>{pendingEvent.cleanupDuration}</Text>
+        <Text style={styles.value}>{formatDuration(pendingEvent.cleanupDuration)}</Text>
 
         <Text style={styles.label}>Observações:</Text>
         <Text style={styles.value}>{pendingEvent.observation || "Nenhuma"}</Text>

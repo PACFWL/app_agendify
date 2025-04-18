@@ -9,6 +9,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { TouchableOpacity } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 
 type Props = NativeStackScreenProps<RootStackParamList, "PendingEventEditForm">;
 
@@ -199,7 +200,15 @@ const handleDateChange = (_: any, selectedDate?: Date) => {
       <TextInput style={styles.input} value={eventData.targetAudience} placeholder="Público-alvo" onChangeText={(text) => handleChange("targetAudience", text)} />
 
       <Text style={styles.label}>Modalidade:</Text>
-      <TextInput style={styles.input} value={eventData.mode} placeholder="Modalidade" onChangeText={(text) => handleChange("mode", text)} />
+      <Picker
+        selectedValue={eventData.mode}
+        onValueChange={(itemValue) => handleChange("mode", itemValue)}
+        style={styles.input}
+      >
+        <Picker.Item label="Presencial" value="PRESENCIAL" />
+        <Picker.Item label="Online" value="ONLINE" />
+        <Picker.Item label="Híbrido" value="HIBRIDO" />
+      </Picker>
 
       <Text style={styles.label}>Ambiente:</Text>
       <TextInput style={styles.input} value={eventData.environment} placeholder="Ambiente" onChangeText={(text) => handleChange("environment", text)} />
@@ -231,15 +240,51 @@ const handleDateChange = (_: any, selectedDate?: Date) => {
       <Text style={styles.label}>Local do Evento:</Text>
       <TextInput style={styles.input} value={eventData.locationName} placeholder="Local" onChangeText={(text) => handleChange("locationName", text)} />
 
-      <Text style={styles.label}>Andar do Local:</Text>
-      <TextInput style={styles.input} value={eventData.locationFloor} placeholder="Andar" onChangeText={(text) => handleChange("locationFloor", text)} />
+   <Text style={styles.label}>Andar do Local:</Text>
+      <Picker
+        selectedValue={eventData.locationFloor}
+        onValueChange={(itemValue) => handleChange("locationFloor", itemValue)}
+        style={styles.input}
+      >
+        <Picker.Item label="Térreo" value="0" />
+        <Picker.Item label="1º Andar" value="1" />
+        <Picker.Item label="2º Andar" value="2" />
+        <Picker.Item label="Bloco C" value="3" />
+      </Picker>
 
-      <Text style={styles.label}>Status do Evento:</Text>
-      <TextInput style={styles.input} value={eventData.status} placeholder="Status" onChangeText={(text) => handleChange("status", text)} />
+         <Text style={styles.label}>Status:</Text>
+      <Picker
+        selectedValue={eventData.status}
+        onValueChange={(itemValue) => handleChange("status", itemValue)}
+        style={styles.input}
+      >
+        <Picker.Item label="Planejado" value="PLANEJADO" />
+        <Picker.Item label="Em Breve" value="EM_BREVE" />
+        <Picker.Item label="Em Andamento" value="EM_ANDAMENTO" />
+        <Picker.Item label="Em Pausa" value="EM_PAUSA" />
+        <Picker.Item label="Urgente" value="URGENTE" />
+        <Picker.Item label="Finalizado" value="FINALIZADO" />
+        <Picker.Item label="Cancelado" value="CANCELADO" />
+        <Picker.Item label="Adiado" value="ADIADO" />
+        <Picker.Item label="Atrasado" value="ATRASADO" />
+        <Picker.Item label="Indefinido" value="INDEFINIDO" />
+        <Picker.Item label="Aprovado" value="APROVADO" />
+        <Picker.Item label="Pendente" value="PENDENTE" />
+      </Picker>
 
       <Text style={styles.label}>Prioridade:</Text>
-      <TextInput style={styles.input} value={eventData.priority} placeholder="Prioridade" onChangeText={(text) => handleChange("priority", text)} />
-
+      <Picker
+        selectedValue={eventData.priority}
+        onValueChange={(itemValue) => handleChange("priority", itemValue)}
+        style={styles.input}
+      >
+        <Picker.Item label="Muito Baixa" value="MUITO_BAIXA" />
+        <Picker.Item label="Baixa" value="BAIXA" />
+        <Picker.Item label="Média" value="MEDIA" />
+        <Picker.Item label="Alta" value="ALTA" />
+        <Picker.Item label="Crítica" value="CRITICA" />
+      </Picker>
+      
       <Text style={styles.label}>Duração da Limpeza (minutos):</Text>
       <TextInput style={styles.input} value={eventData.cleanupDuration} placeholder="Duração da Limpeza" onChangeText={(text) => handleChange("cleanupDuration", text)} />
 

@@ -45,6 +45,10 @@ const styles = StyleSheet.create({
     color: '#222',
     marginBottom: 5,
   },
+  value: {
+    color: "#444",
+    marginBottom: 8,
+  },
 });
 
 export default styles;
