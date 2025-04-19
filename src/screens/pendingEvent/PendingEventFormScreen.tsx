@@ -35,6 +35,7 @@ const PendingEventFormScreen = ({ navigation }: Props) => {
     locationName: "",
     locationFloor: "",
     status: "",
+    administrativeStatus: "",
     priority: "",
     cleanupDuration: "",
     observation: "",
@@ -229,19 +230,19 @@ const PendingEventFormScreen = ({ navigation }: Props) => {
   onValueChange={(itemValue) => handleChange("status", itemValue)}
 >
   <Picker.Item label="Selecione o status" value="" />
-    <Picker.Item label="Planejado" value="PLANEJADO" />
-        <Picker.Item label="Em Breve" value="EM_BREVE" />
-        <Picker.Item label="Em Andamento" value="EM_ANDAMENTO" />
-        <Picker.Item label="Em Pausa" value="EM_PAUSA" />
-        <Picker.Item label="Urgente" value="URGENTE" />
-        <Picker.Item label="Finalizado" value="FINALIZADO" />
-        <Picker.Item label="Cancelado" value="CANCELADO" />
-        <Picker.Item label="Adiado" value="ADIADO" />
-        <Picker.Item label="Atrasado" value="ATRASADO" />
-        <Picker.Item label="Indefinido" value="INDEFINIDO" />
-        <Picker.Item label="Aprovado" value="APROVADO" />
-        <Picker.Item label="Pendente" value="PENDENTE" />
+    <Picker.Item label="Em Análise" value="EM_ANALISE" />
 </Picker>
+
+<Text style={styles.label}>Status Administrativo:</Text>
+<Picker
+  selectedValue={eventData.administrativeStatus}
+  onValueChange={(itemValue) => handleChange("administrativeStatus", itemValue)}
+  style={styles.input}
+>
+  <Picker.Item label="Selecione o status administrativo" value="" />
+  <Picker.Item label="Aguardando" value="AGUARDANDO" />
+</Picker>
+
 
 <Text style={styles.label}>Prioridade:</Text>
 <Picker

@@ -35,6 +35,7 @@ const EventFormScreen = ({ navigation }: Props) => {
     locationName: "",
     locationFloor: "",
     status: "",
+    administrativeStatus: "",
     priority: "",
     cleanupDuration: "",
     observation: "",
@@ -216,28 +217,31 @@ const EventFormScreen = ({ navigation }: Props) => {
         <Picker.Item label="2º Andar" value="2" />
         <Picker.Item label="Bloco C" value="3" />
       </Picker>
-  
       <Text style={styles.label}>Status:</Text>
-      <Picker
-        selectedValue={eventData.status}
-        onValueChange={(itemValue) => handleChange("status", itemValue)}
-        style={styles.input}
-      >
-        <Picker.Item label="Selecione o status" value="" />
-        <Picker.Item label="Planejado" value="PLANEJADO" />
-        <Picker.Item label="Em Breve" value="EM_BREVE" />
-        <Picker.Item label="Em Andamento" value="EM_ANDAMENTO" />
-        <Picker.Item label="Em Pausa" value="EM_PAUSA" />
-        <Picker.Item label="Urgente" value="URGENTE" />
-        <Picker.Item label="Finalizado" value="FINALIZADO" />
-        <Picker.Item label="Cancelado" value="CANCELADO" />
-        <Picker.Item label="Adiado" value="ADIADO" />
-        <Picker.Item label="Atrasado" value="ATRASADO" />
-        <Picker.Item label="Indefinido" value="INDEFINIDO" />
-        <Picker.Item label="Aprovado" value="APROVADO" />
-        <Picker.Item label="Pendente" value="PENDENTE" />
-      </Picker>
+<Picker
+  selectedValue={eventData.status}
+  onValueChange={(itemValue) => handleChange("status", itemValue)}
+  style={styles.input}
+>
+  <Picker.Item label="Selecione o status" value="" />
+  <Picker.Item label="Planejado" value="PLANEJADO" />
+</Picker>
 
+  
+<Text style={styles.label}>Status Administrativo:</Text>
+<Picker
+  selectedValue={eventData.administrativeStatus}
+  onValueChange={(itemValue) => handleChange("administrativeStatus", itemValue)}
+  style={styles.input}
+>
+  <Picker.Item label="Selecione o status administrativo" value="" />
+  <Picker.Item label="Pendente" value="PENDENTE" />
+  <Picker.Item label="Cancelado" value="CANCELADO" />
+  <Picker.Item label="Urgente" value="URGENTE" />
+  <Picker.Item label="Adiado" value="ADIADO" />
+  <Picker.Item label="Atrasado" value="ATRASADO" />
+  <Picker.Item label="Indefinido" value="INDEFINIDO" />
+</Picker>
       <Text style={styles.label}>Prioridade:</Text>
       <Picker
         selectedValue={eventData.priority}

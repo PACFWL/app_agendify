@@ -37,6 +37,7 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
     locationName: "",
     locationFloor: "",
     status: "",
+    administrativeStatus: "",
     priority: "",
     cleanupDuration: "",
     observation: "",
@@ -75,6 +76,7 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
           locationName: event.location.name,
           locationFloor: event.location.floor,
           status: event.status,
+          administrativeStatus: event.administrativeStatus,
           priority: event.priority,
           cleanupDuration: event.cleanupDuration.replace("PT", "").replace("M", ""),
           observation: event.observation,
@@ -260,14 +262,22 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
         <Picker.Item label="Em Breve" value="EM_BREVE" />
         <Picker.Item label="Em Andamento" value="EM_ANDAMENTO" />
         <Picker.Item label="Em Pausa" value="EM_PAUSA" />
-        <Picker.Item label="Urgente" value="URGENTE" />
         <Picker.Item label="Finalizado" value="FINALIZADO" />
+        <Picker.Item label="Aprovado" value="APROVADO" />
+      </Picker>
+
+      <Text style={styles.label}>Status Administrativo:</Text>
+      <Picker
+        selectedValue={eventData.administrativeStatus}
+        onValueChange={(itemValue) => handleChange("administrativeStatus", itemValue)}
+        style={styles.input}
+      >
+        <Picker.Item label="Pendente" value="PENDENTE" />
         <Picker.Item label="Cancelado" value="CANCELADO" />
+        <Picker.Item label="Urgente" value="URGENTE" />
         <Picker.Item label="Adiado" value="ADIADO" />
         <Picker.Item label="Atrasado" value="ATRASADO" />
         <Picker.Item label="Indefinido" value="INDEFINIDO" />
-        <Picker.Item label="Aprovado" value="APROVADO" />
-        <Picker.Item label="Pendente" value="PENDENTE" />
       </Picker>
 
       <Text style={styles.label}>Prioridade:</Text>

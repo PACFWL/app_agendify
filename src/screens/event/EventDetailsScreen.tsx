@@ -30,6 +30,7 @@ type Event = {
   location: { name: string; floor: string };
   observation: string;
   status: string;
+  administrativeStatus: string;
   priority: string;
   cleanupDuration: string;
   createdAt: string;
@@ -55,14 +56,8 @@ const formatStatus = (status: string) => {
     EM_BREVE: "Em Breve",
     EM_ANDAMENTO: "Em Andamento",
     EM_PAUSA: "Em Pausa",
-    URGENTE: "Urgente",
     FINALIZADO: "Finalizado",
-    CANCELADO: "Cancelado",
-    ADIADO: "Adiado",
-    ATRASADO: "Atrasado",
-    INDEFINIDO: "Indefinido",
-    APROVADO: "Aprovado",
-    PENDENTE: "Pendente"
+    EM_ANALISE: "Em Análise"
   };
   return map[status] || status;
 };
@@ -76,6 +71,21 @@ const formatPriority = (priority: string) => {
     CRITICA: "Crítica"
   };
   return map[priority] || priority;
+};
+
+const formatAdministrativeStatus = (status: string) => {
+  const map: { [key: string]: string } = {
+    CANCELADO: "Cancelado",
+    URGENTE: "Urgente",
+    ADIADO: "Adiado",
+    ATRASADO: "Atrasado",
+    INDEFINIDO: "Indefinido",
+    APROVADO: "Aprovado",
+    PENDENTE: "Pendente",
+    AGUARDANDO: "Aguardando",
+    RECUSADO: "Recusado",
+  };
+  return map[status] || status;
 };
 
 const formatDuration = (isoDuration: string): string => {
@@ -190,6 +200,7 @@ const EventDetailsScreen = ({ route, navigation }: Props) => {
       <Text style={styles.detail}><Text style={styles.label}>Localização:</Text> {event.location.name} - {event.location.floor}</Text>
       <Text style={styles.detail}><Text style={styles.label}>Observação:</Text> {event.observation}</Text>
       <Text style={styles.detail}><Text style={styles.label}>Status:</Text> {formatStatus(event.status)}</Text>
+      <Text style={styles.detail}><Text style={styles.label}>Status Administrativo:</Text> {formatAdministrativeStatus(event.administrativeStatus)}</Text>
       <Text style={styles.detail}><Text style={styles.label}>Prioridade:</Text> {formatPriority(event.priority)}</Text>
       <Text style={styles.detail}>
   <Text style={styles.label}>Duração da Limpeza:</Text> {formatDuration(event.cleanupDuration)}

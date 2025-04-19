@@ -34,6 +34,7 @@ export type PendingEvent = {
   location: { name: string; floor: string };
   observation: string;
   status: string;
+  administrativeStatus: string;
   priority: string;
   cleanupDuration: string;
   createdAt: string;
@@ -67,7 +68,23 @@ const formatStatus = (status: string) => {
     ATRASADO: "Atrasado",
     INDEFINIDO: "Indefinido",
     APROVADO: "Aprovado",
-    PENDENTE: "Pendente"
+    PENDENTE: "Pendente",
+    EM_ANALISE: "Em Análise"
+  };
+  return map[status] || status;
+};
+
+const formatAdministrativeStatus = (status: string) => {
+  const map: { [key: string]: string } = {
+    CANCELADO: "Cancelado",
+    URGENTE: "Urgente",
+    ADIADO: "Adiado",
+    ATRASADO: "Atrasado",
+    INDEFINIDO: "Indefinido",
+    APROVADO: "Aprovado",
+    PENDENTE: "Pendente",
+    AGUARDANDO: "Aguardando",
+    RECUSADO: "Recusado",
   };
   return map[status] || status;
 };
@@ -255,6 +272,9 @@ const PendingEventDetailsScreen = () => {
 
         <Text style={styles.label}>Status:</Text>
         <Text style={styles.value}>{formatStatus(pendingEvent.status)}</Text>
+
+        <Text style={styles.label}>Status Administrativo:</Text>
+        <Text style={styles.value}>{formatAdministrativeStatus(pendingEvent.administrativeStatus)}</Text>
 
         <Text style={styles.label}>Prioridade:</Text>
         <Text style={styles.value}>{formatPriority(pendingEvent.priority)}</Text>
