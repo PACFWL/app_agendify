@@ -272,6 +272,7 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
         onValueChange={(itemValue) => handleChange("administrativeStatus", itemValue)}
         style={styles.input}
       >
+        <Picker.Item label="Aprovado" value="APROVADO" />
         <Picker.Item label="Pendente" value="PENDENTE" />
         <Picker.Item label="Cancelado" value="CANCELADO" />
         <Picker.Item label="Urgente" value="URGENTE" />

@@ -7,6 +7,7 @@ import { login } from "../api/auth";
 type UserType = {
   id: string;
   token: string;
+  name: string;
   role: "MASTER" | "REQUESTER" | "USER";
 };
 
@@ -29,12 +30,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     const loadUser = async () => {
       const token = await AsyncStorage.getItem("token");
+      const name = await AsyncStorage.getItem("name");
       const role = await AsyncStorage.getItem("role");
       console.log("🔹 Token armazenado:", token);
       console.log("🔹 Role armazenada:", role);
       const id = await AsyncStorage.getItem("id");
-      if (token && role && id && ["MASTER", "REQUESTER", "USER"].includes(role)) {
-        setUser({ id, token, role: role as "MASTER" | "REQUESTER" | "USER" });
+      if (token && name && role && id && ["MASTER", "REQUESTER", "USER"].includes(role)) {
+        setUser({ id, token, name, role: role as "MASTER" | "REQUESTER" | "USER" });
       }            
       setLoading(false);
     };
@@ -45,12 +47,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const data = await login(email, password); 
     console.log("🔹 Dados retornados do backend:", data);
     await AsyncStorage.setItem("token", data.token);
+    await AsyncStorage.setItem("name", data.name);
     await AsyncStorage.setItem("role", data.role);
     setUser(data);
   };
 
   const signOut = async () => {
-    await AsyncStorage.multiRemove(["token", "role"]);
+    await AsyncStorage.multiRemove(["token", "name", "role"]);
     setUser(null);
   };
 

@@ -1,9 +1,9 @@
-import React, { useState, useContext,useCallback } from "react";
+import React, { useState, useContext, useCallback } from "react";
 import {View,Text,FlatList,ActivityIndicator,Alert,TouchableOpacity} from "react-native";
 import { AuthContext } from "../../contexts/AuthContext";
-import { getAllPendingEvents, getMyPendingEvents} from "../../api/pendingEvent";
+import {getAllPendingEvents,getMyPendingEvents,approvePendingEvent,rejectPendingEvent} from "../../api/pendingEvent";
 import styles from "../../styles/PendingEventScreenStyles";
-import { useNavigation,useFocusEffect } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../routes/Routes";
 
@@ -17,22 +17,69 @@ type PendingEvent = {
   organizer: string;
 };
 
-const EventCard = ({ event }: { event: PendingEvent }) => {
+type UserType = {
+  id: string;
+  token: string;
+  name: string;
+  role: "MASTER" | "REQUESTER" | "USER";
+};
+
+const EventCard = ({
+  event,
+  user,
+  onAction,
+}: {
+  event: PendingEvent;
+  user: UserType;
+  onAction: () => void;
+}) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
+  const handleApprove = async () => {
+    try {
+      await approvePendingEvent(user.token, event.id);
+      Alert.alert("Sucesso", "Evento aprovado com sucesso!");
+      onAction();
+    } catch (error) {
+      Alert.alert("Erro", "Erro ao aprovar o evento.");
+    }
+  };
+
+  const handleReject = async () => {
+    try {
+      await rejectPendingEvent(user.token, event.id);
+      Alert.alert("Sucesso", "Evento rejeitado com sucesso!");
+      onAction();
+    } catch (error) {
+      Alert.alert("Erro", "Erro ao rejeitar o evento.");
+    }
+  };
+
   return (
-    <TouchableOpacity
-      onPress={() =>
-        navigation.navigate("PendingEventDetails", { eventId: event.id })
-      }
-      style={styles.eventCard}
-    >
-      <Text style={styles.eventName}>{event.name}</Text>
-      <Text>{`Data: ${event.day} - ${event.startTime} às ${event.endTime}`}</Text>
-      <Text>{`Tema: ${event.theme}`}</Text>
-      <Text>{`Organizador: ${event.organizer}`}</Text>
-    </TouchableOpacity>
+    <View style={styles.eventCard}>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("PendingEventDetails", { eventId: event.id })
+        }
+      >
+        <Text style={styles.eventName}>{event.name}</Text>
+        <Text>{`Data: ${event.day} - ${event.startTime} às ${event.endTime}`}</Text>
+        <Text>{`Tema: ${event.theme}`}</Text>
+        <Text>{`Organizador: ${event.organizer}`}</Text>
+      </TouchableOpacity>
+
+      {user.role === "MASTER" && (
+        <View style={styles.actionButtonsContainer}>
+          <TouchableOpacity style={styles.approveButton} onPress={handleApprove}>
+            <Text style={styles.approveButtonText}>Aprovar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.rejectButton} onPress={handleReject}>
+            <Text style={styles.rejectButtonText}>Rejeitar</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+    </View>
   );
 };
 
@@ -80,18 +127,16 @@ const PendingEventScreen = () => {
     }
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      const load = async () => {
-        setLoading(true);
-        await fetchMyEvents();
-        if (isMaster) await fetchAllEvents();
-        setLoading(false);
-      };
+  const load = async () => {
+    setLoading(true);
+    await fetchMyEvents();
+    if (isMaster) await fetchAllEvents();
+    setLoading(false);
+  };
 
-      load();
-    }, [user])
-  );
+  useFocusEffect(useCallback(() => {
+    load();
+  }, [user]));
 
   const renderList = () => {
     if (loading) return <Loading />;
@@ -101,7 +146,13 @@ const PendingEventScreen = () => {
       <FlatList
         data={data}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <EventCard event={item} />}
+        renderItem={({ item }) => (
+          <EventCard
+            event={item}
+            user={user}
+            onAction={load}
+          />
+        )}
       />
     );
   };
@@ -165,14 +216,13 @@ const PendingEventScreen = () => {
       {renderList()}
 
       {(user.role === "MASTER" || user.role === "REQUESTER") && (
-  <TouchableOpacity
-    style={styles.createButton}
-    onPress={() => navigation.navigate("PendingEventForm")}
-  >
-    <Text style={styles.createButtonText}>+ Criar Evento Pendente</Text>
-  </TouchableOpacity>
-)}
-
+        <TouchableOpacity
+          style={styles.createButton}
+          onPress={() => navigation.navigate("PendingEventForm")}
+        >
+          <Text style={styles.createButtonText}>+ Criar Evento Pendente</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

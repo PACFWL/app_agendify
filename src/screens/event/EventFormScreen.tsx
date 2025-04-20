@@ -235,6 +235,7 @@ const EventFormScreen = ({ navigation }: Props) => {
   style={styles.input}
 >
   <Picker.Item label="Selecione o status administrativo" value="" />
+  <Picker.Item label="Aprovado" value="APROVADO" />
   <Picker.Item label="Pendente" value="PENDENTE" />
   <Picker.Item label="Cancelado" value="CANCELADO" />
   <Picker.Item label="Urgente" value="URGENTE" />

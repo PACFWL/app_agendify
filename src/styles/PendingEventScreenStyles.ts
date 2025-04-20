@@ -91,5 +91,34 @@ export default StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+  actionButtonsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 10,
+  },
+  approveButton: {
+    backgroundColor: "#4CAF50",
+    padding: 8,
+    borderRadius: 5,
+    flex: 1,
+    marginRight: 5,
+  },
+  rejectButton: {
+    backgroundColor: "#F44336",
+    padding: 8,
+    borderRadius: 5,
+    flex: 1,
+    marginLeft: 5,
+  },
+  approveButtonText: {
+    color: "#fff",
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+  rejectButtonText: {
+    color: "#fff",
+    textAlign: "center",
+    fontWeight: "bold",
+  },
   
 });
