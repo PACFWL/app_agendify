@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { View, Text, Button, Alert } from "react-native";
+import { View, Text, Alert, TouchableOpacity } from "react-native";
 import { AuthContext } from "../../contexts/AuthContext";
 import styles from "../../styles/AccountScreenStyles";
 
@@ -19,15 +19,18 @@ const AccountScreen = () => {
     <View style={styles.container}>
       <Text style={styles.title}>Minha Conta</Text>
       <Text style={styles.item}>Função: {auth?.user?.role}</Text>
-      <View style={styles.button}>
-        <Button title="Perfil" onPress={() => Alert.alert("Perfil", "Funcionalidade em construção.")} />
-      </View>
-      <View style={styles.button}>
-        <Button title="Configurações" onPress={() => Alert.alert("Configurações", "Funcionalidade em construção.")} />
-      </View>
-      <View style={styles.button}>
-        <Button title="Sair" onPress={handleSignOut} color="red" />
-      </View>
+
+      <TouchableOpacity style={styles.button} onPress={() => Alert.alert("Perfil", "Funcionalidade em construção.")}>
+        <Text style={styles.buttonText}>Perfil</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.button} onPress={() => Alert.alert("Configurações", "Funcionalidade em construção.")}>
+        <Text style={styles.buttonText}>Configurações</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.dangerButton} onPress={handleSignOut}>
+        <Text style={styles.buttonText}>Sair</Text>
+      </TouchableOpacity>
     </View>
   );
 };

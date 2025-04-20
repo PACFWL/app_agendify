@@ -47,7 +47,13 @@ const HomeScreenStyles = StyleSheet.create({
   button: {
     marginTop: 16,
   },
-
+  noEventText: {
+    fontSize: 14,
+    color: "#888",
+    fontStyle: "italic",
+    marginLeft: 10,
+    marginBottom: 10,
+  },  
 });
 
 export default HomeScreenStyles;

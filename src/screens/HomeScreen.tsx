@@ -95,70 +95,81 @@ const HomeScreen = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.welcome}>Bem-vindo!</Text>
-
-      <Text style={styles.sectionTitle}>📅 Eventos de Hoje</Text>
-      {eventosDoDia.map(event => (
-  <TouchableOpacity
-    key={event.id}
-    onPress={() => navigation.navigate("EventDetails", { eventId: event.id })}
-  >
-    <View
-      style={[
-        styles.card,
-        { borderLeftColor: getStatusColor(event.status) },
-      ]}
+<Text style={styles.welcome}>Bem-vindo, {auth?.user?.name}!</Text>
+<Text style={styles.sectionTitle}>📅 Eventos de Hoje</Text>
+{eventosDoDia.length === 0 ? (
+  <Text style={styles.noEventText}>Nenhum evento hoje.</Text>
+) : (
+  eventosDoDia.map(event => (
+    <TouchableOpacity
+      key={event.id}
+      onPress={() => navigation.navigate("EventDetails", { eventId: event.id })}
     >
-      <Text style={styles.cardTitle}>{event.name}</Text>
-      <Text style={styles.cardText}>
-        Horário: {event.startTime} - {event.endTime}
-      </Text>
-      <Text style={styles.cardText}>Status: {event.status}</Text>
-    </View>
-  </TouchableOpacity>
-))}
+      <View
+        style={[
+          styles.card,
+          { borderLeftColor: getStatusColor(event.status) },
+        ]}
+      >
+        <Text style={styles.cardTitle}>{event.name}</Text>
+        <Text style={styles.cardText}>
+          Horário: {event.startTime} - {event.endTime}
+        </Text>
+        <Text style={styles.cardText}>Status: {event.status}</Text>
+      </View>
+    </TouchableOpacity>
+  ))
+)}
 
-      <Text style={styles.sectionTitle}>🗓️ Eventos da Semana</Text>
-      {eventosDaSemana.map(event => (
-  <TouchableOpacity
-    key={event.id}
-    onPress={() => navigation.navigate("EventDetails", { eventId: event.id })}
-  >
-    <View
-      style={[
-        styles.card,
-        { borderLeftColor: getStatusColor(event.status) },
-      ]}
+<Text style={styles.sectionTitle}>🗓️ Eventos da Semana</Text>
+{eventosDaSemana.length === 0 ? (
+  <Text style={styles.noEventText}>Nenhum evento esta semana.</Text>
+) : (
+  eventosDaSemana.map(event => (
+    <TouchableOpacity
+      key={event.id}
+      onPress={() => navigation.navigate("EventDetails", { eventId: event.id })}
     >
-      <Text style={styles.cardTitle}>{event.name}</Text>
-      <Text style={styles.cardText}>
-        Data: {new Date(event.day).toLocaleDateString("pt-BR")}
-      </Text>
-      <Text style={styles.cardText}>Status: {event.status}</Text>
-    </View>
-  </TouchableOpacity>
-))}
+      <View
+        style={[
+          styles.card,
+          { borderLeftColor: getStatusColor(event.status) },
+        ]}
+      >
+        <Text style={styles.cardTitle}>{event.name}</Text>
+        <Text style={styles.cardText}>
+          Data: {new Date(event.day).toLocaleDateString("pt-BR")}
+        </Text>
+        <Text style={styles.cardText}>Status: {event.status}</Text>
+      </View>
+    </TouchableOpacity>
+  ))
+)}
 
-<Text style={styles.sectionTitle}>📆 Eventos da Semana que Vem</Text>
-{eventosProximaSemana.map(event => (
-  <TouchableOpacity
-    key={event.id}
-    onPress={() => navigation.navigate("EventDetails", { eventId: event.id })}
-  >
-    <View
-      style={[
-        styles.card,
-        { borderLeftColor: getStatusColor(event.status) },
-      ]}
+<Text style={styles.sectionTitle}>📆 Eventos da Semana que vem</Text>
+{eventosProximaSemana.length === 0 ? (
+  <Text style={styles.noEventText}>Nenhum evento na semana que vem.</Text>
+) : (
+  eventosProximaSemana.map(event => (
+    <TouchableOpacity
+      key={event.id}
+      onPress={() => navigation.navigate("EventDetails", { eventId: event.id })}
     >
-      <Text style={styles.cardTitle}>{event.name}</Text>
-      <Text style={styles.cardText}>
-        Data: {new Date(event.day).toLocaleDateString("pt-BR")}
-      </Text>
-      <Text style={styles.cardText}>Status: {event.status}</Text>
-    </View>
-  </TouchableOpacity>
-))}
+      <View
+        style={[
+          styles.card,
+          { borderLeftColor: getStatusColor(event.status) },
+        ]}
+      >
+        <Text style={styles.cardTitle}>{event.name}</Text>
+        <Text style={styles.cardText}>
+          Data: {new Date(event.day).toLocaleDateString("pt-BR")}
+        </Text>
+        <Text style={styles.cardText}>Status: {event.status}</Text>
+      </View>
+    </TouchableOpacity>
+  ))
+)}
 
 
     </ScrollView>

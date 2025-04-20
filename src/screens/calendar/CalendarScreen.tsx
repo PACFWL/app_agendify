@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, FlatList } from "react-native";
+import { View, Text, FlatList, TouchableOpacity } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { AuthContext } from "../../contexts/AuthContext";
 import { getAllEvents } from "../../api/event";
-import { TouchableOpacity } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../routes/Routes";
 import { useNavigation } from "@react-navigation/native";
+import { LocaleConfig } from "react-native-calendars";
+
 import styles from "../../styles/CalendarScreenStyles";
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamList>;
@@ -25,26 +26,109 @@ type EventType = {
 const getStatusColor = (status: string): string => {
   switch (status) {
     case "PLANEJADO":
-      return "#2196f3"; 
+      return "#2196f3";
     case "EM_ANDAMENTO":
-      return "#4caf50"; 
+      return "#4caf50";
     case "FINALIZADO":
-      return "#9e9e9e"; 
+      return "#9e9e9e";
     case "EM_ANALISE":
       return "#ff9800";
     case "EM_PAUSA":
-      return "#f44336"; 
+      return "#f44336";
     default:
       return "#607d8b";
   }
 };
 
+LocaleConfig.locales['pt-br'] = {
+  monthNames: [
+    'Janeiro',
+    'Fevereiro',
+    'Março',
+    'Abril',
+    'Maio',
+    'Junho',
+    'Julho',
+    'Agosto',
+    'Setembro',
+    'Outubro',
+    'Novembro',
+    'Dezembro'
+  ],
+  monthNamesShort: [
+    'Jan',
+    'Fev',
+    'Mar',
+    'Abr',
+    'Mai',
+    'Jun',
+    'Jul',
+    'Ago',
+    'Set',
+    'Out',
+    'Nov',
+    'Dez'
+  ],
+  dayNames: [
+    'Domingo',
+    'Segunda',
+    'Terça',
+    'Quarta',
+    'Quinta',
+    'Sexta',
+    'Sábado'
+  ],
+  dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+  today: 'Hoje'
+};
+
+LocaleConfig.defaultLocale = 'pt-br';
+
+
+const getTodayInSaoPaulo = (): string => {
+  const formatter = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Sao_Paulo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+
+  const parts = formatter.formatToParts(new Date());
+  const year = parts.find(p => p.type === "year")?.value;
+  const month = parts.find(p => p.type === "month")?.value;
+  const day = parts.find(p => p.type === "day")?.value;
+
+  return `${year}-${month}-${day}`;
+};
+
+const formatMonthYear = (dateString: string): string => {
+  const [year, month] = dateString.split("-");
+  const date = new Date(Number(year), Number(month) - 1);
+  return date.toLocaleDateString("pt-BR", {
+    year: "numeric",
+    month: "long",
+  });
+};
+
 const CalendarScreen = () => {
   const auth = useContext(AuthContext);
   const navigation = useNavigation<NavigationProps>();
-  const [events, setEvents] = useState<EventType[]>([]); 
+  const [events, setEvents] = useState<EventType[]>([]);
   const [selectedDate, setSelectedDate] = useState<string>("");
-  const [markedDates, setMarkedDates] = useState<{ [key: string]: { marked: boolean; dotColor: string } }>({});
+  const [markedDates, setMarkedDates] = useState<{ [key: string]: any }>({});
+  const [nowInBrazil, setNowInBrazil] = useState("");
+  const [currentMonthText, setCurrentMonthText] = useState("");
+
+  const todaySP = getTodayInSaoPaulo();
+
+  useEffect(() => {
+    const today = new Date();
+    const formatted = today.toLocaleDateString("pt-BR", {
+      year: "numeric",
+      month: "long",
+    });
+    setCurrentMonthText(formatted);
+  }, []);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -52,7 +136,7 @@ const CalendarScreen = () => {
       try {
         const data: EventType[] = await getAllEvents(auth.user.token);
         setEvents(data);
-        markEventDates(data);
+        markDates(data);
       } catch (error) {
         console.error("Erro ao carregar eventos", error);
       }
@@ -60,27 +144,123 @@ const CalendarScreen = () => {
     fetchEvents();
   }, [auth]);
 
-  const markEventDates = (events: EventType[]) => {
-    let marks: { [key: string]: { marked: boolean; dotColor: string } } = {};
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date().toLocaleString("pt-BR", {
+        timeZone: "America/Sao_Paulo",
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      setNowInBrazil(now);
+    };
+  
+    updateTime();
+    const interval = setInterval(updateTime, 60000); 
+  
+    return () => clearInterval(interval);
+  }, []);
+
+  const markDates = (events: EventType[]) => {
+    const newMarks: { [key: string]: any } = {};
+  
+  
     events.forEach((event) => {
-      marks[event.day] = { marked: true, dotColor: "blue" };
+      newMarks[event.day] = {
+        ...(newMarks[event.day] || {}),
+        marked: true,
+        dotColor: "blue",
+      };
     });
-    setMarkedDates(marks);
+  
+   
+    newMarks[todaySP] = {
+      ...(newMarks[todaySP] || {}),
+      customStyles: {
+        container: {
+          backgroundColor: "#FFF9C4", 
+        },
+        text: {
+          color: "#F57C00",
+          fontWeight: "bold",
+        },
+      },
+    };
+  
+ 
+    const today = new Date();
+    const formatter = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "America/Sao_Paulo",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+  
+    const formattedDate = formatter.format(today);
+    const baseDate = new Date(`${formattedDate}T00:00:00`);
+    const start = new Date(baseDate);
+    start.setDate(start.getDate() - baseDate.getDay()); 
+  
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(start);
+      date.setDate(start.getDate() + i);
+      const dateStr = formatter.format(date);
+  
+  
+      if (dateStr !== todaySP) {
+        newMarks[dateStr] = {
+          ...(newMarks[dateStr] || {}),
+          customStyles: {
+            container: {
+              backgroundColor: "#F1F8E9", 
+            },
+            text: {
+              color: "#33691E",
+            },
+          },
+        };
+      }
+    }
+  
+    setMarkedDates(newMarks);
   };
 
   const eventsForSelectedDate = events
-  .filter((event) => event.day === selectedDate)
-  .sort((a, b) => a.startTime.localeCompare(b.startTime));
+    .filter((event) => event.day === selectedDate)
+    .sort((a, b) => a.startTime.localeCompare(b.startTime));
 
   return (
     <View style={styles.container}>
+        <Text style={styles.titleToday}>
+      {nowInBrazil}
+    </Text>
       <Calendar
-        onDayPress={(day) => setSelectedDate(day.dateString)}
-        markedDates={{
-          ...markedDates,
-          [selectedDate]: { selected: true, selectedColor: "blue" },
-        }}
-      />
+  markingType="custom"
+  onDayPress={(day) => setSelectedDate(day.dateString)}
+  onMonthChange={(month) => {
+    const formatted = formatMonthYear(month.dateString);
+    setCurrentMonthText(formatted);
+  }}
+  markedDates={{
+    ...markedDates,
+    ...(selectedDate && {
+      [selectedDate]: {
+        ...(markedDates[selectedDate] || {}),
+        customStyles: {
+          container: { backgroundColor: "#2196f3" },
+          text: { color: "white", fontWeight: "bold" },
+        },
+      },
+    }),
+  }}
+  renderHeader={() => (
+    <Text style={styles.titleCalendar}>{currentMonthText}</Text>
+  )}
+/>
+  
       <Text style={styles.title}>Eventos do Dia</Text>
       <FlatList
         data={eventsForSelectedDate}
@@ -91,7 +271,9 @@ const CalendarScreen = () => {
               styles.eventCard,
               { borderLeftColor: getStatusColor(item.status) },
             ]}
-            onPress={() => navigation.navigate("EventDetails", { eventId: item.id })}
+            onPress={() =>
+              navigation.navigate("EventDetails", { eventId: item.id })
+            }
           >
             <Text style={styles.eventName}>{item.name}</Text>
             <Text>{`${item.startTime} - ${item.endTime}`}</Text>

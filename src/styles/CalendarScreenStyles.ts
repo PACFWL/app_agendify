@@ -28,6 +28,22 @@ const styles = StyleSheet.create({
       fontSize: 16, 
       fontWeight: "bold" 
     },
+    titleToday: {
+      fontSize: 16,
+      fontWeight: "500",
+      color: "#555",
+      textAlign: "center",
+      marginBottom: 10,
+    },
+    
+    titleCalendar: {
+      fontSize: 22,
+      fontWeight: "bold",
+      color: "#333",
+      textAlign: "center",
+      marginVertical: 10,
+    },
+    
   });
 
   export default styles;
