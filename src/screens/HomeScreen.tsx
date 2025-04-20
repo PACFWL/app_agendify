@@ -6,6 +6,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import { RootStackParamList } from "../routes/Routes"; 
 import styles from "../styles/HomeScreenStyles";
 import { getAllEvents } from "../api/event";
+import { TouchableOpacity } from "react-native";
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamList, "Home">;
 
@@ -65,6 +66,19 @@ const HomeScreen = () => {
   const endOfWeek = new Date(startOfWeek);
   endOfWeek.setDate(startOfWeek.getDate() + 6);
 
+  const startOfNextWeek = new Date(endOfWeek);
+  startOfNextWeek.setDate(endOfWeek.getDate() + 1);
+  
+  const endOfNextWeek = new Date(startOfNextWeek);
+  endOfNextWeek.setDate(startOfNextWeek.getDate() + 6);
+  
+  const eventosProximaSemana = events.filter(e => {
+    const data = new Date(e.day);
+    return data >= startOfNextWeek && data <= endOfNextWeek;
+  });
+  
+
+
   const eventosDoDia = events.filter(e => {
     const data = new Date(e.day);
     return data.toDateString() === today.toDateString();
@@ -85,37 +99,68 @@ const HomeScreen = () => {
 
       <Text style={styles.sectionTitle}>📅 Eventos de Hoje</Text>
       {eventosDoDia.map(event => (
-        <View
-          key={event.id}
-          style={[
-            styles.card,
-            { borderLeftColor: getStatusColor(event.status) },
-          ]}
-        >
-          <Text style={styles.cardTitle}>{event.name}</Text>
-          <Text style={styles.cardText}>
-            Horário: {event.startTime} - {event.endTime}
-          </Text>
-          <Text style={styles.cardText}>Status: {event.status}</Text>
-        </View>
-      ))}
+  <TouchableOpacity
+    key={event.id}
+    onPress={() => navigation.navigate("EventDetails", { eventId: event.id })}
+  >
+    <View
+      style={[
+        styles.card,
+        { borderLeftColor: getStatusColor(event.status) },
+      ]}
+    >
+      <Text style={styles.cardTitle}>{event.name}</Text>
+      <Text style={styles.cardText}>
+        Horário: {event.startTime} - {event.endTime}
+      </Text>
+      <Text style={styles.cardText}>Status: {event.status}</Text>
+    </View>
+  </TouchableOpacity>
+))}
 
       <Text style={styles.sectionTitle}>🗓️ Eventos da Semana</Text>
       {eventosDaSemana.map(event => (
-        <View
-          key={event.id}
-          style={[
-            styles.card,
-            { borderLeftColor: getStatusColor(event.status) },
-          ]}
-        >
-          <Text style={styles.cardTitle}>{event.name}</Text>
-          <Text style={styles.cardText}>
-            Data: {new Date(event.day).toLocaleDateString("pt-BR")}
-          </Text>
-          <Text style={styles.cardText}>Status: {event.status}</Text>
-        </View>
-      ))}
+  <TouchableOpacity
+    key={event.id}
+    onPress={() => navigation.navigate("EventDetails", { eventId: event.id })}
+  >
+    <View
+      style={[
+        styles.card,
+        { borderLeftColor: getStatusColor(event.status) },
+      ]}
+    >
+      <Text style={styles.cardTitle}>{event.name}</Text>
+      <Text style={styles.cardText}>
+        Data: {new Date(event.day).toLocaleDateString("pt-BR")}
+      </Text>
+      <Text style={styles.cardText}>Status: {event.status}</Text>
+    </View>
+  </TouchableOpacity>
+))}
+
+<Text style={styles.sectionTitle}>📆 Eventos da Semana que Vem</Text>
+{eventosProximaSemana.map(event => (
+  <TouchableOpacity
+    key={event.id}
+    onPress={() => navigation.navigate("EventDetails", { eventId: event.id })}
+  >
+    <View
+      style={[
+        styles.card,
+        { borderLeftColor: getStatusColor(event.status) },
+      ]}
+    >
+      <Text style={styles.cardTitle}>{event.name}</Text>
+      <Text style={styles.cardText}>
+        Data: {new Date(event.day).toLocaleDateString("pt-BR")}
+      </Text>
+      <Text style={styles.cardText}>Status: {event.status}</Text>
+    </View>
+  </TouchableOpacity>
+))}
+
+
     </ScrollView>
   );
 };
