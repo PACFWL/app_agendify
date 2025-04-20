@@ -14,11 +14,29 @@ type NavigationProps = NativeStackNavigationProp<RootStackParamList>;
 type EventType = {
   id: string;
   name: string;
-  day: string; 
+  day: string;
   startTime: string;
   endTime: string;
   mode: string;
+  status: string;
   location: { name: string; floor: string };
+};
+
+const getStatusColor = (status: string): string => {
+  switch (status) {
+    case "PLANEJADO":
+      return "#2196f3"; 
+    case "EM_ANDAMENTO":
+      return "#4caf50"; 
+    case "FINALIZADO":
+      return "#9e9e9e"; 
+    case "EM_ANALISE":
+      return "#ff9800";
+    case "EM_PAUSA":
+      return "#f44336"; 
+    default:
+      return "#607d8b";
+  }
 };
 
 const CalendarScreen = () => {
@@ -69,11 +87,15 @@ const CalendarScreen = () => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity
-            style={styles.eventCard}
+            style={[
+              styles.eventCard,
+              { borderLeftColor: getStatusColor(item.status) },
+            ]}
             onPress={() => navigation.navigate("EventDetails", { eventId: item.id })}
           >
             <Text style={styles.eventName}>{item.name}</Text>
-            <Text>{`${item.startTime} - ${item.endTime} - ${item.mode}`}</Text>
+            <Text>{`${item.startTime} - ${item.endTime}`}</Text>
+            <Text>Status: {item.status}</Text>
             <Text>{`${item.location.name} - ${item.location.floor}`}</Text>
           </TouchableOpacity>
         )}
