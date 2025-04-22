@@ -95,3 +95,17 @@ export const deleteEvent = async (token: string, eventId: string) => {
   if (!response.ok) throw new Error("Erro ao deletar evento");
   return { message: "Evento deletado com sucesso" };
 };
+
+export const searchEvents = async (token: string, filters: any) => {
+  const response = await fetch(`${API_URL}/api/events/search`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(filters),
+  });
+
+  if (!response.ok) throw new Error("Erro ao buscar eventos com filtros");
+  return response.json();
+};
