@@ -33,7 +33,7 @@ const EventFormScreen = ({ navigation }: Props) => {
     mode: "",
     environment: "",
     organizer: "",
-    resourcesDescription: "",
+    resourcesDescription: [""],
     disclosureMethod: "",
     relatedSubjects: [""],
     teachingStrategy: "",
@@ -89,18 +89,18 @@ const EventFormScreen = ({ navigation }: Props) => {
   const handleResourcesDescriptionChange = (index: number, value: string) => {
     const updatedResourcesDescriptions = [...eventData.resourcesDescription];
     updatedResourcesDescriptions[index] = value;
-    setEventData(prev => ({ ...prev, resourcesDescriptions: updatedResourcesDescriptions }));
+    setEventData(prev => ({ ...prev, resourcesDescription: updatedResourcesDescriptions }));
   };
   
   const addResourcesDescriptionField = () => {
-    setEventData(prev => ({ ...prev, resourcesDescriptions: [...prev.resourcesDescription, ""] }));
+    setEventData(prev => ({ ...prev, resourcesDescription: [...prev.resourcesDescription, ""] }));
   };
   
   const removeResourcesDescriptionField = (index: number) => {
     const updatedResourcesDescriptions = [...eventData.resourcesDescription];
     updatedResourcesDescriptions.splice(index, 1);
-    setEventData(prev => ({ ...prev, resourcesDescriptions: updatedResourcesDescriptions }));
-  };
+    setEventData(prev => ({ ...prev, resourcesDescription: updatedResourcesDescriptions }));
+  };  
   
   const handleRelatedSubjectChange = (index: number, value: string) => {
     const updatedRelatedSubjects = [...eventData.relatedSubjects];
@@ -168,7 +168,7 @@ const EventFormScreen = ({ navigation }: Props) => {
         day: selectedDay ? selectedDay.toISOString().split("T")[0] : "",
         startTime: eventData.startTime + ":00",
         endTime: eventData.endTime + ":00",
-        resourcesDescription: eventData.resourcesDescription.split(","),
+        resourcesDescription: eventData.resourcesDescription,
         relatedSubjects: eventData.relatedSubjects,
         authors: eventData.authors,
         courses: eventData.courses,
@@ -253,9 +253,26 @@ const EventFormScreen = ({ navigation }: Props) => {
       <Text style={styles.label}>Organizador:</Text>
       <TextInput style={styles.input} placeholder="Organizador" onChangeText={(text) => handleChange("organizer", text)} />
   
-      <Text style={styles.label}>Recursos (separados por vírgula):</Text>
-      <TextInput style={styles.input} placeholder="Recursos" onChangeText={(text) => handleChange("resourcesDescription", text)} />
-  
+      <Text style={styles.label}>Recursos:</Text>
+{eventData.resourcesDescription.map((resource, index) => (
+  <React.Fragment key={index}>
+    <TextInput
+      style={styles.input}
+      placeholder={`Recurso ${index + 1}`}
+      value={resource}
+      onChangeText={(text) => handleResourcesDescriptionChange(index, text)}
+    />
+    {index > 0 && (
+      <Button
+        title="Remover"
+        color="red"
+        onPress={() => removeResourcesDescriptionField(index)}
+      />
+    )}
+  </React.Fragment>
+))}
+<Button title="Adicionar Recurso" onPress={addResourcesDescriptionField} />
+
       <Text style={styles.label}>Forma de Divulgação:</Text>
       <TextInput style={styles.input} placeholder="Forma de Divulgação" onChangeText={(text) => handleChange("disclosureMethod", text)} />
   
