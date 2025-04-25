@@ -115,7 +115,7 @@ const PendingEventFormScreen = ({ navigation }: Props) => {
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 30 }}>
+    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }}>
       <Text style={styles.title}>Criar Evento Pendente</Text>
 
       <Text style={styles.label}>Nome:</Text>

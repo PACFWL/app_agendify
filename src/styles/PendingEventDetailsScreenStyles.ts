@@ -8,6 +8,7 @@ export default StyleSheet.create({
   },
   scrollContainer: {
     padding: 16,
+    paddingBottom: 40
   },
   innerContainer: {
     paddingBottom: 32,

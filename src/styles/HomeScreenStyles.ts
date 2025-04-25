@@ -6,6 +6,7 @@ const HomeScreenStyles = StyleSheet.create({
     backgroundColor: "#F8F9FA",
     paddingHorizontal: 16,
     paddingTop: 32,
+    padding: 20,
   },
   welcome: {
     fontSize: 24,
@@ -54,6 +55,15 @@ const HomeScreenStyles = StyleSheet.create({
     marginLeft: 10,
     marginBottom: 10,
   },  
+  statusTag: {
+    alignSelf: "flex-start",
+    paddingVertical: 2,
+    paddingHorizontal: 8,
+    borderRadius: 8,
+    fontWeight: "bold",
+    marginTop: 4,
+    color: "#fff",
+  },
 });
 
 export default HomeScreenStyles;

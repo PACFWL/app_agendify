@@ -148,7 +148,7 @@ const handleDateChange = (_: any, selectedDate?: Date) => {
 
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 30 }}>
+    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }}>
       <Text style={styles.title}>Editar Evento Pendente</Text>
 
       <Text style={styles.label}>Nome:</Text>

@@ -271,7 +271,9 @@ const EventFormScreen = ({ navigation }: Props) => {
     )}
   </React.Fragment>
 ))}
-<Button title="Adicionar Recurso" onPress={addResourcesDescriptionField} />
+<TouchableOpacity style={styles.addButton} onPress={addResourcesDescriptionField}>
+  <Text style={styles.addButtonText}>Adicionar Recurso</Text>
+</TouchableOpacity>
 
       <Text style={styles.label}>Forma de Divulgação:</Text>
       <TextInput style={styles.input} placeholder="Forma de Divulgação" onChangeText={(text) => handleChange("disclosureMethod", text)} />
@@ -294,8 +296,10 @@ const EventFormScreen = ({ navigation }: Props) => {
     )}
   </React.Fragment>
 ))}
-<Button title="Adicionar Disciplina" onPress={addRelatedSubjectField} />
-  
+<TouchableOpacity style={styles.addButton} onPress={addRelatedSubjectField}>
+  <Text style={styles.addButtonText}>Adicionar Disciplina</Text>
+</TouchableOpacity>
+
       <Text style={styles.label}>Estratégia de Ensino:</Text>
       <TextInput style={styles.input} placeholder="Estratégia de Ensino" onChangeText={(text) => handleChange("teachingStrategy", text)} />
   
@@ -317,7 +321,10 @@ const EventFormScreen = ({ navigation }: Props) => {
     )}
   </React.Fragment>
 ))}
-<Button title="Adicionar Autor" onPress={addAuthorField} />
+<TouchableOpacity style={styles.addButton} onPress={addAuthorField}>
+  <Text style={styles.addButtonText}>Adicionar Autor</Text>
+</TouchableOpacity>
+
 
 <Text style={styles.label}>Cursos:</Text>
 {eventData.courses.map((course, index) => (
@@ -337,8 +344,10 @@ const EventFormScreen = ({ navigation }: Props) => {
     )}
   </React.Fragment>
 ))}
-<Button title="Adicionar Curso" onPress={addCourseField} />
-  
+<TouchableOpacity style={styles.addButton} onPress={addCourseField}>
+  <Text style={styles.addButtonText}>Adicionar Curso</Text>
+</TouchableOpacity>
+
       <Text style={styles.label}>Vínculo Disciplinar:</Text>
       <TextInput style={styles.input} placeholder="Vínculo Disciplinar" onChangeText={(text) => handleChange("disciplinaryLink", text)} />
   
@@ -414,7 +423,11 @@ const EventFormScreen = ({ navigation }: Props) => {
       <Text style={styles.label}>Observação:</Text>
       <TextInput style={styles.input} placeholder="Observação" onChangeText={(text) => handleChange("observation", text)} />
   
-      <Button title="Criar Evento" onPress={handleSubmit} />
+      
+      <TouchableOpacity style={styles.addButton} onPress={handleSubmit}>
+        <Text style={styles.addButtonText}>Criar Evento</Text>
+      </TouchableOpacity>
+
     </ScrollView>
   );
 };

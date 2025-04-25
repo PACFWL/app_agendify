@@ -19,6 +19,14 @@ type Event = {
   status: string;
 };
 
+const formatStatusText = (status: string): string => {
+  const formatted = status
+    .toLowerCase()
+    .replace(/_/g, " ")
+    .replace(/(^\w{1}|\s+\w{1})/g, letter => letter.toUpperCase());
+  return formatted;
+};
+
 const getStatusColor = (status: string): string => {
   switch (status) {
     case "PLANEJADO":
@@ -94,7 +102,7 @@ const HomeScreen = () => {
   });
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 30 }}>
 <Text style={styles.welcome}>Bem-vindo, {auth?.user?.name}!</Text>
 <Text style={styles.sectionTitle}>📅 Eventos de Hoje</Text>
 {eventosDoDia.length === 0 ? (
@@ -115,7 +123,14 @@ const HomeScreen = () => {
         <Text style={styles.cardText}>
           Horário: {event.startTime} - {event.endTime}
         </Text>
-        <Text style={styles.cardText}>Status: {event.status}</Text>
+        <Text
+  style={[
+    styles.statusTag,
+    { backgroundColor: getStatusColor(event.status) },
+  ]}
+>
+  {formatStatusText(event.status)}
+</Text>
       </View>
     </TouchableOpacity>
   ))
@@ -140,7 +155,14 @@ const HomeScreen = () => {
         <Text style={styles.cardText}>
           Data: {new Date(event.day).toLocaleDateString("pt-BR")}
         </Text>
-        <Text style={styles.cardText}>Status: {event.status}</Text>
+        <Text
+  style={[
+    styles.statusTag,
+    { backgroundColor: getStatusColor(event.status) },
+  ]}
+>
+  {formatStatusText(event.status)}
+</Text>
       </View>
     </TouchableOpacity>
   ))
@@ -165,7 +187,14 @@ const HomeScreen = () => {
         <Text style={styles.cardText}>
           Data: {new Date(event.day).toLocaleDateString("pt-BR")}
         </Text>
-        <Text style={styles.cardText}>Status: {event.status}</Text>
+        <Text
+  style={[
+    styles.statusTag,
+    { backgroundColor: getStatusColor(event.status) },
+  ]}
+>
+  {formatStatusText(event.status)}
+</Text>
       </View>
     </TouchableOpacity>
   ))

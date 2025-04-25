@@ -162,7 +162,7 @@ const EventDetailsScreen = ({ route, navigation }: Props) => {
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 30 }}>
       <Text style={styles.title}>{event.name}</Text>
       <Text style={styles.detail}>
       <Text style={styles.label}>Data:</Text>{" "}
