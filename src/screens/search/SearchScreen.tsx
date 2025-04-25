@@ -4,6 +4,10 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { searchEvents } from "../../api/event";
 import RemoteSvgIcon from "../../components/RemoteSvgIcon";
 import styles from "../../styles/SearchScreenStyles";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../routes/Routes";
+
+type Props = NativeStackScreenProps<RootStackParamList, "Search">;
 
 type Event = {
   id: string;
@@ -25,7 +29,7 @@ type Event = {
   observation: string;
 };
 
-const SearchScreen = () => {
+const SearchScreen = ({ navigation }: Props) => {
   const auth = useContext(AuthContext);
   const [name, setName] = useState("");
   const [organizer, setOrganizer] = useState("");
@@ -139,15 +143,20 @@ const SearchScreen = () => {
         {loading && <Text style={{ marginTop: 16 }}>Carregando...</Text>}
 
         {results.map((item) => (
-          <View key={item.id} style={styles.eventItem}>
-            <Text style={styles.eventTitle}>{item.name}</Text>
-            <Text>
-              {item.day} - {item.startTime} às {item.endTime}
-            </Text>
-            <Text>Tema: {item.theme}</Text>
-            <Text>Organizador: {item.organizer}</Text>
-          </View>
-        ))}
+  <TouchableOpacity
+    key={item.id}
+    onPress={() => navigation.navigate("EventDetails", { eventId: item.id })}
+    style={styles.eventItem}
+  >
+    <Text style={styles.eventTitle}>{item.name}</Text>
+    <Text>
+      {item.day} - {item.startTime} às {item.endTime}
+    </Text>
+    <Text>Tema: {item.theme}</Text>
+    <Text>Organizador: {item.organizer}</Text>
+  </TouchableOpacity>
+))}
+
       </ScrollView>
     </KeyboardAvoidingView>
   );

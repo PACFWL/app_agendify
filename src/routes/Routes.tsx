@@ -26,6 +26,7 @@ export type RootStackParamList = {
   EventForm: { event?: any } | undefined;
   EventEditForm: { eventId: string };
   UserDetails: { userId: string };
+  Search: undefined;
   Calendar: undefined;
   Tabs: undefined;
 };
