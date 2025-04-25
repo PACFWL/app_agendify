@@ -75,6 +75,7 @@ const formatPriority = (priority: string) => {
 
 const formatAdministrativeStatus = (status: string) => {
   const map: { [key: string]: string } = {
+    NORMAL: "Normal",
     CANCELADO: "Cancelado",
     URGENTE: "Urgente",
     ADIADO: "Adiado",

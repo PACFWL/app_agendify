@@ -175,7 +175,7 @@ const PendingEventFormScreen = ({ navigation }: Props) => {
         onValueChange={(itemValue) => handleChange("mode", itemValue)}
       >
         <Picker.Item label="Selecione a modalidade" value="" />
-   <Picker.Item label="Presencial" value="PRESENCIAL" />
+          <Picker.Item label="Presencial" value="PRESENCIAL" />
           <Picker.Item label="Online" value="ONLINE" />
           <Picker.Item label="Híbrido" value="HIBRIDO" />
       </Picker>

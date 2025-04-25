@@ -170,8 +170,6 @@ const HomeScreen = () => {
     </TouchableOpacity>
   ))
 )}
-
-
     </ScrollView>
   );
 };
