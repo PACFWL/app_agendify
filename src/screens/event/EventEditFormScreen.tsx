@@ -166,7 +166,6 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
     setEventData(prev => ({ ...prev, relatedSubjects: updatedRelatedSubjects }));
   };
 
-
   const handleDateChange = (_: any, selectedDate?: Date) => {
     setShowDatePicker(false);
     if (!selectedDate) return;
@@ -334,6 +333,7 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
 <TouchableOpacity style={styles.addButton} onPress={addRelatedSubjectField}>
   <Text style={styles.addButtonText}>Adicionar Disciplina</Text>
 </TouchableOpacity>
+
       <Text style={styles.label}>Estratégia de Ensino:</Text>
       <TextInput style={styles.input} value={eventData.teachingStrategy} placeholder="Estratégia de Ensino" onChangeText={(text) => handleChange("teachingStrategy", text)} />
 
@@ -358,7 +358,6 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
 <TouchableOpacity style={styles.addButton} onPress={addAuthorField}>
   <Text style={styles.addButtonText}>Adicionar Autor</Text>
 </TouchableOpacity>
-
 
 <Text style={styles.label}>Cursos:</Text>
 {eventData.courses.map((course, index) => (
@@ -399,16 +398,16 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
 
       <Text style={styles.label}>Local do Evento:</Text>
       <Picker
-selectedValue={eventData.locationName}
-onValueChange={(itemValue) => handleChange("locationName", itemValue)}
-style={styles.input}
-enabled={!!eventData.locationFloor && locationOptionsByFloor[eventData.locationFloor]?.length > 0}
->
-<Picker.Item label="Selecione o local" value="" />
-{(locationOptionsByFloor[eventData.locationFloor] || []).map((location) => (
-  <Picker.Item key={location} label={location} value={location} />
-))}
-</Picker>
+        selectedValue={eventData.locationName}
+        onValueChange={(itemValue) => handleChange("locationName", itemValue)}
+        style={styles.input}
+        enabled={!!eventData.locationFloor && locationOptionsByFloor[eventData.locationFloor]?.length > 0}
+        >
+        <Picker.Item label="Selecione o local" value="" />
+        {(locationOptionsByFloor[eventData.locationFloor] || []).map((location) => (
+          <Picker.Item key={location} label={location} value={location} />
+        ))}
+        </Picker>
 
       <Text style={styles.label}>Status:</Text>
       <Picker

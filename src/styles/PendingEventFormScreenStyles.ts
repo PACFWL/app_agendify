@@ -38,4 +38,43 @@ export default StyleSheet.create({
     marginBottom: 5,
     color: "#333",
   },
+  section: {
+    marginVertical: 15,
+    padding: 15,
+    borderRadius: 10,
+    backgroundColor: "#ffffff",
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  button: {
+    marginTop: 20,
+    padding: 15,
+    backgroundColor: "#4CAF50",
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  removeButton: {
+    backgroundColor: "#ff4d4d",
+    marginBottom: 10,
+    borderRadius: 5,
+    padding: 10,
+  },
+  addButton: {
+    backgroundColor: "#007bff",
+    marginBottom: 10,
+    borderRadius: 5,
+    padding: 10,
+  },
+  addButtonText: {
+    color: "#fff",
+    textAlign: "center",
+    fontWeight: "bold",
+  }
 });
