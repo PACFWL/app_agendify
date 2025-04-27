@@ -13,9 +13,16 @@ import { Picker } from "@react-native-picker/picker";
 
 type Props = NativeStackScreenProps<RootStackParamList, "EventEditForm">;
 
+const locationOptionsByFloor: Record<string, string[]> = {
+  "0": ["Auditório", "Sala Maker", "Hall Principal", "Sala T01", "Sala T02", "Sala T03"],
+  "1": ["Sala de Informática 001", "Sala de Informática 002", "Sala de Informática 003", "Sala de Informática 004", "Sala 111", "Sala de Informática 001", "Sala de Aula 001", "Sala de Aula 002", "Sala de Aula 003", "Sala de Aula 004", "Sala de Aula 005", "Sala de Aula 006", "Sala de Aula 007", "Sala de Aula 008", "Sala de Aula 009"],
+  "2": ["Sala de Informática 001", "Sala de Informática 002", "Sala de Informática 003", "Sala de Informática 004", "Sala de Aula 001", "Sala de Aula 002", "Sala de Aula 003", "Sala de Aula 004", "Sala de Aula 005", "Sala de Aula 006", "Sala de Aula 007", "Sala de Aula 008", "Sala de Aula 009", "Sala de Aula 010" ],
+  "3": ["Sala de Aula 1", "Sala de Aula 2"],
+};
+
 const EventEditFormScreen = ({ route, navigation }: Props) => {
   const { eventId } = route.params;
-  const auth = useContext(AuthContext);
+  const auth = useContext(AuthContext); 
 
   const [eventData, setEventData] = useState({
     name: "",
@@ -27,13 +34,13 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
     mode: "",
     environment: "",
     organizer: "",
-    resourcesDescription: "",
+    resourcesDescription: [""],
     disclosureMethod: "",
-    relatedSubjects: "",
+    relatedSubjects: [""],
     teachingStrategy: "",
-    authors: "",
-    courses: "",
-    disciplinaryLink: "",
+    authors: [""],
+    courses: [""],
+    disciplinaryLink: "", 
     locationName: "",
     locationFloor: "",
     status: "",
@@ -49,7 +56,7 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
   const [startTimeDate, setStartTimeDate] = useState<Date | null>(null);
   const [endTimeDate, setEndTimeDate] = useState<Date | null>(null);
-  
+
   useEffect(() => {
     const fetchEvent = async () => {
       if (!auth?.user) return;
@@ -66,12 +73,12 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
           mode: event.mode,
           environment: event.environment,
           organizer: event.organizer,
-          resourcesDescription: event.resourcesDescription.join(", "),
+          resourcesDescription: event.resourcesDescription,
           disclosureMethod: event.disclosureMethod,
-          relatedSubjects: event.relatedSubjects.join(", "),
+          relatedSubjects: event.relatedSubjects,
           teachingStrategy: event.teachingStrategy,
-          authors: event.authors.join(", "),
-          courses: event.courses.join(", "),
+          authors: event.authors,
+          courses: event.courses,
           disciplinaryLink: event.disciplinaryLink,
           locationName: event.location.name,
           locationFloor: event.location.floor,
@@ -94,6 +101,71 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
 
     fetchEvent();
   }, [auth, eventId]);
+
+  const handleAuthorChange = (index: number, value: string) => {
+    const updatedAuthors = [...eventData.authors];
+    updatedAuthors[index] = value;
+    setEventData(prev => ({ ...prev, authors: updatedAuthors }));
+  };
+  
+  const addAuthorField = () => {
+    setEventData(prev => ({ ...prev, authors: [...prev.authors, ""] }));
+  };
+  
+  const removeAuthorField = (index: number) => {
+    const updatedAuthors = [...eventData.authors];
+    updatedAuthors.splice(index, 1);
+    setEventData(prev => ({ ...prev, authors: updatedAuthors }));
+  };
+  
+  const handleCourseChange = (index: number, value: string) => {
+    const updatedCourses = [...eventData.courses];
+    updatedCourses[index] = value;
+    setEventData(prev => ({ ...prev, courses: updatedCourses }));
+  };
+  
+  const addCourseField = () => {
+    setEventData(prev => ({ ...prev, courses: [...prev.courses, ""] }));
+  };
+  
+  const removeCourseField = (index: number) => {
+    const updatedCourses = [...eventData.courses];
+    updatedCourses.splice(index, 1);
+    setEventData(prev => ({ ...prev, courses: updatedCourses }));
+  };
+
+  const handleResourcesDescriptionChange = (index: number, value: string) => {
+    const updatedResourcesDescriptions = [...eventData.resourcesDescription];
+    updatedResourcesDescriptions[index] = value;
+    setEventData(prev => ({ ...prev, resourcesDescription: updatedResourcesDescriptions }));
+  };
+  
+  const addResourcesDescriptionField = () => {
+    setEventData(prev => ({ ...prev, resourcesDescription: [...prev.resourcesDescription, ""] }));
+  };
+  
+  const removeResourcesDescriptionField = (index: number) => {
+    const updatedResourcesDescriptions = [...eventData.resourcesDescription];
+    updatedResourcesDescriptions.splice(index, 1);
+    setEventData(prev => ({ ...prev, resourcesDescription: updatedResourcesDescriptions }));
+  };  
+  
+  const handleRelatedSubjectChange = (index: number, value: string) => {
+    const updatedRelatedSubjects = [...eventData.relatedSubjects];
+    updatedRelatedSubjects[index] = value;
+    setEventData(prev => ({ ...prev, relatedSubjects: updatedRelatedSubjects }));
+  };
+  
+  const addRelatedSubjectField = () => {
+    setEventData(prev => ({ ...prev, relatedSubjects: [...prev.relatedSubjects, ""] }));
+  };
+  
+  const removeRelatedSubjectField = (index: number) => {
+    const updatedRelatedSubjects = [...eventData.relatedSubjects];
+    updatedRelatedSubjects.splice(index, 1);
+    setEventData(prev => ({ ...prev, relatedSubjects: updatedRelatedSubjects }));
+  };
+
 
   const handleDateChange = (_: any, selectedDate?: Date) => {
     setShowDatePicker(false);
@@ -129,10 +201,10 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
         day: selectedDay ? selectedDay.toISOString().split("T")[0] : "",
         startTime: startTimeDate ? format(startTimeDate, "HH:mm:ss") : eventData.startTime + ":00",
         endTime: endTimeDate ? format(endTimeDate, "HH:mm:ss") : eventData.endTime + ":00",        
-        resourcesDescription: eventData.resourcesDescription.split(","),
-        relatedSubjects: eventData.relatedSubjects.split(","),
-        authors: eventData.authors.split(","),
-        courses: eventData.courses.split(","),
+        resourcesDescription: eventData.resourcesDescription,
+        relatedSubjects: eventData.relatedSubjects,
+        authors: eventData.authors,
+        courses: eventData.courses,
         location: { name: eventData.locationName, floor: eventData.locationFloor },
         cleanupDuration: `PT${eventData.cleanupDuration}M`,
       };
@@ -216,29 +288,102 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
       <Text style={styles.label}>Organizador:</Text>
       <TextInput style={styles.input} value={eventData.organizer} placeholder="Organizador" onChangeText={(text) => handleChange("organizer", text)} />
 
-      <Text style={styles.label}>Recursos (separados por vírgula):</Text>
-      <TextInput style={styles.input} value={eventData.resourcesDescription} placeholder="Recursos" onChangeText={(text) => handleChange("resourcesDescription", text)} />
+      <Text style={styles.label}>Recursos:</Text>
+{eventData.resourcesDescription.map((resource, index) => (
+  <React.Fragment key={index}>
+    <TextInput
+      style={styles.input}
+      placeholder={`Recurso ${index + 1}`}
+      value={resource}
+      onChangeText={(text) => handleResourcesDescriptionChange(index, text)}
+    />
+    {index > 0 && (
+      <Button
+        title="Remover"
+        color="red"
+        onPress={() => removeResourcesDescriptionField(index)}
+      />
+    )}
+  </React.Fragment>
+))}
+<TouchableOpacity style={styles.addButton} onPress={addResourcesDescriptionField}>
+  <Text style={styles.addButtonText}>Adicionar Recurso</Text>
+</TouchableOpacity>
 
       <Text style={styles.label}>Forma de Divulgação:</Text>
       <TextInput style={styles.input} value={eventData.disclosureMethod} placeholder="Forma de Divulgação" onChangeText={(text) => handleChange("disclosureMethod", text)} />
 
-      <Text style={styles.label}>Disciplinas Relacionadas (separadas por vírgula):</Text>
-      <TextInput style={styles.input} value={eventData.relatedSubjects} placeholder="Disciplinas" onChangeText={(text) => handleChange("relatedSubjects", text)} />
-
+      <Text style={styles.label}>Disciplinas Relacionadas:</Text>
+{eventData.relatedSubjects.map((relatedSubject, index) => (
+  <React.Fragment key={index}>
+    <TextInput
+      style={styles.input}
+      placeholder={`Disciplina ${index + 1}`}
+      value={relatedSubject}
+      onChangeText={(text) => handleRelatedSubjectChange(index, text)}
+    />
+    {index > 0 && (
+      <Button
+        title="Remover"
+        color="red"
+        onPress={() => removeRelatedSubjectField(index)}
+      />
+    )}
+  </React.Fragment>
+))}
+<TouchableOpacity style={styles.addButton} onPress={addRelatedSubjectField}>
+  <Text style={styles.addButtonText}>Adicionar Disciplina</Text>
+</TouchableOpacity>
       <Text style={styles.label}>Estratégia de Ensino:</Text>
       <TextInput style={styles.input} value={eventData.teachingStrategy} placeholder="Estratégia de Ensino" onChangeText={(text) => handleChange("teachingStrategy", text)} />
 
-      <Text style={styles.label}>Autores (separados por vírgula):</Text>
-      <TextInput style={styles.input} value={eventData.authors} placeholder="Autores" onChangeText={(text) => handleChange("authors", text)} />
+      <Text style={styles.label}>Autores:</Text>
+{eventData.authors.map((author, index) => (
+  <React.Fragment key={index}>
+    <TextInput
+      style={styles.input}
+      placeholder={`Autor ${index + 1}`}
+      value={author}
+      onChangeText={(text) => handleAuthorChange(index, text)}
+    />
+    {index > 0 && (
+      <Button
+        title="Remover"
+        color="red"
+        onPress={() => removeAuthorField(index)}
+      />
+    )}
+  </React.Fragment>
+))}
+<TouchableOpacity style={styles.addButton} onPress={addAuthorField}>
+  <Text style={styles.addButtonText}>Adicionar Autor</Text>
+</TouchableOpacity>
 
-      <Text style={styles.label}>Cursos (separados por vírgula):</Text>
-      <TextInput style={styles.input} value={eventData.courses} placeholder="Cursos" onChangeText={(text) => handleChange("courses", text)} />
+
+<Text style={styles.label}>Cursos:</Text>
+{eventData.courses.map((course, index) => (
+  <React.Fragment key={index}>
+    <TextInput
+      style={styles.input}
+      placeholder={`Curso ${index + 1}`}
+      value={course}
+      onChangeText={(text) => handleCourseChange(index, text)}
+    />
+    {index > 0 && (
+      <Button
+        title="Remover"
+        color="red"
+        onPress={() => removeCourseField(index)}
+      />
+    )}
+  </React.Fragment>
+))}
+<TouchableOpacity style={styles.addButton} onPress={addCourseField}>
+  <Text style={styles.addButtonText}>Adicionar Curso</Text>
+</TouchableOpacity>
 
       <Text style={styles.label}>Vínculo Disciplinar:</Text>
       <TextInput style={styles.input} value={eventData.disciplinaryLink} placeholder="Vínculo Disciplinar" onChangeText={(text) => handleChange("disciplinaryLink", text)} />
-
-      <Text style={styles.label}>Local do Evento:</Text>
-      <TextInput style={styles.input} value={eventData.locationName} placeholder="Local" onChangeText={(text) => handleChange("locationName", text)} />
 
       <Text style={styles.label}>Andar do Local:</Text>
       <Picker
@@ -251,6 +396,19 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
         <Picker.Item label="2º Andar" value="2" />
         <Picker.Item label="Bloco C" value="3" />
       </Picker>
+
+      <Text style={styles.label}>Local do Evento:</Text>
+      <Picker
+selectedValue={eventData.locationName}
+onValueChange={(itemValue) => handleChange("locationName", itemValue)}
+style={styles.input}
+enabled={!!eventData.locationFloor && locationOptionsByFloor[eventData.locationFloor]?.length > 0}
+>
+<Picker.Item label="Selecione o local" value="" />
+{(locationOptionsByFloor[eventData.locationFloor] || []).map((location) => (
+  <Picker.Item key={location} label={location} value={location} />
+))}
+</Picker>
 
       <Text style={styles.label}>Status:</Text>
       <Picker

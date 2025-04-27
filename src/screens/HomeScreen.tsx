@@ -1,9 +1,9 @@
 import React, { useState, useContext, useCallback } from "react";
 import { View, Text, Alert, ScrollView, TouchableOpacity } from "react-native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack"; 
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { AuthContext } from "../contexts/AuthContext";
-import { RootStackParamList } from "../routes/Routes"; 
+import { RootStackParamList } from "../routes/Routes";
 import styles from "../styles/HomeScreenStyles";
 import { getAllEvents } from "../api/event";
 
@@ -25,11 +25,6 @@ const formatStatusText = (status: string): string => {
     .replace(/(^\w{1}|\s+\w{1})/g, letter => letter.toUpperCase());
 };
 
-const ajustarParaSaoPaulo = (data: Date): Date => {
-  const ajustada = new Date(data);
-  ajustada.setHours(ajustada.getHours() - 3);
-  return ajustada;
-};
 const getStatusColor = (status: string): string => {
   switch (status) {
     case "PLANEJADO":
@@ -56,15 +51,12 @@ const statusPriority: Record<string, number> = {
 };
 
 const isSameDay = (dateA: Date, dateB: Date): boolean => {
-  const ajustadaA = ajustarParaSaoPaulo(dateA);
-  const ajustadaB = ajustarParaSaoPaulo(dateB);
   return (
-    ajustadaA.getDate() === ajustadaB.getDate() &&
-    ajustadaA.getMonth() === ajustadaB.getMonth() &&
-    ajustadaA.getFullYear() === ajustadaB.getFullYear()
+    dateA.getDate() === dateB.getDate() &&
+    dateA.getMonth() === dateB.getMonth() &&
+    dateA.getFullYear() === dateB.getFullYear()
   );
 };
-
 
 const ordenarEventos = (eventos: Event[]): Event[] => {
   return eventos.sort((a, b) => {
@@ -91,7 +83,7 @@ const ordenarEventos = (eventos: Event[]): Event[] => {
 
 const HomeScreen = () => {
   const auth = useContext(AuthContext);
-  const navigation = useNavigation<NavigationProps>(); 
+  const navigation = useNavigation<NavigationProps>();
   const [events, setEvents] = useState<Event[]>([]);
 
   useFocusEffect(
@@ -112,7 +104,7 @@ const HomeScreen = () => {
     }, [auth])
   );
 
-  const today = ajustarParaSaoPaulo(new Date());
+  const today = new Date();
 
   const startOfWeek = new Date(today);
   startOfWeek.setDate(today.getDate() - today.getDay() + 1);
@@ -131,20 +123,19 @@ const HomeScreen = () => {
   endOfNextWeek.setHours(23, 59, 59, 999);
 
   const eventosDoDia = events.filter(e => {
-    const data = ajustarParaSaoPaulo(new Date(e.day));
+    const data = new Date(e.day);
     return isSameDay(data, today);
   });
 
   const eventosDaSemana = events.filter(e => {
-    const data = ajustarParaSaoPaulo(new Date(e.day));
+    const data = new Date(e.day);
     return data >= startOfWeek && data <= endOfWeek && !isSameDay(data, today);
   });
 
   const eventosProximaSemana = events.filter(e => {
-    const data = ajustarParaSaoPaulo(new Date(e.day));
+    const data = new Date(e.day);
     return data >= startOfNextWeek && data <= endOfNextWeek;
   });
-
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 30 }}>
