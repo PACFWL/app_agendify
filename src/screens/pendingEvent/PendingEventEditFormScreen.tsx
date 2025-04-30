@@ -445,8 +445,10 @@ const handleDateChange = (_: any, selectedDate?: Date) => {
 
       <Text style={styles.label}>Observação:</Text>
       <TextInput style={styles.input} value={eventData.observation} placeholder="Observação" onChangeText={(text) => handleChange("observation", text)} />
-
-      <Button title="Salvar Alterações" onPress={handleSubmit} />
+     
+      <TouchableOpacity style={styles.addButton} onPress={handleSubmit}>
+        <Text style={styles.addButtonText}>Salvar Alterações</Text>
+      </TouchableOpacity>
     </ScrollView>
 
   );

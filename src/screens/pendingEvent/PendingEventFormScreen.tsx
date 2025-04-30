@@ -421,8 +421,9 @@ const PendingEventFormScreen = ({ navigation }: Props) => {
 
       <Text style={styles.label}>Observação:</Text>
       <TextInput style={styles.input} placeholder="Observação" onChangeText={(text) => handleChange("observation", text)} />
-
-      <Button title="Criar Evento Pendente" onPress={handleSubmit} />
+        <TouchableOpacity style={styles.addButton} onPress={handleSubmit}>
+          <Text style={styles.addButtonText}>Criar Evento Pendente</Text>
+        </TouchableOpacity>
     </ScrollView>
   );
 };

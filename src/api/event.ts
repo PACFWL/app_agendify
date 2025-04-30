@@ -57,6 +57,32 @@ export const resolveEventConflict = async (
   return response.json();
 };
 
+
+export const resolveUpdateConflict = async (
+  token: string,
+  conflictingEventId: string,
+  updatedEventData: any
+) => {
+  const response = await fetch(
+    `${API_URL}/api/events/resolve-update/${conflictingEventId}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(updatedEventData),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Erro ao resolver conflito de atualização de evento");
+  }
+
+  return response.json();
+};
+
+
 export const getEventById = async (token: string, eventId: string) => {
   const response = await fetch(`${API_URL}/api/events/${eventId}`, {
     method: "GET",

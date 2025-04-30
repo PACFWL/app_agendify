@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Text, TextInput, Button, Alert, ScrollView } from "react-native";
 import { AuthContext } from "../../contexts/AuthContext";
-import { getEventById, updateEvent } from "../../api/event";
+import { getEventById, updateEvent,resolveUpdateConflict  } from "../../api/event";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../routes/Routes";
 import styles from "../../styles/EventFormScreenStyles";
@@ -288,26 +288,26 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
       <TextInput style={styles.input} value={eventData.organizer} placeholder="Organizador" onChangeText={(text) => handleChange("organizer", text)} />
 
       <Text style={styles.label}>Recursos:</Text>
-{eventData.resourcesDescription.map((resource, index) => (
-  <React.Fragment key={index}>
-    <TextInput
-      style={styles.input}
-      placeholder={`Recurso ${index + 1}`}
-      value={resource}
-      onChangeText={(text) => handleResourcesDescriptionChange(index, text)}
-    />
-    {index > 0 && (
-      <Button
-        title="Remover"
-        color="red"
-        onPress={() => removeResourcesDescriptionField(index)}
-      />
-    )}
-  </React.Fragment>
-))}
-<TouchableOpacity style={styles.addButton} onPress={addResourcesDescriptionField}>
-  <Text style={styles.addButtonText}>Adicionar Recurso</Text>
-</TouchableOpacity>
+        {eventData.resourcesDescription.map((resource, index) => (
+          <React.Fragment key={index}>
+            <TextInput
+              style={styles.input}
+              placeholder={`Recurso ${index + 1}`}
+              value={resource}
+              onChangeText={(text) => handleResourcesDescriptionChange(index, text)}
+            />
+            {index > 0 && (
+              <Button
+                title="Remover"
+                color="red"
+                onPress={() => removeResourcesDescriptionField(index)}
+              />
+            )}
+          </React.Fragment>
+        ))}
+    <TouchableOpacity style={styles.addButton} onPress={addResourcesDescriptionField}>
+      <Text style={styles.addButtonText}>Adicionar Recurso</Text>
+    </TouchableOpacity>
 
       <Text style={styles.label}>Forma de Divulgação:</Text>
       <TextInput style={styles.input} value={eventData.disclosureMethod} placeholder="Forma de Divulgação" onChangeText={(text) => handleChange("disclosureMethod", text)} />
@@ -458,7 +458,9 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
       <Text style={styles.label}>Observação:</Text>
       <TextInput style={styles.input} value={eventData.observation} placeholder="Observação" onChangeText={(text) => handleChange("observation", text)} />
 
-      <Button title="Salvar Alterações" onPress={handleSubmit} />
+      <TouchableOpacity style={styles.addButton} onPress={handleSubmit}>
+        <Text style={styles.addButtonText}>Salvar Alterações</Text>
+      </TouchableOpacity>
     </ScrollView>
 
   );

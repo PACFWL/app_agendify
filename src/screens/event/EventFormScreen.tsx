@@ -1,17 +1,17 @@
 import React, { useState, useContext } from "react";
-import { Text, TextInput, Button, Alert, ScrollView, TouchableOpacity } from "react-native";
+import { Text, TextInput, Button, Alert, ScrollView, TouchableOpacity, Modal, View } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { AuthContext } from "../../contexts/AuthContext";
-import { createEvent } from "../../api/event";
+import { createEvent, resolveEventConflict } from "../../api/event";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../routes/Routes";
 import styles from "../../styles/EventFormScreenStyles";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Picker } from '@react-native-picker/picker';
+import { useNavigation } from "@react-navigation/native";
 
 type Props = NativeStackScreenProps<RootStackParamList, "EventForm">;
-
 
 const locationOptionsByFloor: Record<string, string[]> = {
   "0": ["Auditório", "Sala Maker", "Hall Principal", "Sala T01", "Sala T02", "Sala T03"],
@@ -53,7 +53,7 @@ const EventFormScreen = ({ navigation }: Props) => {
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
-  
+
   const handleAuthorChange = (index: number, value: string) => {
     const updatedAuthors = [...eventData.authors];
     updatedAuthors[index] = value;
@@ -176,14 +176,28 @@ const EventFormScreen = ({ navigation }: Props) => {
         cleanupDuration: `PT${eventData.cleanupDuration}M`,
       };
   
-      await createEvent(auth.user.token, formattedData);
-      Alert.alert("Sucesso", "Evento criado com sucesso!");
-      navigation.goBack();
+      const result = await createEvent(auth.user.token, formattedData);
+   
+      if (!result.conflict) {
+        Alert.alert("Sucesso", "Evento criado com sucesso!");
+        navigation.goBack();
+        return;
+      }
+  
+      const conflictingEvent = result.conflictData.existingEvent;
+
+    
+    navigation.navigate("ConflictResolution", {
+      newEvent: formattedData,
+      existingEvent: conflictingEvent,
+    });
+    
     } catch (error) {
+      console.error(error);
       Alert.alert("Erro", "Erro ao criar evento.");
     }
   };
-  
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 30 }}>
 
@@ -325,7 +339,6 @@ const EventFormScreen = ({ navigation }: Props) => {
   <Text style={styles.addButtonText}>Adicionar Autor</Text>
 </TouchableOpacity>
 
-
 <Text style={styles.label}>Cursos:</Text>
 {eventData.courses.map((course, index) => (
   <React.Fragment key={index}>
@@ -387,22 +400,22 @@ const EventFormScreen = ({ navigation }: Props) => {
 </Picker>
 
   
-<Text style={styles.label}>Status Administrativo:</Text>
-<Picker
-  selectedValue={eventData.administrativeStatus}
-  onValueChange={(itemValue) => handleChange("administrativeStatus", itemValue)}
-  style={styles.input}
->
-  <Picker.Item label="Selecione o status administrativo" value="" />
-  <Picker.Item label="Normal" value="NORMAL" />
-  <Picker.Item label="Aprovado" value="APROVADO" />
-  <Picker.Item label="Pendente" value="PENDENTE" />
-  <Picker.Item label="Cancelado" value="CANCELADO" />
-  <Picker.Item label="Urgente" value="URGENTE" />
-  <Picker.Item label="Adiado" value="ADIADO" />
-  <Picker.Item label="Atrasado" value="ATRASADO" />
-  <Picker.Item label="Indefinido" value="INDEFINIDO" />
-</Picker>
+  <Text style={styles.label}>Status Administrativo:</Text>
+  <Picker
+    selectedValue={eventData.administrativeStatus}
+    onValueChange={(itemValue) => handleChange("administrativeStatus", itemValue)}
+    style={styles.input}
+  >
+    <Picker.Item label="Selecione o status administrativo" value="" />
+    <Picker.Item label="Normal" value="NORMAL" />
+    <Picker.Item label="Aprovado" value="APROVADO" />
+    <Picker.Item label="Pendente" value="PENDENTE" />
+    <Picker.Item label="Cancelado" value="CANCELADO" />
+    <Picker.Item label="Urgente" value="URGENTE" />
+    <Picker.Item label="Adiado" value="ADIADO" />
+    <Picker.Item label="Atrasado" value="ATRASADO" />
+    <Picker.Item label="Indefinido" value="INDEFINIDO" />
+  </Picker>
       <Text style={styles.label}>Prioridade:</Text>
       <Picker
         selectedValue={eventData.priority}
@@ -422,8 +435,7 @@ const EventFormScreen = ({ navigation }: Props) => {
   
       <Text style={styles.label}>Observação:</Text>
       <TextInput style={styles.input} placeholder="Observação" onChangeText={(text) => handleChange("observation", text)} />
-  
-      
+
       <TouchableOpacity style={styles.addButton} onPress={handleSubmit}>
         <Text style={styles.addButtonText}>Criar Evento</Text>
       </TouchableOpacity>
@@ -433,3 +445,28 @@ const EventFormScreen = ({ navigation }: Props) => {
 };
 
 export default EventFormScreen;
+
+/**
+  Alert.alert(
+        "Conflito detectado",
+        `Já existe um evento no mesmo horário (${conflictingEvent.name}). Deseja substituir?`,
+        [
+          { text: "Cancelar", style: "cancel" },
+          {
+            text: "Substituir",
+            onPress: async () => {
+              try {
+                await resolveEventConflict(auth.user!.token, conflictingEvent.id, formattedData);
+                Alert.alert("Sucesso", "Conflito resolvido e evento criado!");
+                navigation.goBack();
+              } catch (error) {
+                console.error("Erro ao substituir evento:", error);
+              Alert.alert("Erro", "Erro ao resolver o conflito.");
+             
+              }
+            },
+          },
+        ]
+      ); 
+ 
+ */

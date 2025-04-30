@@ -82,7 +82,7 @@ const EventScreen = () => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <EventCard event={item} />}
       />
-
+ 
       {auth?.user?.role === "MASTER" && (
         <TouchableOpacity
           style={styles.createButton}
