@@ -36,15 +36,24 @@ const EventCard = ({
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  const handleApprove = async () => {
-    try {
-      await approvePendingEvent(user.token, event.id);
-      Alert.alert("Sucesso", "Evento aprovado com sucesso!");
-      onAction();
-    } catch (error) {
-      Alert.alert("Erro", "Erro ao aprovar o evento.");
-    }
-  };
+    const handleApprove = async () => {
+      try {
+        const result = await approvePendingEvent(user.token, event.id);
+    
+        if (result?.conflict) {
+          navigation.navigate("PendingConflictResolution", {
+            existingEvent: result.conflictData.existingEvent,
+            pendingEvent: event,
+          });
+        } else {
+          Alert.alert("Sucesso", "Evento aprovado com sucesso!");
+          onAction();
+        }
+      } catch (error) {
+        Alert.alert("Erro", "Erro ao aprovar o evento.");
+      }
+    };
+    
 
   const handleReject = async () => {
     try {

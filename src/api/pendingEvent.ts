@@ -121,11 +121,15 @@ export const resolvePendingEventConflict = async (
     {
       method: "POST",
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     }
   );
 
-  if (!response.ok) throw new Error("Erro ao resolver conflito de evento pendente");
+  if (!response.ok) {
+    throw new Error("Erro ao resolver conflito de evento pendente");
+  }
+
   return response.json();
 };
