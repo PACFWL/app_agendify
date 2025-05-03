@@ -13,6 +13,7 @@ import PendingEventDetailsScreen from "../screens/pendingEvent/PendingEventDetai
 import PendingEventFormScreen from "../screens/pendingEvent/PendingEventFormScreen";
 import PendingEventEditFormScreen from "../screens/pendingEvent/PendingEventEditFormScreen";
 import ConflictResolutionScreen from "../screens/event/ConflictResolutionScreen";
+import UpdateConflictResolutionScreen from "../screens/event/UpdateConflictResolutionScreen";
 
 export type RootStackParamList = {
   Login: undefined;
@@ -29,6 +30,10 @@ export type RootStackParamList = {
   ConflictResolution: {
     newEvent: any;
     existingEvent: any;
+  };
+  UpdateConflictResolution: {
+    updatedEvent: any;
+    conflictingEvent: any;
   };
   UserDetails: { userId: string };
   Search: undefined;
@@ -63,6 +68,7 @@ const Routes = () => {
     <Stack.Screen name="EventForm" component={EventFormScreen} />
     <Stack.Screen name="EventEditForm" component={EventEditFormScreen} />
     <Stack.Screen name="ConflictResolution" component={ConflictResolutionScreen} />
+    <Stack.Screen name="UpdateConflictResolution" component={UpdateConflictResolutionScreen} />
     <Stack.Screen name="PendingEventDetails" component={PendingEventDetailsScreen} />
     <Stack.Screen name="PendingEventForm" component={PendingEventFormScreen} />
     <Stack.Screen name="PendingEventEditForm" component={PendingEventEditFormScreen} />

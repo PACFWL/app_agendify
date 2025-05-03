@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Text, TextInput, Button, Alert, ScrollView } from "react-native";
 import { AuthContext } from "../../contexts/AuthContext";
-import { getEventById, updateEvent,resolveUpdateConflict  } from "../../api/event";
+import { getEventById, updateEvent } from "../../api/event";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../routes/Routes";
 import styles from "../../styles/EventFormScreenStyles";
@@ -46,7 +46,7 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
     status: "",
     administrativeStatus: "",
     priority: "",
-    cleanupDuration: "",
+    cleanupDuration: "",  
     observation: "",
   });
 
@@ -92,7 +92,6 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
         setSelectedDay(new Date(event.day));
         setStartTimeDate(new Date(`${event.day}T${event.startTime}`));
         setEndTimeDate(new Date(`${event.day}T${event.endTime}`));
-
 
       } catch (error) {
         Alert.alert("Erro", "Erro ao carregar evento.");
@@ -208,9 +207,20 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
         cleanupDuration: `PT${eventData.cleanupDuration}M`,
       };
 
-      await updateEvent(auth.user.token, eventId, formattedData);
-      Alert.alert("Sucesso", "Evento atualizado!");
-      navigation.goBack();
+      const result = await updateEvent(auth.user.token, eventId, formattedData);
+
+      if (!result.conflict) {
+        Alert.alert("Sucesso", "Evento atualizado com sucesso!");
+        navigation.goBack();
+        return;
+      }
+  
+      const conflictingEvent = result.conflictData.existingEvent;
+  
+      navigation.navigate("UpdateConflictResolution", {
+        updatedEvent:{ ...formattedData, id: eventId },
+        conflictingEvent
+      });
     } catch (error) {
       Alert.alert("Erro", "Erro ao atualizar evento.");
     }

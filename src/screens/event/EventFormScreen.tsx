@@ -2,14 +2,14 @@ import React, { useState, useContext } from "react";
 import { Text, TextInput, Button, Alert, ScrollView, TouchableOpacity, Modal, View } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { AuthContext } from "../../contexts/AuthContext";
-import { createEvent, resolveEventConflict } from "../../api/event";
+import { createEvent } from "../../api/event";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../routes/Routes";
 import styles from "../../styles/EventFormScreenStyles";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Picker } from '@react-native-picker/picker';
-import { useNavigation } from "@react-navigation/native";
+
 
 type Props = NativeStackScreenProps<RootStackParamList, "EventForm">;
 
@@ -53,6 +53,7 @@ const EventFormScreen = ({ navigation }: Props) => {
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
+
 
   const handleAuthorChange = (index: number, value: string) => {
     const updatedAuthors = [...eventData.authors];
@@ -185,7 +186,6 @@ const EventFormScreen = ({ navigation }: Props) => {
       }
   
       const conflictingEvent = result.conflictData.existingEvent;
-
     
     navigation.navigate("ConflictResolution", {
       newEvent: formattedData,
@@ -255,7 +255,7 @@ const EventFormScreen = ({ navigation }: Props) => {
         onValueChange={(itemValue) => handleChange("mode", itemValue)}
         style={styles.input}
       >
-         <Picker.Item label="Selecione a modalidade" value="" />
+      <Picker.Item label="Selecione a modalidade" value="" />
         <Picker.Item label="Presencial" value="PRESENCIAL" />
         <Picker.Item label="Online" value="ONLINE" />
         <Picker.Item label="Híbrido" value="HIBRIDO" />
@@ -445,28 +445,3 @@ const EventFormScreen = ({ navigation }: Props) => {
 };
 
 export default EventFormScreen;
-
-/**
-  Alert.alert(
-        "Conflito detectado",
-        `Já existe um evento no mesmo horário (${conflictingEvent.name}). Deseja substituir?`,
-        [
-          { text: "Cancelar", style: "cancel" },
-          {
-            text: "Substituir",
-            onPress: async () => {
-              try {
-                await resolveEventConflict(auth.user!.token, conflictingEvent.id, formattedData);
-                Alert.alert("Sucesso", "Conflito resolvido e evento criado!");
-                navigation.goBack();
-              } catch (error) {
-                console.error("Erro ao substituir evento:", error);
-              Alert.alert("Erro", "Erro ao resolver o conflito.");
-             
-              }
-            },
-          },
-        ]
-      ); 
- 
- */

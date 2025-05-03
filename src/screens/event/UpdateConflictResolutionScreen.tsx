@@ -1,33 +1,35 @@
-import React, { useContext } from "react";
-import { View, Text, ScrollView, Button, StyleSheet, Alert } from "react-native";
+import React,{useContext} from "react";
+import { View, Text, Button, ScrollView, Alert,StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { resolveUpdateConflict } from "../../api/event"; 
+import { AuthContext } from "../../contexts/AuthContext"; 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../routes/Routes";
-import { resolveEventConflict } from "../../api/event";
-import { useNavigation } from "@react-navigation/native";
-import { AuthContext } from "../../contexts/AuthContext"; 
 
-type Props = NativeStackScreenProps<RootStackParamList, "ConflictResolution">;
+type Props = NativeStackScreenProps<RootStackParamList, "UpdateConflictResolution">;
 
-const ConflictResolutionScreen = ({ route }: Props) => {
-  const { newEvent, existingEvent } = route.params;
+const UpdateConflictResolutionScreen = ({ route }: Props) => {
+  const { updatedEvent, conflictingEvent } = route.params;
   const navigation = useNavigation();
-  const auth = useContext(AuthContext); 
+  const auth  = useContext(AuthContext);
 
-  const handleReplace = async () => {
+
+  const handleResolve = async () => {
     try {
-      if (!auth?.user?.token) {
+    if (!auth?.user?.token) {
         throw new Error("Token de autenticação ausente.");
-      }
+    }
 
-      await resolveEventConflict(auth.user.token, existingEvent.id, newEvent); 
-      Alert.alert("Evento substituído com sucesso!");
+      await resolveUpdateConflict(auth.user.token, conflictingEvent.id, updatedEvent, );
+      Alert.alert("Sucesso", "Conflito resolvido e evento atualizado.");
       navigation.goBack();
       navigation.goBack();
     } catch (error) {
       console.error(error);
-      Alert.alert("Erro ao substituir o evento.");
+      Alert.alert("Erro", "Falha ao resolver o conflito.");
     }
   };
+
 
   const renderEventDetails = (event: any) => (
     <>
@@ -57,21 +59,21 @@ const ConflictResolutionScreen = ({ route }: Props) => {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 30 }}>
-      <Text style={styles.header}>Conflito de Eventos</Text>
+      <Text style={styles.header}>Conflito de Atualização</Text>
 
       <View style={styles.section}>
         <Text style={styles.subHeader}>Evento Existente:</Text>
-        {renderEventDetails(existingEvent)}
+        {renderEventDetails(conflictingEvent)}
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.subHeader}>Novo Evento:</Text>
-        {renderEventDetails(newEvent)}
+        <Text style={styles.subHeader}>Sua Atualização:</Text>
+        {renderEventDetails(updatedEvent)}
       </View>
 
       <View style={styles.buttonRow}>
         <Button title="Cancelar" onPress={() => navigation.goBack()} />
-        <Button title="Substituir Evento Existente" onPress={handleReplace} />
+        <Button title="Substituir Evento Existente" onPress={handleResolve} />
       </View>
     </ScrollView>
   );
@@ -85,4 +87,4 @@ const styles = StyleSheet.create({
   buttonRow: { flexDirection: "row", justifyContent: "space-around", marginTop: 20 },
 });
 
-export default ConflictResolutionScreen;
+export default UpdateConflictResolutionScreen;

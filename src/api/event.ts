@@ -28,7 +28,10 @@ export const createEvent = async (token: string, eventData: any) => {
   if (!response.ok) {
     if (response.status === 409) {
      
-      return { conflict: true, conflictData: data };
+      return { 
+        conflict: true, 
+        conflictData: data 
+      };
     }
     throw new Error("Erro ao criar evento");
   }
@@ -53,10 +56,11 @@ export const resolveEventConflict = async (
     }
   );
 
-  if (!response.ok) throw new Error("Erro ao resolver conflito de evento");
+  if (!response.ok) {
+    throw new Error("Erro ao resolver conflito de evento");
+  }
   return response.json();
 };
-
 
 export const resolveUpdateConflict = async (
   token: string,
@@ -78,7 +82,6 @@ export const resolveUpdateConflict = async (
   if (!response.ok) {
     throw new Error("Erro ao resolver conflito de atualização de evento");
   }
-
   return response.json();
 };
 
@@ -106,8 +109,18 @@ export const updateEvent = async (token: string, eventId: string, eventData: any
     body: JSON.stringify(eventData),
   });
 
-  if (!response.ok) throw new Error("Erro ao atualizar evento");
-  return response.json();
+  if (response.status === 409) {
+    const data = await response.json();
+    return {
+      conflict: true,
+      conflictData: data,
+    };
+  }
+  if (!response.ok) {
+    throw new Error("Erro ao atualizar evento");
+  }
+
+  return { conflict: false };
 };
 
 export const deleteEvent = async (token: string, eventId: string) => {

@@ -20,7 +20,6 @@ export type BottomTabParamList = {
   Search: undefined; 
 };
 
-
 const BottomTabs = () => {
   const auth = useContext(AuthContext);
   const role = auth?.user?.role;
@@ -47,11 +46,10 @@ const BottomTabs = () => {
       <Tab.Screen name="Calendar" component={CalendarScreen} options={{ title: "Calendário" }} />
       <Tab.Screen name="Account" component={AccountScreen} options={{ title: "Conta" }} />
       <Tab.Screen
-  name="Search"
-  component={SearchScreen}
-  options={{ title: "Buscar" }}
-/>
-
+        name="Search"
+        component={SearchScreen}
+        options={{ title: "Buscar" }}
+      />
       {role !== "USER" && (
         <Tab.Screen
           name="PendingsEvents"
@@ -61,7 +59,7 @@ const BottomTabs = () => {
       )}
     </Tab.Navigator>
   );
+  
 };
-
 
 export default BottomTabs;
