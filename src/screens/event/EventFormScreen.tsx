@@ -268,23 +268,23 @@ const EventFormScreen = ({ navigation }: Props) => {
       <TextInput style={styles.input} placeholder="Organizador" onChangeText={(text) => handleChange("organizer", text)} />
   
       <Text style={styles.label}>Recursos:</Text>
-{eventData.resourcesDescription.map((resource, index) => (
-  <React.Fragment key={index}>
-    <TextInput
-      style={styles.input}
-      placeholder={`Recurso ${index + 1}`}
-      value={resource}
-      onChangeText={(text) => handleResourcesDescriptionChange(index, text)}
-    />
-    {index > 0 && (
-      <Button
-        title="Remover"
-        color="red"
-        onPress={() => removeResourcesDescriptionField(index)}
-      />
-    )}
-  </React.Fragment>
-))}
+        {eventData.resourcesDescription.map((resource, index) => (
+          <React.Fragment key={index}>
+            <TextInput
+              style={styles.input}
+              placeholder={`Recurso ${index + 1}`}
+              value={resource}
+              onChangeText={(text) => handleResourcesDescriptionChange(index, text)}
+            />
+            {index > 0 && (
+              <Button
+                title="Remover"
+                color="red"
+                onPress={() => removeResourcesDescriptionField(index)}
+              />
+            )}
+          </React.Fragment>
+        ))}
 <TouchableOpacity style={styles.addButton} onPress={addResourcesDescriptionField}>
   <Text style={styles.addButtonText}>Adicionar Recurso</Text>
 </TouchableOpacity>
@@ -379,16 +379,16 @@ const EventFormScreen = ({ navigation }: Props) => {
 
       <Text style={styles.label}>Local do Evento:</Text>
       <Picker
-  selectedValue={eventData.locationName}
-  onValueChange={(itemValue) => handleChange("locationName", itemValue)}
-  style={styles.input}
-  enabled={!!eventData.locationFloor && locationOptionsByFloor[eventData.locationFloor]?.length > 0}
->
-  <Picker.Item label="Selecione o local" value="" />
-  {(locationOptionsByFloor[eventData.locationFloor] || []).map((location) => (
-    <Picker.Item key={location} label={location} value={location} />
-  ))}
-</Picker>
+        selectedValue={eventData.locationName}
+        onValueChange={(itemValue) => handleChange("locationName", itemValue)}
+        style={styles.input}
+        enabled={!!eventData.locationFloor && locationOptionsByFloor[eventData.locationFloor]?.length > 0}
+      >
+      <Picker.Item label="Selecione o local" value="" />
+      {(locationOptionsByFloor[eventData.locationFloor] || []).map((location) => (
+        <Picker.Item key={location} label={location} value={location} />
+      ))}
+    </Picker>
       <Text style={styles.label}>Status:</Text>
 <Picker
   selectedValue={eventData.status}

@@ -5,6 +5,7 @@ import { RootStackParamList } from "../../routes/Routes";
 import { resolveEventConflict } from "../../api/event";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../contexts/AuthContext"; 
+import styles from "../../styles/ConflictResolutionScreenStyles";
 
 type Props = NativeStackScreenProps<RootStackParamList, "ConflictResolution">;
 
@@ -76,13 +77,5 @@ const ConflictResolutionScreen = ({ route }: Props) => {
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: { padding: 20 },
-  header: { fontSize: 22, fontWeight: "bold", marginBottom: 20 },
-  subHeader: { fontSize: 18, fontWeight: "600", marginBottom: 10 },
-  section: { marginBottom: 20 },
-  buttonRow: { flexDirection: "row", justifyContent: "space-around", marginTop: 20 },
-});
 
 export default ConflictResolutionScreen;

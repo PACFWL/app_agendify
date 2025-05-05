@@ -5,6 +5,7 @@ import { resolveUpdateConflict } from "../../api/event";
 import { AuthContext } from "../../contexts/AuthContext"; 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../routes/Routes";
+import styles from "../../styles/UpdateConflictResolutionScreenStyles";
 
 type Props = NativeStackScreenProps<RootStackParamList, "UpdateConflictResolution">;
 
@@ -29,7 +30,6 @@ const UpdateConflictResolutionScreen = ({ route }: Props) => {
       Alert.alert("Erro", "Falha ao resolver o conflito.");
     }
   };
-
 
   const renderEventDetails = (event: any) => (
     <>
@@ -78,13 +78,5 @@ const UpdateConflictResolutionScreen = ({ route }: Props) => {
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: { padding: 20 },
-  header: { fontSize: 22, fontWeight: "bold", marginBottom: 20 },
-  subHeader: { fontSize: 18, fontWeight: "600", marginBottom: 10 },
-  section: { marginBottom: 20 },
-  buttonRow: { flexDirection: "row", justifyContent: "space-around", marginTop: 20 },
-});
 
 export default UpdateConflictResolutionScreen;

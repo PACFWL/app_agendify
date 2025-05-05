@@ -409,11 +409,7 @@ const PendingEventFormScreen = ({ navigation }: Props) => {
   onValueChange={(itemValue) => handleChange("priority", itemValue)}
 >
   <Picker.Item label="Selecione a prioridade" value="" />
-  <Picker.Item label="Muito Baixa" value="MUITO_BAIXA" />
-  <Picker.Item label="Baixa" value="BAIXA" />
-  <Picker.Item label="Média" value="MEDIA" />
-  <Picker.Item label="Alta" value="ALTA" />
-  <Picker.Item label="Crítica" value="CRITICA" />
+  <Picker.Item label="Indefinido" value="INDEFINIDO" />
 </Picker>
 
       <Text style={styles.label}>Duração da Limpeza (minutos):</Text>
@@ -429,3 +425,13 @@ const PendingEventFormScreen = ({ navigation }: Props) => {
 };
 
 export default PendingEventFormScreen;
+
+/*
+ 
+  <Picker.Item label="Muito Baixa" value="MUITO_BAIXA" />
+  <Picker.Item label="Baixa" value="BAIXA" />
+  <Picker.Item label="Média" value="MEDIA" />
+  <Picker.Item label="Alta" value="ALTA" />
+  <Picker.Item label="Crítica" value="CRITICA" />  
+  
+ */

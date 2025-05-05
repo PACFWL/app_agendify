@@ -24,6 +24,18 @@ const SearchScreenStyles = StyleSheet.create({
     eventTitle: {
       fontWeight: "bold",
     },
+    pickerContainer: {
+      borderWidth: 1,
+      borderColor: "#ccc",
+      borderRadius: 4,
+      marginBottom: 12,
+    },
+    label: {
+      fontSize: 15,
+      fontWeight: "600",
+      marginBottom: 6,
+      color: "#444",
+    },   
   });
 
   export default SearchScreenStyles;
