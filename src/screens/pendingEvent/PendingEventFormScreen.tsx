@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Text, TextInput, Button, Alert, ScrollView, TouchableOpacity } from "react-native";
+import { Text, TextInput, Button, Alert, ScrollView, TouchableOpacity, View } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { AuthContext } from "../../contexts/AuthContext";
 import { createPendingEvent } from "../../api/pendingEvent";
@@ -44,7 +44,6 @@ const PendingEventFormScreen = ({ navigation }: Props) => {
     status: "",
     administrativeStatus: "",
     priority: "",
-    cleanupDuration: "",
     observation: "",
     eventRequesterId: "",
   });
@@ -53,6 +52,8 @@ const PendingEventFormScreen = ({ navigation }: Props) => {
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
+    const [cleanupHours, setCleanupHours] = useState("");
+    const [cleanupMinutes, setCleanupMinutes] = useState("");
 
   const handleAuthorChange = (index: number, value: string) => {
     const updatedAuthors = [...eventData.authors];
@@ -163,6 +164,13 @@ const PendingEventFormScreen = ({ navigation }: Props) => {
     if (!auth?.user) return;
 
     try {
+
+      let cleanupDurationISO = "";
+      if (cleanupHours || cleanupMinutes) {
+        cleanupDurationISO = "PT";
+        if (cleanupHours) cleanupDurationISO += `${parseInt(cleanupHours)}H`;
+        if (cleanupMinutes) cleanupDurationISO += `${parseInt(cleanupMinutes)}M`;
+      }
       const formattedData = {
         ...eventData,
         day: selectedDay ? selectedDay.toISOString().split("T")[0] : "",
@@ -173,7 +181,7 @@ const PendingEventFormScreen = ({ navigation }: Props) => {
         authors: eventData.authors,
         courses: eventData.courses,
         location: { name: eventData.locationName, floor: eventData.locationFloor },
-        cleanupDuration: `PT${eventData.cleanupDuration}M`,
+        cleanupDuration: cleanupDurationISO || null,
         eventRequesterId: auth.user.id,
       };
 
@@ -412,9 +420,24 @@ const PendingEventFormScreen = ({ navigation }: Props) => {
   <Picker.Item label="Indefinido" value="INDEFINIDO" />
 </Picker>
 
-      <Text style={styles.label}>Duração da Limpeza (minutos):</Text>
-      <TextInput style={styles.input} placeholder="Duração da Limpeza" onChangeText={(text) => handleChange("cleanupDuration", text)} />
-
+      <Text style={styles.label}>Duração de Limpeza</Text>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <TextInput
+            style={[styles.input, { flex: 1, marginRight: 8 }]}
+            placeholder="Horas"
+            keyboardType="numeric"
+            value={cleanupHours}
+            onChangeText={setCleanupHours}
+          />
+          <TextInput
+            style={[styles.input, { flex: 1 }]}
+            placeholder="Minutos"
+            keyboardType="numeric"
+            value={cleanupMinutes}
+            onChangeText={setCleanupMinutes}
+          />
+        </View> 
+        
       <Text style={styles.label}>Observação:</Text>
       <TextInput style={styles.input} placeholder="Observação" onChangeText={(text) => handleChange("observation", text)} />
         <TouchableOpacity style={styles.addButton} onPress={handleSubmit}>

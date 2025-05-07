@@ -45,7 +45,6 @@ const EventFormScreen = ({ navigation }: Props) => {
     status: "",
     administrativeStatus: "",
     priority: "",
-    cleanupDuration: "",
     observation: "",
   });
 
@@ -53,7 +52,9 @@ const EventFormScreen = ({ navigation }: Props) => {
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
-
+  const [cleanupHours, setCleanupHours] = useState("");
+  const [cleanupMinutes, setCleanupMinutes] = useState("");
+  
 
   const handleAuthorChange = (index: number, value: string) => {
     const updatedAuthors = [...eventData.authors];
@@ -164,6 +165,14 @@ const EventFormScreen = ({ navigation }: Props) => {
     if (!auth?.user) return;
   
     try {
+
+      let cleanupDurationISO = "";
+      if (cleanupHours || cleanupMinutes) {
+        cleanupDurationISO = "PT";
+        if (cleanupHours) cleanupDurationISO += `${parseInt(cleanupHours)}H`;
+        if (cleanupMinutes) cleanupDurationISO += `${parseInt(cleanupMinutes)}M`;
+      }
+
       const formattedData = {
         ...eventData,
         day: selectedDay ? selectedDay.toISOString().split("T")[0] : "",
@@ -174,7 +183,7 @@ const EventFormScreen = ({ navigation }: Props) => {
         authors: eventData.authors,
         courses: eventData.courses,
         location: { name: eventData.locationName, floor: eventData.locationFloor },
-        cleanupDuration: `PT${eventData.cleanupDuration}M`,
+        cleanupDuration: cleanupDurationISO || null,
       };
   
       const result = await createEvent(auth.user.token, formattedData);
@@ -430,9 +439,24 @@ const EventFormScreen = ({ navigation }: Props) => {
         <Picker.Item label="Crítica" value="CRITICA" />
       </Picker>
 
-      <Text style={styles.label}>Duração da Limpeza (minutos):</Text>
-      <TextInput style={styles.input} placeholder="Duração da Limpeza" onChangeText={(text) => handleChange("cleanupDuration", text)} />
-  
+      <Text style={styles.label}>Duração de Limpeza</Text>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <TextInput
+            style={[styles.input, { flex: 1, marginRight: 8 }]}
+            placeholder="Horas"
+            keyboardType="numeric"
+            value={cleanupHours}
+            onChangeText={setCleanupHours}
+          />
+          <TextInput
+            style={[styles.input, { flex: 1 }]}
+            placeholder="Minutos"
+            keyboardType="numeric"
+            value={cleanupMinutes}
+            onChangeText={setCleanupMinutes}
+          />
+        </View>
+
       <Text style={styles.label}>Observação:</Text>
       <TextInput style={styles.input} placeholder="Observação" onChangeText={(text) => handleChange("observation", text)} />
 

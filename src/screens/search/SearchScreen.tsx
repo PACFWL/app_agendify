@@ -29,7 +29,6 @@ type Event = {
   disciplinaryLink: string;
   status: string;
   administrativeStatus: string;
-  cleanupDuration: string;
   priority: string;
   observation: string;
 };
@@ -61,7 +60,6 @@ const SearchScreen = ({ navigation }: Props) => {
   const [results, setResults] = useState<Event[]>([]);
   const [loading, setLoading] = useState(false);
   const [intervalSearch, setIntervalSearch] = useState(false);
-  const [cleanupDuration, setCleanupDuration] = useState("");
   const [cleanupHours, setCleanupHours] = useState("");
   const [cleanupMinutes, setCleanupMinutes] = useState("");
   

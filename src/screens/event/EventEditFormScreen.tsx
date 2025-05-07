@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Text, TextInput, Button, Alert, ScrollView } from "react-native";
+import { Text, TextInput, Button, Alert, ScrollView, View } from "react-native";
 import { AuthContext } from "../../contexts/AuthContext";
 import { getEventById, updateEvent } from "../../api/event";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -56,7 +56,9 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
   const [startTimeDate, setStartTimeDate] = useState<Date | null>(null);
   const [endTimeDate, setEndTimeDate] = useState<Date | null>(null);
-
+  const [cleanupHours, setCleanupHours] = useState("");
+  const [cleanupMinutes, setCleanupMinutes] = useState("");
+  
   useEffect(() => {
     const fetchEvent = async () => {
       if (!auth?.user) return;
@@ -89,6 +91,12 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
           observation: event.observation,
         });
 
+        const cleanup = event.cleanupDuration.replace("PT", "");
+        const hoursMatch = cleanup.match(/(\d+)H/);
+        const minutesMatch = cleanup.match(/(\d+)M/);
+        setCleanupHours(hoursMatch ? hoursMatch[1] : "");
+        setCleanupMinutes(minutesMatch ? minutesMatch[1] : "");
+        
         setSelectedDay(new Date(event.day));
         setStartTimeDate(new Date(`${event.day}T${event.startTime}`));
         setEndTimeDate(new Date(`${event.day}T${event.endTime}`));
@@ -194,6 +202,14 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
     if (!auth?.user) return;
 
     try {
+
+      let cleanupDurationISO = "";
+      if (cleanupHours || cleanupMinutes) {
+        cleanupDurationISO = "PT";
+        if (cleanupHours) cleanupDurationISO += `${parseInt(cleanupHours)}H`;
+        if (cleanupMinutes) cleanupDurationISO += `${parseInt(cleanupMinutes)}M`;
+      }
+      
       const formattedData = {
         ...eventData,
         day: selectedDay ? selectedDay.toISOString().split("T")[0] : "",
@@ -204,7 +220,7 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
         authors: eventData.authors,
         courses: eventData.courses,
         location: { name: eventData.locationName, floor: eventData.locationFloor },
-        cleanupDuration: `PT${eventData.cleanupDuration}M`,
+        cleanupDuration: cleanupDurationISO || null,
       };
 
       const result = await updateEvent(auth.user.token, eventId, formattedData);
@@ -462,8 +478,23 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
         <Picker.Item label="Crítica" value="CRITICA" />
       </Picker>
 
-      <Text style={styles.label}>Duração da Limpeza (minutos):</Text>
-      <TextInput style={styles.input} value={eventData.cleanupDuration} placeholder="Duração da Limpeza" onChangeText={(text) => handleChange("cleanupDuration", text)} />
+      <Text style={styles.label}>Duração da Limpeza</Text>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <TextInput
+            style={[styles.input, { flex: 1, marginRight: 8 }]}
+            placeholder="Horas"
+            keyboardType="numeric"
+            value={cleanupHours}
+            onChangeText={setCleanupHours}
+          />
+          <TextInput
+            style={[styles.input, { flex: 1 }]}
+            placeholder="Minutos"
+            keyboardType="numeric"
+            value={cleanupMinutes}
+            onChangeText={setCleanupMinutes}
+          />
+        </View>
 
       <Text style={styles.label}>Observação:</Text>
       <TextInput style={styles.input} value={eventData.observation} placeholder="Observação" onChangeText={(text) => handleChange("observation", text)} />
