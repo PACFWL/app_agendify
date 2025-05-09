@@ -40,50 +40,23 @@ const getStatusColor = (status: string): string => {
   }
 };
 
-LocaleConfig.locales['pt-br'] = {
+LocaleConfig.locales["pt-br"] = {
   monthNames: [
-    'Janeiro',
-    'Fevereiro',
-    'Março',
-    'Abril',
-    'Maio',
-    'Junho',
-    'Julho',
-    'Agosto',
-    'Setembro',
-    'Outubro',
-    'Novembro',
-    'Dezembro'
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
   ],
   monthNamesShort: [
-    'Jan',
-    'Fev',
-    'Mar',
-    'Abr',
-    'Mai',
-    'Jun',
-    'Jul',
-    'Ago',
-    'Set',
-    'Out',
-    'Nov',
-    'Dez'
+    "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
+    "Jul", "Ago", "Set", "Out", "Nov", "Dez"
   ],
   dayNames: [
-    'Domingo',
-    'Segunda',
-    'Terça',
-    'Quarta',
-    'Quinta',
-    'Sexta',
-    'Sábado'
+    "Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"
   ],
-  dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
-  today: 'Hoje'
+  dayNamesShort: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"],
+  today: "Hoje"
 };
 
-LocaleConfig.defaultLocale = 'pt-br';
-
+LocaleConfig.defaultLocale = "pt-br";
 
 const getTodayInSaoPaulo = (): string => {
   const formatter = new Intl.DateTimeFormat("en-CA", {
@@ -157,31 +130,29 @@ const CalendarScreen = () => {
       });
       setNowInBrazil(now);
     };
-  
+
     updateTime();
-    const interval = setInterval(updateTime, 60000); 
-  
+    const interval = setInterval(updateTime, 60000);
+
     return () => clearInterval(interval);
   }, []);
 
   const markDates = (events: EventType[]) => {
     const newMarks: { [key: string]: any } = {};
-  
-  
+
     events.forEach((event) => {
       newMarks[event.day] = {
         ...(newMarks[event.day] || {}),
         marked: true,
-        dotColor: "blue",
+        dotColor: "#0288d1",
       };
     });
-  
-   
+
     newMarks[todaySP] = {
       ...(newMarks[todaySP] || {}),
       customStyles: {
         container: {
-          backgroundColor: "#FFF9C4", 
+          backgroundColor: "#FFF9C4",
         },
         text: {
           color: "#F57C00",
@@ -189,8 +160,7 @@ const CalendarScreen = () => {
         },
       },
     };
-  
- 
+
     const today = new Date();
     const formatter = new Intl.DateTimeFormat("en-CA", {
       timeZone: "America/Sao_Paulo",
@@ -198,24 +168,23 @@ const CalendarScreen = () => {
       month: "2-digit",
       day: "2-digit",
     });
-  
+
     const formattedDate = formatter.format(today);
     const baseDate = new Date(`${formattedDate}T00:00:00`);
     const start = new Date(baseDate);
-    start.setDate(start.getDate() - baseDate.getDay()); 
-  
+    start.setDate(start.getDate() - baseDate.getDay());
+
     for (let i = 0; i < 7; i++) {
       const date = new Date(start);
       date.setDate(start.getDate() + i);
       const dateStr = formatter.format(date);
-  
-  
+
       if (dateStr !== todaySP) {
         newMarks[dateStr] = {
           ...(newMarks[dateStr] || {}),
           customStyles: {
             container: {
-              backgroundColor: "#F1F8E9", 
+              backgroundColor: "#F1F8E9",
             },
             text: {
               color: "#33691E",
@@ -224,7 +193,7 @@ const CalendarScreen = () => {
         };
       }
     }
-  
+
     setMarkedDates(newMarks);
   };
 
@@ -234,33 +203,32 @@ const CalendarScreen = () => {
 
   return (
     <View style={styles.container}>
-        <Text style={styles.titleToday}>
-      {nowInBrazil}
-    </Text>
+      <Text style={styles.titleToday}>{nowInBrazil}</Text>
+
       <Calendar
-  markingType="custom"
-  onDayPress={(day) => setSelectedDate(day.dateString)}
-  onMonthChange={(month) => {
-    const formatted = formatMonthYear(month.dateString);
-    setCurrentMonthText(formatted);
-  }}
-  markedDates={{
-    ...markedDates,
-    ...(selectedDate && {
-      [selectedDate]: {
-        ...(markedDates[selectedDate] || {}),
-        customStyles: {
-          container: { backgroundColor: "#2196f3" },
-          text: { color: "white", fontWeight: "bold" },
-        },
-      },
-    }),
-  }}
-  renderHeader={() => (
-    <Text style={styles.titleCalendar}>{currentMonthText}</Text>
-  )}
-/>
-  
+        markingType="custom"
+        onDayPress={(day) => setSelectedDate(day.dateString)}
+        onMonthChange={(month) => {
+          const formatted = formatMonthYear(month.dateString);
+          setCurrentMonthText(formatted);
+        }}
+        markedDates={{
+          ...markedDates,
+          ...(selectedDate && {
+            [selectedDate]: {
+              ...(markedDates[selectedDate] || {}),
+              customStyles: {
+                container: { backgroundColor: "#1976d2" },
+                text: { color: "white", fontWeight: "bold" },
+              },
+            },
+          }),
+        }}
+        renderHeader={() => (
+          <Text style={styles.titleCalendar}>{currentMonthText}</Text>
+        )}
+      />
+
       <Text style={styles.title}>Eventos do Dia</Text>
       <FlatList
         data={eventsForSelectedDate}
@@ -276,11 +244,12 @@ const CalendarScreen = () => {
             }
           >
             <Text style={styles.eventName}>{item.name}</Text>
-            <Text>{`${item.startTime} - ${item.endTime}`}</Text>
-            <Text>Status: {item.status}</Text>
-            <Text>{`${item.location.name} - ${item.location.floor}`}</Text>
+            <Text style={{ color: "#555" }}>{`${item.startTime} - ${item.endTime}`}</Text>
+            <Text style={{ color: "#666" }}>Status: {item.status}</Text>
+            <Text style={{ color: "#666" }}>{`${item.location.name} - ${item.location.floor}`}</Text>
           </TouchableOpacity>
         )}
+        contentContainerStyle={{ paddingBottom: 80 }}
       />
     </View>
   );

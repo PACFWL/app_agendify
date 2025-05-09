@@ -3,51 +3,71 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: "#ffffff",
+    padding: 16,
+    backgroundColor: "#f5f5f5",
   },
   title: {
-    fontSize: 26,
+    fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 15,
-    color: "#6200ee",
+    color: "#1E88E5",
+    marginBottom: 16,
   },
-  description: {
-    fontSize: 18,
+  detailCard: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    padding: 16,
     marginBottom: 20,
-    color: "#555",
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 20,
-    gap: 10, 
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  errorText: {
-    color: 'red',
-    fontSize: 16,
-    textAlign: 'center',
-    marginTop: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 3,
   },
   detail: {
     fontSize: 14,
-    color: '#444',
-    marginBottom: 5,
+    color: "#333",
+    marginBottom: 8,
   },
   label: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#222',
-    marginBottom: 5,
+    fontWeight: "bold",
+    color: "#000",
   },
   value: {
-    color: "#444",
-    marginBottom: 8,
+    fontSize: 14,
+    color: "#555",
+  },
+  buttonContainer: {
+    marginTop: 10,
+    gap: 12,
+  },
+  button: {
+    padding: 12,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  primaryButton: {
+    backgroundColor: "#1E88E5",
+  },
+  warningButton: {
+    backgroundColor: "#FFA726",
+  },
+  dangerButton: {
+    backgroundColor: "#E53935",
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  errorText: {
+    color: "red",
+    fontSize: 16,
+    textAlign: "center",
+    marginTop: 20,
   },
 });
 

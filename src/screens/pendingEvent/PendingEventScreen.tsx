@@ -1,7 +1,19 @@
 import React, { useState, useContext, useCallback } from "react";
-import {View,Text,FlatList,ActivityIndicator,Alert,TouchableOpacity} from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  ActivityIndicator,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
 import { AuthContext } from "../../contexts/AuthContext";
-import {getAllPendingEvents,getMyPendingEvents,approvePendingEvent,rejectPendingEvent} from "../../api/pendingEvent";
+import {
+  getAllPendingEvents,
+  getMyPendingEvents,
+  approvePendingEvent,
+  rejectPendingEvent,
+} from "../../api/pendingEvent";
 import styles from "../../styles/PendingEventScreenStyles";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -36,24 +48,22 @@ const EventCard = ({
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-    const handleApprove = async () => {
-      try {
-        const result = await approvePendingEvent(user.token, event.id);
-    
-        if (result?.conflict) {
-          navigation.navigate("PendingConflictResolution", {
-            existingEvent: result.conflictData.existingEvent,
-            pendingEvent: event,
-          });
-        } else {
-          Alert.alert("Sucesso", "Evento aprovado com sucesso!");
-          onAction();
-        }
-      } catch (error) {
-        Alert.alert("Erro", "Erro ao aprovar o evento.");
+  const handleApprove = async () => {
+    try {
+      const result = await approvePendingEvent(user.token, event.id);
+      if (result?.conflict) {
+        navigation.navigate("PendingConflictResolution", {
+          existingEvent: result.conflictData.existingEvent,
+          pendingEvent: event,
+        });
+      } else {
+        Alert.alert("Sucesso", "Evento aprovado com sucesso!");
+        onAction();
       }
-    };
-    
+    } catch (error) {
+      Alert.alert("Erro", "Erro ao aprovar o evento.");
+    }
+  };
 
   const handleReject = async () => {
     try {
@@ -72,10 +82,17 @@ const EventCard = ({
           navigation.navigate("PendingEventDetails", { eventId: event.id })
         }
       >
+        <Text style={styles.eventDate}>{event.day}</Text>
         <Text style={styles.eventName}>{event.name}</Text>
-        <Text>{`Data: ${event.day} - ${event.startTime} às ${event.endTime}`}</Text>
-        <Text>{`Tema: ${event.theme}`}</Text>
-        <Text>{`Organizador: ${event.organizer}`}</Text>
+        <View style={styles.eventInfoRow}>
+          <Text style={styles.eventTime}>
+            {`${event.startTime} - ${event.endTime}`}
+          </Text>
+          <Text style={styles.eventTheme}>{event.theme}</Text>
+        </View>
+        <Text style={styles.eventOrganizer}>
+          Organizador: {event.organizer}
+        </Text>
       </TouchableOpacity>
 
       {user.role === "MASTER" && (
@@ -94,7 +111,7 @@ const EventCard = ({
 
 const Loading = () => (
   <View style={styles.loadingContainer}>
-    <ActivityIndicator size="large" color="#6200ee" />
+    <ActivityIndicator size="large" color="#1976d2" />
     <Text>Carregando eventos pendentes...</Text>
   </View>
 );
@@ -105,7 +122,8 @@ const PendingEventScreen = () => {
   const [allEvents, setAllEvents] = useState<PendingEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"my" | "all">("my");
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   if (!auth?.user) {
     return (
@@ -143,9 +161,11 @@ const PendingEventScreen = () => {
     setLoading(false);
   };
 
-  useFocusEffect(useCallback(() => {
-    load();
-  }, [user]));
+  useFocusEffect(
+    useCallback(() => {
+      load();
+    }, [user])
+  );
 
   const renderList = () => {
     if (loading) return <Loading />;
@@ -156,12 +176,9 @@ const PendingEventScreen = () => {
         data={data}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <EventCard
-            event={item}
-            user={user}
-            onAction={load}
-          />
+          <EventCard event={item} user={user} onAction={load} />
         )}
+        contentContainerStyle={{ paddingBottom: 80 }}
       />
     );
   };
@@ -226,10 +243,10 @@ const PendingEventScreen = () => {
 
       {(user.role === "MASTER" || user.role === "REQUESTER") && (
         <TouchableOpacity
-          style={styles.createButton}
+          style={styles.fab}
           onPress={() => navigation.navigate("PendingEventForm")}
         >
-          <Text style={styles.createButtonText}>+ Criar Evento Pendente</Text>
+          <Text style={styles.fabIcon}>＋</Text>
         </TouchableOpacity>
       )}
     </View>

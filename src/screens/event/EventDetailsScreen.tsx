@@ -1,5 +1,12 @@
-import React, {useState, useContext, useCallback } from "react";
-import { View, Text, ActivityIndicator, Button, ScrollView, Alert } from "react-native";
+import React, { useState, useContext, useCallback } from "react";
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  ScrollView,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useFocusEffect } from "@react-navigation/native";
 import { getEventById, deleteEvent } from "../../api/event";
@@ -39,14 +46,10 @@ type Event = {
 
 const formatMode = (mode: string) => {
   switch (mode) {
-    case "PRESENCIAL":
-      return "Presencial";
-    case "ONLINE":
-      return "Online";
-    case "HIBRIDO":
-      return "Híbrido";
-    default:
-      return mode;
+    case "PRESENCIAL": return "Presencial";
+    case "ONLINE": return "Online";
+    case "HIBRIDO": return "Híbrido";
+    default: return mode;
   }
 };
 
@@ -93,7 +96,7 @@ const formatDuration = (isoDuration: string): string => {
   const match = isoDuration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
   if (!match) return isoDuration;
 
-  const [, hours, minutes, seconds] = match.map(v => v ? parseInt(v) : 0);
+  const [, hours, minutes, seconds] = match.map((v) => v ? parseInt(v) : 0);
 
   const parts = [];
   if (hours) parts.push(`${hours} hora${hours > 1 ? 's' : ''}`);
@@ -113,33 +116,27 @@ const EventDetailsScreen = ({ route, navigation }: Props) => {
     useCallback(() => {
       const fetchEvent = async () => {
         if (!auth?.user) return;
-  
         try {
           const data = await getEventById(auth.user.token, eventId);
           setEvent(data);
-        } catch (error) {
+        } catch {
           Alert.alert("Erro", "Erro ao carregar detalhes do evento.");
         } finally {
           setLoading(false);
         }
       };
-  
       fetchEvent();
     }, [auth, eventId])
   );
 
   const handleDelete = async () => {
-    if (!auth?.user) {
-      Alert.alert("Erro", "Usuário não autenticado.");
-      return;
-    }
-
+    if (!auth?.user) return Alert.alert("Erro", "Usuário não autenticado.");
     try {
       await deleteEvent(auth.user.token, eventId);
       Alert.alert("Sucesso", "Evento deletado com sucesso!", [
         { text: "OK", onPress: () => navigation.goBack() },
       ]);
-    } catch (error) {
+    } catch {
       Alert.alert("Erro", "Erro ao deletar evento.");
     }
   };
@@ -147,7 +144,7 @@ const EventDetailsScreen = ({ route, navigation }: Props) => {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#6200ee" />
+        <ActivityIndicator size="large" color="#1E88E5" />
         <Text>Carregando evento...</Text>
       </View>
     );
@@ -162,75 +159,48 @@ const EventDetailsScreen = ({ route, navigation }: Props) => {
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 30 }}>
+    <ScrollView style={styles.container}>
       <Text style={styles.title}>{event.name}</Text>
-      <Text style={styles.detail}>
-      <Text style={styles.label}>Data:</Text>{" "}
-      {new Date(event.day).toLocaleDateString("pt-BR", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      })}
-      </Text>
-      <Text style={styles.detail}>
-      <Text style={styles.label}>Horário:</Text>
-      <Text style={styles.value}>
-         <Text style={styles.label}>Início:</Text> {new Date(`1970-01-01T${event.startTime}`).toLocaleTimeString("pt-BR", {
-             hour: "2-digit",
-             minute: "2-digit",
-           })}{" "}
-           -{" "}
-         <Text style={styles.label}>Término:</Text> {new Date(`1970-01-01T${event.endTime}`).toLocaleTimeString("pt-BR", {
-             hour: "2-digit",
-             minute: "2-digit",
-           })}
-         </Text>
-         </Text>
-      <Text style={styles.detail}><Text style={styles.label}>Tema:</Text> {event.theme}</Text>
-      <Text style={styles.detail}><Text style={styles.label}>Público-alvo:</Text> {event.targetAudience}</Text>
-      <Text style={styles.detail}><Text style={styles.label}>Modalidade:</Text> {formatMode(event.mode)}</Text>
-      <Text style={styles.detail}><Text style={styles.label}>Ambiente:</Text> {event.environment}</Text>
-      <Text style={styles.detail}><Text style={styles.label}>Organizador:</Text> {event.organizer}</Text>
-      <Text style={styles.detail}><Text style={styles.label}>Recursos:</Text> {event.resourcesDescription.join(", ")}</Text>
-      <Text style={styles.detail}><Text style={styles.label}>Divulgação:</Text> {event.disclosureMethod}</Text>
-      <Text style={styles.detail}><Text style={styles.label}>Assuntos Relacionados:</Text> {event.relatedSubjects.join(", ")}</Text>
-      <Text style={styles.detail}><Text style={styles.label}>Estratégia de Ensino:</Text> {event.teachingStrategy}</Text>
-      <Text style={styles.detail}><Text style={styles.label}>Autores:</Text> {event.authors.join(", ")}</Text>
-      <Text style={styles.detail}><Text style={styles.label}>Cursos:</Text> {event.courses.join(", ")}</Text>
-      <Text style={styles.detail}><Text style={styles.label}>Vínculo Disciplinar:</Text> {event.disciplinaryLink}</Text>
-      <Text style={styles.detail}><Text style={styles.label}>Localização:</Text> {event.location.name} - {event.location.floor}</Text>
-      <Text style={styles.detail}><Text style={styles.label}>Observação:</Text> {event.observation}</Text>
-      <Text style={styles.detail}><Text style={styles.label}>Status:</Text> {formatStatus(event.status)}</Text>
-      <Text style={styles.detail}><Text style={styles.label}>Status Administrativo:</Text> {formatAdministrativeStatus(event.administrativeStatus)}</Text>
-      <Text style={styles.detail}><Text style={styles.label}>Prioridade:</Text> {formatPriority(event.priority)}</Text>
-      <Text style={styles.detail}>
-  <Text style={styles.label}>Duração da Limpeza:</Text> {formatDuration(event.cleanupDuration)}
-</Text>
-      <Text style={styles.detail}><Text style={styles.label}>Criado em:</Text> {new Date(event.createdAt).toLocaleString("pt-BR", {
-        timeZone: "America/Sao_Paulo",
-        hour12: false
-      })}</Text>
-      <Text style={styles.detail}><Text style={styles.label}>Última Modificação:</Text> {new Date(event.lastModifiedAt).toLocaleString("pt-BR", {
-        timeZone: "America/Sao_Paulo",
-        hour12: false
-      })}</Text>
-        <View style={styles.buttonContainer}>
-          {auth?.user?.role === "MASTER" && (
-            <>
-              <Button
-                title="Editar Evento"
-                onPress={() => navigation.navigate("EventEditForm", { eventId })}
-                color="orange"
-              />
-              <Button
-                title="Deletar Evento"
-                onPress={handleDelete}
-                color="red"
-              />
-            </>
-          )}
-          <Button title="Voltar" onPress={() => navigation.goBack()} color="#6200ee" />
-        </View>
+      <View style={styles.detailCard}>
+        <Text style={styles.detail}><Text style={styles.label}>Data:</Text> {new Date(event.day).toLocaleDateString("pt-BR")}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Horário:</Text> {event.startTime} - {event.endTime}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Tema:</Text> {event.theme}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Público-alvo:</Text> {event.targetAudience}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Modalidade:</Text> {formatMode(event.mode)}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Ambiente:</Text> {event.environment}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Organizador:</Text> {event.organizer}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Recursos:</Text> {event.resourcesDescription.join(", ")}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Divulgação:</Text> {event.disclosureMethod}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Assuntos Relacionados:</Text> {event.relatedSubjects.join(", ")}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Estratégia de Ensino:</Text> {event.teachingStrategy}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Autores:</Text> {event.authors.join(", ")}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Cursos:</Text> {event.courses.join(", ")}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Vínculo Disciplinar:</Text> {event.disciplinaryLink}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Localização:</Text> {event.location.name} - {event.location.floor}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Observação:</Text> {event.observation}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Status:</Text> {formatStatus(event.status)}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Status Administrativo:</Text> {formatAdministrativeStatus(event.administrativeStatus)}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Prioridade:</Text> {formatPriority(event.priority)}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Duração da Limpeza:</Text> {formatDuration(event.cleanupDuration)}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Criado em:</Text> {new Date(event.createdAt).toLocaleString("pt-BR")}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Última Modificação:</Text> {new Date(event.lastModifiedAt).toLocaleString("pt-BR")}</Text>
+      </View>
+
+      <View style={styles.buttonContainer}>
+        {auth?.user?.role === "MASTER" && (
+          <>
+            <TouchableOpacity style={[styles.button, styles.warningButton]} onPress={() => navigation.navigate("EventEditForm", { eventId })}>
+              <Text style={styles.buttonText}>Editar Evento</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.button, styles.dangerButton]} onPress={handleDelete}>
+              <Text style={styles.buttonText}>Deletar Evento</Text>
+            </TouchableOpacity>
+          </>
+        )}
+        <TouchableOpacity style={[styles.button, styles.primaryButton]} onPress={() => navigation.goBack()}>
+          <Text style={styles.buttonText}>Voltar</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };

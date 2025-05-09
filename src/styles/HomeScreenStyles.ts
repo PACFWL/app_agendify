@@ -64,6 +64,7 @@ const HomeScreenStyles = StyleSheet.create({
     marginTop: 4,
     color: "#fff",
   },
+  
 });
 
 export default HomeScreenStyles;
