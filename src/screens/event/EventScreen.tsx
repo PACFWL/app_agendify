@@ -1,12 +1,5 @@
 import React, { useState, useContext, useCallback } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  ActivityIndicator,
-  Alert,
-  TouchableOpacity,
-} from "react-native";
+import {View,Text,FlatList,ActivityIndicator,Alert,TouchableOpacity} from "react-native";
 import { AuthContext } from "../../contexts/AuthContext";
 import { getAllEvents } from "../../api/event";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";

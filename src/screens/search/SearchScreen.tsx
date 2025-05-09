@@ -169,7 +169,7 @@ const showPicker = (type: "date" | "start" | "end") => {
             <RemoteSvgIcon
               uri="https://www.svgrepo.com/show/362103/funnel.svg"
               size={24}
-              color="#6200ee"
+              color="#1976d2"
             />
           </TouchableOpacity>
         </View>
@@ -368,7 +368,11 @@ const showPicker = (type: "date" | "start" | "end") => {
             <TextInput style={styles.input} placeholder="Fim do intervalo (YYYY-MM-DD)" value={endDay} onChangeText={setEndDay} />
           </>
         )}
-        <Button title="Buscar" onPress={handleSearch} />
+
+  <TouchableOpacity style={[styles.button, styles.primaryButton]} onPress={handleSearch}>
+          <Text style={styles.buttonText}>Buscar</Text>
+        </TouchableOpacity>
+
         {loading && <Text style={{ marginTop: 16 }}>Carregando...</Text>}
 
         {results.map((item) => (

@@ -1,12 +1,5 @@
 import React, { useState, useContext, useCallback } from "react";
-import {
-  View,
-  Text,
-  ActivityIndicator,
-  ScrollView,
-  Alert,
-  TouchableOpacity,
-} from "react-native";
+import {View,Text,ActivityIndicator,ScrollView,Alert,TouchableOpacity} from "react-native";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useFocusEffect } from "@react-navigation/native";
 import { getEventById, deleteEvent } from "../../api/event";

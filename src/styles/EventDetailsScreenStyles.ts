@@ -11,6 +11,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#1E88E5",
     marginBottom: 16,
+    textAlign: "center",
   },
   detailCard: {
     backgroundColor: "#fff",
