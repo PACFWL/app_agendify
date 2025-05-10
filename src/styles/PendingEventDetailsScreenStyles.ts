@@ -4,7 +4,7 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: "#fff",
+    backgroundColor: "#f5f5f5",
   },
   scrollContainer: {
     padding: 16,
@@ -21,14 +21,13 @@ export default StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#6200ee",
+    color: "#1E88E5",
     marginBottom: 16,
     textAlign: "center",
   },
   label: {
     fontWeight: "bold",
-    color: "#333",
-    marginTop: 8,
+    color: "#000",
   },
   value: {
     color: "#444",
@@ -57,5 +56,38 @@ export default StyleSheet.create({
   buttonWrapper: {
     marginBottom: 10,
   },
-  
+    detailCard: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 20,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 3,
+  },
+    detail: {
+    fontSize: 14,
+    color: "#333",
+    marginBottom: 8,
+  },
+    button: {
+    padding: 12,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+    primaryButton: {
+    backgroundColor: "#1E88E5",
+  },
+  warningButton: {
+    backgroundColor: "#FFA726",
+  },
+  dangerButton: {
+    backgroundColor: "#E53935",
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
 });

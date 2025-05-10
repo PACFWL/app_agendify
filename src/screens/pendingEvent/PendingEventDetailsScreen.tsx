@@ -1,14 +1,13 @@
-import React, { useEffect, useState, useContext,useCallback } from "react";
-import { View, Text, ActivityIndicator, Alert, ScrollView, Button } from "react-native";
-import { RouteProp, useRoute } from "@react-navigation/native";
+import React, { useState, useContext,useCallback } from "react";
+import { View, Text, ActivityIndicator, Alert, ScrollView, TouchableOpacity } from "react-native";
+import { RouteProp, useRoute,useFocusEffect } from "@react-navigation/native";
 import { getPendingEventById,deletePendingEvent } from "../../api/pendingEvent";
 import { AuthContext } from "../../contexts/AuthContext";
 import { RootStackParamList } from "../../routes/Routes";
-import styles from "../../styles/PendingEventDetailsScreenStyles";
 import { getUserById } from "../../api/user"; 
 import { useNavigation } from "@react-navigation/native"; 
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useFocusEffect } from '@react-navigation/native';
+import styles from "../../styles/PendingEventDetailsScreenStyles";
 
 type PendingEventDetailsRouteProp = RouteProp<RootStackParamList, "PendingEventDetails">;
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, "PendingEventDetails">;
@@ -44,14 +43,10 @@ export type PendingEvent = {
 
 const formatMode = (mode: string) => {
   switch (mode) {
-    case "PRESENCIAL":
-      return "Presencial";
-    case "ONLINE":
-      return "Online";
-    case "HIBRIDO":
-      return "Híbrido";
-    default:
-      return mode;
+    case "PRESENCIAL": return "Presencial";
+    case "ONLINE": return "Online";
+    case "HIBRIDO": return "Híbrido";
+    default: return mode;
   }
 };
 
@@ -182,7 +177,7 @@ const PendingEventDetailsScreen = () => {
   if (loading) {
     return (
       <View style={styles.center}>
-        <ActivityIndicator size="large" color="#6200ee" />
+        <ActivityIndicator size="large" color="#1E88E5" />
         <Text>Carregando detalhes...</Text>
       </View>
     );
@@ -190,147 +185,57 @@ const PendingEventDetailsScreen = () => {
 
   if (!pendingEvent) {
     return (
-      <View style={styles.center}>
+      <View style={styles.container}>
         <Text>Evento pendente não encontrado.</Text>
       </View>
     );
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <View style={styles.innerContainer}>
+    <ScrollView style={styles.container}>
         <Text style={styles.title}>{pendingEvent.name}</Text>
-
-        <Text style={styles.label}>Data:</Text>
-        <Text style={styles.value}>
-          {new Date(pendingEvent.day).toLocaleDateString("pt-BR", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-          })}
-        </Text>
-
-        <Text style={styles.label}>Horário:</Text>
-        <Text style={styles.value}>
-        <Text style={styles.label}>Início:</Text> {new Date(`1970-01-01T${pendingEvent.startTime}`).toLocaleTimeString("pt-BR", {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}{" "}
-          -{" "}
-        <Text style={styles.label}>Término:</Text> {new Date(`1970-01-01T${pendingEvent.endTime}`).toLocaleTimeString("pt-BR", {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </Text>
-
-        <Text style={styles.label}>Tema:</Text>
-        <Text style={styles.value}>{pendingEvent.theme}</Text>
-
-        <Text style={styles.label}>Organizador:</Text>
-        <Text style={styles.value}>{pendingEvent.organizer}</Text>
-
-        <Text style={styles.label}>Público-alvo:</Text>
-        <Text style={styles.value}>{pendingEvent.targetAudience}</Text>
-
-        <Text style={styles.label}>Modalidade:</Text>
-        <Text style={styles.value}>{formatMode(pendingEvent.mode)}</Text>
-
-        <Text style={styles.label}>Ambiente:</Text>
-        <Text style={styles.value}>{pendingEvent.environment}</Text>
-
-        <Text style={styles.label}>Recursos:</Text>
-        <Text style={styles.value}>
-          {pendingEvent.resourcesDescription?.join(", ") || "Nenhum"}
-        </Text>
-
-        <Text style={styles.label}>Forma de Divulgação:</Text>
-        <Text style={styles.value}>{pendingEvent.disclosureMethod}</Text>
-
-        <Text style={styles.label}>Disciplinas Relacionadas:</Text>
-        <Text style={styles.value}>
-          {pendingEvent.relatedSubjects?.join(", ") || "Nenhuma"}
-        </Text>
-
-        <Text style={styles.label}>Estratégia de Ensino:</Text>
-        <Text style={styles.value}>{pendingEvent.teachingStrategy}</Text>
-
-        <Text style={styles.label}>Autores:</Text>
-        <Text style={styles.value}>
-          {pendingEvent.authors?.join(", ") || "Nenhum"}
-        </Text>
-
-        <Text style={styles.label}>Cursos:</Text>
-        <Text style={styles.value}>
-          {pendingEvent.courses?.join(", ") || "Nenhum"}
-        </Text>
-
-        <Text style={styles.label}>Vínculo Disciplinar:</Text>
-        <Text style={styles.value}>{pendingEvent.disciplinaryLink}</Text>
-
-        <Text style={styles.label}>Localização:</Text>
-        <Text style={styles.value}><Text style={styles.label}>Local:</Text> {pendingEvent.location.name} - <Text style={styles.label}>Andar:</Text> {pendingEvent.location.floor}</Text>
-
-        <Text style={styles.label}>Status:</Text>
-        <Text style={styles.value}>{formatStatus(pendingEvent.status)}</Text>
-
-        <Text style={styles.label}>Status Administrativo:</Text>
-        <Text style={styles.value}>{formatAdministrativeStatus(pendingEvent.administrativeStatus)}</Text>
-
-        <Text style={styles.label}>Prioridade:</Text>
-        <Text style={styles.value}>{formatPriority(pendingEvent.priority)}</Text>
-
-        <Text style={styles.label}>Tempo de Intervalo:</Text>
-        <Text style={styles.value}>{formatDuration(pendingEvent.cleanupDuration)}</Text>
-
-        <Text style={styles.label}>Observações:</Text>
-        <Text style={styles.value}>{pendingEvent.observation || "Nenhuma"}</Text>
-
-        <Text style={styles.label}>Solicitante:</Text>
-        {pendingEvent.eventRequesterId && (
-          <Text
-            style={styles.requesterLink}
-            onPress={() =>
-              navigation.navigate("UserDetails", { userId: pendingEvent.eventRequesterId! })
-            }
-          >
-            {requesterName ?? pendingEvent.eventRequesterId}
-          </Text>
-        )}
-        <Text style={styles.label}>Criado em:</Text>
-        <Text style={styles.value}>
-          {new Date(pendingEvent.createdAt).toLocaleString("pt-BR", {
-            timeZone: "America/Sao_Paulo",
-            hour12: false,
-          })}
-        </Text>
-
-        <Text style={styles.label}>Última modificação:</Text>
-        <Text style={styles.value}>
-          {new Date(pendingEvent.lastModifiedAt).toLocaleString("pt-BR", {
-            timeZone: "America/Sao_Paulo",
-            hour12: false,
-          })}
-        </Text>
-      </View>
-
+        <View style={styles.detailCard}>
+        <Text style={styles.detail}><Text style={styles.label}>Data:</Text> {new Date(pendingEvent.day).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric", })} </Text>
+        <Text style={styles.detail}><Text style={styles.label}>Horário:</Text><Text style={styles.label}>Início:</Text> {new Date(`1970-01-01T${pendingEvent.startTime}`).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", })}{" "} - {" "}
+        <Text style={styles.label}>Término:</Text> {new Date(`1970-01-01T${pendingEvent.endTime}`).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", })} </Text>
+        <Text style={styles.detail}><Text style={styles.label}>Tema:</Text> {pendingEvent.theme}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Organizador:</Text> {pendingEvent.organizer}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Público-alvo:</Text> {pendingEvent.targetAudience}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Modalidade:</Text> {formatMode(pendingEvent.mode)}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Ambiente:</Text> {pendingEvent.environment}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Recursos:</Text> {pendingEvent.resourcesDescription?.join(", ") || "Nenhum"}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Forma de Divulgação:</Text> {pendingEvent.disclosureMethod}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Disciplinas Relacionadas:</Text> {pendingEvent.relatedSubjects?.join(", ") || "Nenhuma"}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Estratégia de Ensino:</Text> {pendingEvent.teachingStrategy}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Autores:</Text> {pendingEvent.authors?.join(", ") || "Nenhum"}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Cursos:</Text> {pendingEvent.courses?.join(", ") || "Nenhum"}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Vínculo Disciplinar:</Text> {pendingEvent.disciplinaryLink}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Localização:</Text><Text style={styles.label}>Local:</Text> {pendingEvent.location.name} - <Text style={styles.label}>Andar:</Text> {pendingEvent.location.floor}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Status:</Text> {formatStatus(pendingEvent.status)}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Status Administrativo:</Text> {formatAdministrativeStatus(pendingEvent.administrativeStatus)}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Prioridade:</Text>{formatPriority (pendingEvent.priority)}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Tempo de Intervalo:</Text> {formatDuration(pendingEvent.cleanupDuration)}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Observações:</Text> {pendingEvent.observation || "Nenhuma"}</Text>
+        <Text style={styles.detail}><Text style={styles.label}>Solicitante:</Text> {pendingEvent.eventRequesterId && ( <Text style={styles.requesterLink} onPress={() => navigation.navigate("UserDetails", { userId: pendingEvent.eventRequesterId! })}> {requesterName ?? pendingEvent.eventRequesterId} </Text>)} </Text>
+        <Text style={styles.detail}><Text style={styles.label}>Criado em:</Text> {new Date(pendingEvent.createdAt).toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo", hour12: false, })} </Text>
+        <Text style={styles.detail}><Text style={styles.label}>Última modificação:</Text> {new Date(pendingEvent.lastModifiedAt).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo", hour12: false, })} </Text> 
+        </View>
+        
       <View style={styles.buttonContainer}>
       {auth?.user?.role && ["MASTER", "REQUESTER"].includes(auth.user.role) && (
-  <>
-     <Button
-      title="Editar Evento"
-      onPress={() => navigation.navigate("PendingEventEditForm", { eventId })}
-      color="orange"
-    />
-    <Button
-      title="Deletar Evento"
-      onPress={handleDelete}
-      color="red"
-    />
-  </>
-)}
-  <Button title="Voltar" onPress={() => navigation.goBack()} color="#6200ee" />
-</View>
-
+          <>
+            <TouchableOpacity style={[styles.button, styles.warningButton]} onPress={() => navigation.navigate("PendingEventEditForm", { eventId })}>
+              <Text style={styles.buttonText}>Editar Evento</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.button, styles.dangerButton]} onPress={handleDelete}>
+              <Text style={styles.buttonText}>Deletar Evento</Text>
+            </TouchableOpacity>  
+          </>
+      )}
+      <TouchableOpacity style={[styles.button, styles.primaryButton]} onPress={() => navigation.goBack()}>
+          <Text style={styles.buttonText}>Voltar</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };

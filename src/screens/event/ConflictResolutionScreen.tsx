@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { View, Text, ScrollView, Button, StyleSheet, Alert } from "react-native";
+import { View, Text, ScrollView, Button, StyleSheet, Alert, TouchableOpacity } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../routes/Routes";
 import { resolveEventConflict } from "../../api/event";
@@ -32,27 +32,29 @@ const ConflictResolutionScreen = ({ route }: Props) => {
 
   const renderEventDetails = (event: any) => (
     <>
-      <Text>Nome: {event.name}</Text>
-      <Text>Data: {event.day}</Text>
-      <Text>Horário: {event.startTime} - {event.endTime}</Text>
-      <Text>Tema: {event.theme}</Text>
-      <Text>Público-alvo: {event.targetAudience}</Text>
-      <Text>Modalidade: {event.mode}</Text>
-      <Text>Ambiente: {event.environment}</Text>
-      <Text>Organizador: {event.organizer}</Text>
-      <Text>Recursos: {event.resourcesDescription?.join(", ")}</Text>
-      <Text>Forma de Divulgação: {event.disclosureMethod}</Text>
-      <Text>Disciplinas Relacionadas: {event.relatedSubjects?.join(", ")}</Text>
-      <Text>Estratégia de Ensino: {event.teachingStrategy}</Text>
-      <Text>Autores: {event.authors?.join(", ")}</Text>
-      <Text>Cursos: {event.courses?.join(", ")}</Text>
-      <Text>Vínculo Disciplinar: {event.disciplinaryLink}</Text>
-      <Text>Local: {event.location?.name} ({event.location?.floor})</Text>
-      <Text>Status: {event.status}</Text>
-      <Text>Status Administrativo: {event.administrativeStatus}</Text>
-      <Text>Prioridade: {event.priority}</Text>
-      <Text>Duração da Limpeza: {event.cleanupDuration} minutos</Text>
-      <Text>Observação: {event.observation}</Text>
+    <View style={styles.detailCard}>
+      <Text style={styles.detail}><Text>Nome: {event.name}</Text></Text>
+      <Text style={styles.detail}><Text>Data: {event.day}</Text></Text>
+      <Text style={styles.detail}><Text>Horário: {event.startTime} - {event.endTime}</Text></Text>
+      <Text style={styles.detail}><Text>Tema: {event.theme}</Text></Text>
+      <Text style={styles.detail}><Text>Público-alvo: {event.targetAudience}</Text></Text>
+      <Text style={styles.detail}><Text>Modalidade: {event.mode}</Text></Text>
+      <Text style={styles.detail}><Text>Ambiente: {event.environment}</Text></Text>
+      <Text style={styles.detail}><Text>Organizador: {event.organizer}</Text></Text>
+      <Text style={styles.detail}><Text>Recursos: {event.resourcesDescription?.join(", ")}</Text></Text>
+      <Text style={styles.detail}><Text>Forma de Divulgação: {event.disclosureMethod}</Text></Text>
+      <Text style={styles.detail}><Text>Disciplinas Relacionadas: {event.relatedSubjects?.join(", ")}</Text></Text>
+      <Text style={styles.detail}><Text>Estratégia de Ensino: {event.teachingStrategy}</Text></Text>
+      <Text style={styles.detail}><Text>Autores: {event.authors?.join(", ")}</Text></Text>
+      <Text style={styles.detail}><Text>Cursos: {event.courses?.join(", ")}</Text></Text>
+      <Text style={styles.detail}><Text>Vínculo Disciplinar: {event.disciplinaryLink}</Text></Text>
+      <Text style={styles.detail}><Text>Local: {event.location?.name} ({event.location?.floor})</Text></Text>
+      <Text style={styles.detail}><Text>Status: {event.status}</Text></Text>
+      <Text style={styles.detail}><Text>Status Administrativo: {event.administrativeStatus}</Text></Text>
+      <Text style={styles.detail}><Text>Prioridade: {event.priority}</Text></Text>
+      <Text style={styles.detail}><Text>Duração da Limpeza: {event.cleanupDuration} minutos</Text></Text>
+      <Text style={styles.detail}><Text>Observação: {event.observation}</Text></Text>
+    </View>
     </>
   );
 
@@ -71,8 +73,12 @@ const ConflictResolutionScreen = ({ route }: Props) => {
       </View>
 
       <View style={styles.buttonRow}>
-        <Button title="Cancelar" onPress={() => navigation.goBack()} />
-        <Button title="Substituir Evento Existente" onPress={handleReplace} />
+        <TouchableOpacity style={[styles.button, styles.dangerButton]} onPress={() => navigation.goBack()}>
+            <Text style={styles.buttonText}>Cancelar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.button, styles.warningButton]} onPress={handleReplace}>
+           <Text style={styles.buttonText}>Substituir Evento Existente</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
