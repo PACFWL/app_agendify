@@ -51,7 +51,8 @@ export default StyleSheet.create({
   buttonContainer: {
     marginTop: 20,
     paddingHorizontal: 16,
-    gap: 10,
+    gap: 10,     
+    marginBottom: 30,
   },
   buttonWrapper: {
     marginBottom: 10,

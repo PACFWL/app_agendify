@@ -323,11 +323,9 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
               onChangeText={(text) => handleResourcesDescriptionChange(index, text)}
             />
             {index > 0 && (
-              <Button
-                title="Remover"
-                color="red"
-                onPress={() => removeResourcesDescriptionField(index)}
-              />
+        <TouchableOpacity style={styles.removeButton}  onPress={() => removeResourcesDescriptionField(index)}>
+          <Text style={styles.addButtonText}>Remover</Text>
+        </TouchableOpacity>
             )}
           </React.Fragment>
         ))}
@@ -339,73 +337,67 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
       <TextInput style={styles.input} value={eventData.disclosureMethod} placeholder="Forma de Divulgação" onChangeText={(text) => handleChange("disclosureMethod", text)} />
 
       <Text style={styles.label}>Disciplinas Relacionadas:</Text>
-{eventData.relatedSubjects.map((relatedSubject, index) => (
-  <React.Fragment key={index}>
-    <TextInput
-      style={styles.input}
-      placeholder={`Disciplina ${index + 1}`}
-      value={relatedSubject}
-      onChangeText={(text) => handleRelatedSubjectChange(index, text)}
-    />
-    {index > 0 && (
-      <Button
-        title="Remover"
-        color="red"
-        onPress={() => removeRelatedSubjectField(index)}
-      />
-    )}
-  </React.Fragment>
-))}
-<TouchableOpacity style={styles.addButton} onPress={addRelatedSubjectField}>
-  <Text style={styles.addButtonText}>Adicionar Disciplina</Text>
-</TouchableOpacity>
+        {eventData.relatedSubjects.map((relatedSubject, index) => (
+          <React.Fragment key={index}>
+            <TextInput
+              style={styles.input}
+              placeholder={`Disciplina ${index + 1}`}
+              value={relatedSubject}
+              onChangeText={(text) => handleRelatedSubjectChange(index, text)}
+            />
+            {index > 0 && (
+                <TouchableOpacity style={styles.removeButton}  onPress={() => removeRelatedSubjectField(index)}>
+                  <Text style={styles.addButtonText}>Remover</Text>
+                </TouchableOpacity>
+            )}
+          </React.Fragment>
+        ))}
+        <TouchableOpacity style={styles.addButton} onPress={addRelatedSubjectField}>
+          <Text style={styles.addButtonText}>Adicionar Disciplina</Text>
+        </TouchableOpacity>
 
       <Text style={styles.label}>Estratégia de Ensino:</Text>
       <TextInput style={styles.input} value={eventData.teachingStrategy} placeholder="Estratégia de Ensino" onChangeText={(text) => handleChange("teachingStrategy", text)} />
 
       <Text style={styles.label}>Autores:</Text>
-{eventData.authors.map((author, index) => (
-  <React.Fragment key={index}>
-    <TextInput
-      style={styles.input}
-      placeholder={`Autor ${index + 1}`}
-      value={author}
-      onChangeText={(text) => handleAuthorChange(index, text)}
-    />
-    {index > 0 && (
-      <Button
-        title="Remover"
-        color="red"
-        onPress={() => removeAuthorField(index)}
-      />
-    )}
-  </React.Fragment>
-))}
-<TouchableOpacity style={styles.addButton} onPress={addAuthorField}>
-  <Text style={styles.addButtonText}>Adicionar Autor</Text>
-</TouchableOpacity>
+        {eventData.authors.map((author, index) => (
+          <React.Fragment key={index}>
+            <TextInput
+              style={styles.input}
+              placeholder={`Autor ${index + 1}`}
+              value={author}
+              onChangeText={(text) => handleAuthorChange(index, text)}
+            />
+            {index > 0 && (
+            <TouchableOpacity style={styles.removeButton} onPress={() => removeAuthorField(index)}>
+              <Text style={styles.addButtonText}>Remover</Text>
+            </TouchableOpacity>
+            )}
+          </React.Fragment>
+        ))}
+        <TouchableOpacity style={styles.addButton} onPress={addAuthorField}>
+          <Text style={styles.addButtonText}>Adicionar Autor</Text>
+        </TouchableOpacity>
 
-<Text style={styles.label}>Cursos:</Text>
-{eventData.courses.map((course, index) => (
-  <React.Fragment key={index}>
-    <TextInput
-      style={styles.input}
-      placeholder={`Curso ${index + 1}`}
-      value={course}
-      onChangeText={(text) => handleCourseChange(index, text)}
-    />
+    <Text style={styles.label}>Cursos:</Text>
+    {eventData.courses.map((course, index) => (
+      <React.Fragment key={index}>
+        <TextInput
+          style={styles.input}
+          placeholder={`Curso ${index + 1}`}
+          value={course}
+          onChangeText={(text) => handleCourseChange(index, text)}
+        />
     {index > 0 && (
-      <Button
-        title="Remover"
-        color="red"
-        onPress={() => removeCourseField(index)}
-      />
-    )}
-  </React.Fragment>
-))}
-<TouchableOpacity style={styles.addButton} onPress={addCourseField}>
-  <Text style={styles.addButtonText}>Adicionar Curso</Text>
-</TouchableOpacity>
+      <TouchableOpacity style={styles.removeButton}  onPress={() => removeCourseField(index)}>
+        <Text style={styles.addButtonText}>Remover</Text>
+      </TouchableOpacity>
+          )}
+        </React.Fragment>
+      ))}
+      <TouchableOpacity style={styles.addButton} onPress={addCourseField}>
+        <Text style={styles.addButtonText}>Adicionar Curso</Text>
+      </TouchableOpacity>
 
       <Text style={styles.label}>Vínculo Disciplinar:</Text>
       <TextInput style={styles.input} value={eventData.disciplinaryLink} placeholder="Vínculo Disciplinar" onChangeText={(text) => handleChange("disciplinaryLink", text)} />
@@ -498,12 +490,10 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
 
       <Text style={styles.label}>Observação:</Text>
       <TextInput style={styles.input} value={eventData.observation} placeholder="Observação" onChangeText={(text) => handleChange("observation", text)} />
-
       <TouchableOpacity style={styles.addButton} onPress={handleSubmit}>
         <Text style={styles.addButtonText}>Salvar Alterações</Text>
       </TouchableOpacity>
     </ScrollView>
-
   );
 };
 

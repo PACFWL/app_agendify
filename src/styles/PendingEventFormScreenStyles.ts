@@ -65,7 +65,7 @@ export default StyleSheet.create({
   },
   removeButton: {
     backgroundColor: "#ff4d4d",
-    marginBottom: 10,
+    marginBottom: 6,
     borderRadius: 8,
     padding: 12,
     alignItems: "center",

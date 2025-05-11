@@ -136,12 +136,10 @@ const showPicker = (type: "date" | "start" | "end") => {
         }
         if (startTime) filter.startTime = startTime;
         if (endTime) filter.endTime = endTime;
-  
         if (startTime && endTime) {
           filter.intervalSearch = intervalSearch; 
         }
-
-         if (cleanupHours || cleanupMinutes) {
+        if (cleanupHours || cleanupMinutes) {
         let duration = "PT";
         if (cleanupHours) duration += `${parseInt(cleanupHours)}H`;
         if (cleanupMinutes) duration += `${parseInt(cleanupMinutes)}M`;
@@ -364,8 +362,6 @@ const showPicker = (type: "date" | "start" | "end") => {
                 keyboardType="numeric"
               />
             </View>
-            <TextInput style={styles.input} placeholder="Início do intervalo (YYYY-MM-DD)" value={startDay} onChangeText={setStartDay} />
-            <TextInput style={styles.input} placeholder="Fim do intervalo (YYYY-MM-DD)" value={endDay} onChangeText={setEndDay} />
           </>
         )}
 
@@ -395,3 +391,9 @@ const showPicker = (type: "date" | "start" | "end") => {
 };
 
 export default SearchScreen;
+
+
+/**
+  <TextInput style={styles.input} placeholder="Início do intervalo (YYYY-MM-DD)" value={startDay} onChangeText={setStartDay} />
+  <TextInput style={styles.input} placeholder="Fim do intervalo (YYYY-MM-DD)" value={endDay} onChangeText={setEndDay} />
+ */

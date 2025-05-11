@@ -10,7 +10,6 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Picker } from '@react-native-picker/picker';
 
-
 type Props = NativeStackScreenProps<RootStackParamList, "EventForm">;
 
 const locationOptionsByFloor: Record<string, string[]> = {
@@ -286,89 +285,83 @@ const EventFormScreen = ({ navigation }: Props) => {
               onChangeText={(text) => handleResourcesDescriptionChange(index, text)}
             />
             {index > 0 && (
-              <Button
-                title="Remover"
-                color="red"
-                onPress={() => removeResourcesDescriptionField(index)}
-              />
+
+       <TouchableOpacity style={styles.removeButton}  onPress={() => removeResourcesDescriptionField(index)}>
+          <Text style={styles.addButtonText}>Remover</Text>
+       </TouchableOpacity>
+
             )}
           </React.Fragment>
         ))}
-<TouchableOpacity style={styles.addButton} onPress={addResourcesDescriptionField}>
-  <Text style={styles.addButtonText}>Adicionar Recurso</Text>
-</TouchableOpacity>
+    <TouchableOpacity style={styles.addButton} onPress={addResourcesDescriptionField}>
+      <Text style={styles.addButtonText}>Adicionar Recurso</Text>
+    </TouchableOpacity>
 
-      <Text style={styles.label}>Forma de Divulgação:</Text>
-      <TextInput style={styles.input} placeholder="Forma de Divulgação" onChangeText={(text) => handleChange("disclosureMethod", text)} />
-  
-      <Text style={styles.label}>Disciplinas Relacionadas:</Text>
-{eventData.relatedSubjects.map((relatedSubject, index) => (
-  <React.Fragment key={index}>
-    <TextInput
-      style={styles.input}
-      placeholder={`Disciplina ${index + 1}`}
-      value={relatedSubject}
-      onChangeText={(text) => handleRelatedSubjectChange(index, text)}
-    />
-    {index > 0 && (
-      <Button
-        title="Remover"
-        color="red"
-        onPress={() => removeRelatedSubjectField(index)}
-      />
-    )}
-  </React.Fragment>
-))}
-<TouchableOpacity style={styles.addButton} onPress={addRelatedSubjectField}>
-  <Text style={styles.addButtonText}>Adicionar Disciplina</Text>
-</TouchableOpacity>
+          <Text style={styles.label}>Forma de Divulgação:</Text>
+          <TextInput style={styles.input} placeholder="Forma de Divulgação" onChangeText={(text) => handleChange("disclosureMethod", text)} />
+      
+          <Text style={styles.label}>Disciplinas Relacionadas:</Text>
+    {eventData.relatedSubjects.map((relatedSubject, index) => (
+      <React.Fragment key={index}>
+        <TextInput
+          style={styles.input}
+          placeholder={`Disciplina ${index + 1}`}
+          value={relatedSubject}
+          onChangeText={(text) => handleRelatedSubjectChange(index, text)}
+        />
+        {index > 0 && (
+          <TouchableOpacity style={styles.removeButton}  onPress={() => removeRelatedSubjectField(index)}>
+              <Text style={styles.addButtonText}>Remover</Text>
+          </TouchableOpacity>
+        )}
+      </React.Fragment>
+    ))}
+    <TouchableOpacity style={styles.addButton} onPress={addRelatedSubjectField}>
+      <Text style={styles.addButtonText}>Adicionar Disciplina</Text>
+    </TouchableOpacity>
 
       <Text style={styles.label}>Estratégia de Ensino:</Text>
       <TextInput style={styles.input} placeholder="Estratégia de Ensino" onChangeText={(text) => handleChange("teachingStrategy", text)} />
   
       <Text style={styles.label}>Autores:</Text>
-{eventData.authors.map((author, index) => (
-  <React.Fragment key={index}>
-    <TextInput
-      style={styles.input}
-      placeholder={`Autor ${index + 1}`}
-      value={author}
-      onChangeText={(text) => handleAuthorChange(index, text)}
-    />
-    {index > 0 && (
-      <Button
-        title="Remover"
-        color="red"
-        onPress={() => removeAuthorField(index)}
-      />
-    )}
-  </React.Fragment>
-))}
-<TouchableOpacity style={styles.addButton} onPress={addAuthorField}>
-  <Text style={styles.addButtonText}>Adicionar Autor</Text>
-</TouchableOpacity>
+        {eventData.authors.map((author, index) => (
+          <React.Fragment key={index}>
+            <TextInput
+              style={styles.input}
+              placeholder={`Autor ${index + 1}`}
+              value={author}
+              onChangeText={(text) => handleAuthorChange(index, text)}
+            />
+            {index > 0 && (
+              <TouchableOpacity style={styles.removeButton}   onPress={() => removeAuthorField(index)}>
+                  <Text style={styles.addButtonText}>Remover</Text>
+              </TouchableOpacity>
+            )}
+          </React.Fragment>
+        ))}
+          <TouchableOpacity style={styles.addButton} onPress={addAuthorField}>
+            <Text style={styles.addButtonText}>Adicionar Autor</Text>
+          </TouchableOpacity>
 
-<Text style={styles.label}>Cursos:</Text>
-{eventData.courses.map((course, index) => (
-  <React.Fragment key={index}>
-    <TextInput
-      style={styles.input}
-      placeholder={`Curso ${index + 1}`}
-      value={course}
-      onChangeText={(text) => handleCourseChange(index, text)}
-    />
-    {index > 0 && (
-      <Button
-        title="Remover"
-        color="red"
-        onPress={() => removeCourseField(index)}
-      />
-    )}
-  </React.Fragment>
-))}
-<TouchableOpacity style={styles.addButton} onPress={addCourseField}>
-  <Text style={styles.addButtonText}>Adicionar Curso</Text>
-</TouchableOpacity>
+      <Text style={styles.label}>Cursos:</Text>
+      {eventData.courses.map((course, index) => (
+        <React.Fragment key={index}>
+          <TextInput
+            style={styles.input}
+            placeholder={`Curso ${index + 1}`}
+            value={course}
+            onChangeText={(text) => handleCourseChange(index, text)}
+          />
+          {index > 0 && (
+          <TouchableOpacity style={styles.removeButton}   onPress={() => removeCourseField(index)}>
+                <Text style={styles.addButtonText}>Remover</Text>
+            </TouchableOpacity>
+          )}
+        </React.Fragment>
+      ))}
+      <TouchableOpacity style={styles.addButton} onPress={addCourseField}>
+        <Text style={styles.addButtonText}>Adicionar Curso</Text>
+      </TouchableOpacity>
 
       <Text style={styles.label}>Vínculo Disciplinar:</Text>
       <TextInput style={styles.input} placeholder="Vínculo Disciplinar" onChangeText={(text) => handleChange("disciplinaryLink", text)} />
@@ -398,46 +391,45 @@ const EventFormScreen = ({ navigation }: Props) => {
         <Picker.Item key={location} label={location} value={location} />
       ))}
     </Picker>
-      <Text style={styles.label}>Status:</Text>
-<Picker
-  selectedValue={eventData.status}
-  onValueChange={(itemValue) => handleChange("status", itemValue)}
-  style={styles.input}
->
-  <Picker.Item label="Selecione o status" value="" />
-  <Picker.Item label="Planejado" value="PLANEJADO" />
-</Picker>
+          <Text style={styles.label}>Status:</Text>
+    <Picker
+      selectedValue={eventData.status}
+      onValueChange={(itemValue) => handleChange("status", itemValue)}
+      style={styles.input}
+    >
+      <Picker.Item label="Selecione o status" value="" />
+      <Picker.Item label="Planejado" value="PLANEJADO" />
+    </Picker>
 
-  
-  <Text style={styles.label}>Status Administrativo:</Text>
-  <Picker
-    selectedValue={eventData.administrativeStatus}
-    onValueChange={(itemValue) => handleChange("administrativeStatus", itemValue)}
-    style={styles.input}
-  >
-    <Picker.Item label="Selecione o status administrativo" value="" />
-    <Picker.Item label="Normal" value="NORMAL" />
-    <Picker.Item label="Aprovado" value="APROVADO" />
-    <Picker.Item label="Pendente" value="PENDENTE" />
-    <Picker.Item label="Cancelado" value="CANCELADO" />
-    <Picker.Item label="Urgente" value="URGENTE" />
-    <Picker.Item label="Adiado" value="ADIADO" />
-    <Picker.Item label="Atrasado" value="ATRASADO" />
-    <Picker.Item label="Indefinido" value="INDEFINIDO" />
-  </Picker>
-      <Text style={styles.label}>Prioridade:</Text>
+      <Text style={styles.label}>Status Administrativo:</Text>
       <Picker
-        selectedValue={eventData.priority}
-        onValueChange={(itemValue) => handleChange("priority", itemValue)}
+        selectedValue={eventData.administrativeStatus}
+        onValueChange={(itemValue) => handleChange("administrativeStatus", itemValue)}
         style={styles.input}
       >
-        <Picker.Item label="Selecione a prioridade" value="" />
-        <Picker.Item label="Muito Baixa" value="MUITO_BAIXA" />
-        <Picker.Item label="Baixa" value="BAIXA" />
-        <Picker.Item label="Média" value="MEDIA" />
-        <Picker.Item label="Alta" value="ALTA" />
-        <Picker.Item label="Crítica" value="CRITICA" />
+        <Picker.Item label="Selecione o status administrativo" value="" />
+        <Picker.Item label="Normal" value="NORMAL" />
+        <Picker.Item label="Aprovado" value="APROVADO" />
+        <Picker.Item label="Pendente" value="PENDENTE" />
+        <Picker.Item label="Cancelado" value="CANCELADO" />
+        <Picker.Item label="Urgente" value="URGENTE" />
+        <Picker.Item label="Adiado" value="ADIADO" />
+        <Picker.Item label="Atrasado" value="ATRASADO" />
+        <Picker.Item label="Indefinido" value="INDEFINIDO" />
       </Picker>
+          <Text style={styles.label}>Prioridade:</Text>
+          <Picker
+            selectedValue={eventData.priority}
+            onValueChange={(itemValue) => handleChange("priority", itemValue)}
+            style={styles.input}
+          >
+            <Picker.Item label="Selecione a prioridade" value="" />
+            <Picker.Item label="Muito Baixa" value="MUITO_BAIXA" />
+            <Picker.Item label="Baixa" value="BAIXA" />
+            <Picker.Item label="Média" value="MEDIA" />
+            <Picker.Item label="Alta" value="ALTA" />
+            <Picker.Item label="Crítica" value="CRITICA" />
+          </Picker>
 
       <Text style={styles.label}>Duração de Limpeza</Text>
         <View style={{ flexDirection: "row", alignItems: "center" }}>

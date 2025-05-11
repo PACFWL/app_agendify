@@ -20,25 +20,25 @@ type Event = {
   organizer: string;
 };
 
-const EventCard = ({ event }: { event: Event }) => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+    const EventCard = ({ event }: { event: Event }) => {
+      const navigation =
+        useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  return (
-    <TouchableOpacity
-      onPress={() => navigation.navigate("EventDetails", { eventId: event.id })}
-      style={styles.eventCard}
-    >
-      <Text style={styles.eventDate}>{event.day}</Text>
-      <Text style={styles.eventName}>{event.name}</Text>
-      <View style={styles.eventInfoRow}>
-        <Text style={styles.eventTime}>{`${event.startTime} - ${event.endTime}`}</Text>
-        <Text style={styles.eventTheme}>{event.theme}</Text>
-      </View>
-      <Text style={styles.eventOrganizer}>Organizador: {event.organizer}</Text>
-    </TouchableOpacity>
-  );
-};
+        return (
+          <TouchableOpacity
+            onPress={() => navigation.navigate("EventDetails", { eventId: event.id })}
+            style={styles.eventCard}
+          >
+            <Text style={styles.eventDate}>{event.day}</Text>
+            <Text style={styles.eventName}>{event.name}</Text>
+            <View style={styles.eventInfoRow}>
+              <Text style={styles.eventTime}>{`${event.startTime} - ${event.endTime}`}</Text>
+              <Text style={styles.eventTheme}>Tema: {event.theme}</Text>
+            </View>
+            <Text style={styles.eventOrganizer}>Organizador: {event.organizer}</Text>
+          </TouchableOpacity>
+        );
+      };
 
 const Loading = () => (
   <View style={styles.loadingContainer}>
