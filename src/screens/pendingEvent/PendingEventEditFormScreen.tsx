@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Text, TextInput, Button, Alert, ScrollView, View } from "react-native";
+import React, { useEffect, useContext } from "react";
+import { Text, TextInput, Alert, ScrollView, View } from "react-native";
 import { AuthContext } from "../../contexts/AuthContext";
 import { getPendingEventById, updatePendingEvent } from "../../api/pendingEvent";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { TouchableOpacity } from "react-native";
 import { Picker } from "@react-native-picker/picker";
+import { usePendingEventEditForm } from "../../hooks/usePendingEventEditForm";
 
 type Props = NativeStackScreenProps<RootStackParamList, "PendingEventEditForm">;
 
@@ -24,40 +25,42 @@ const PendingEventEditFormScreen = ({ navigation, route }: Props) => {
     const { eventId } = route.params;
     const auth = useContext(AuthContext);
 
-  const [eventData, setEventData] = useState({
-    name: "",
-    day: "",
-    startTime: "",
-    endTime: "",
-    theme: "",
-    targetAudience: "",
-    mode: "",
-    environment: "",
-    organizer: "",
-    resourcesDescription: [""],
-    disclosureMethod: "",
-    relatedSubjects: [""],
-    teachingStrategy: "",
-    authors: [""],
-    courses: [""],
-    disciplinaryLink: "",
-    locationName: "",
-    locationFloor: "",
-    status: "",
-    administrativeStatus: "",
-    priority: "",
-    cleanupDuration: "",
-    observation: "",
-  });
-
- const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showStartTimePicker, setShowStartTimePicker] = useState(false);
-  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
-  const [selectedDay, setSelectedDay] = useState<Date | null>(null);
-  const [startTimeDate, setStartTimeDate] = useState<Date | null>(null);
-  const [endTimeDate, setEndTimeDate] = useState<Date | null>(null);
-  const [cleanupHours, setCleanupHours] = useState("");
-  const [cleanupMinutes, setCleanupMinutes] = useState("");
+  const {
+    handleAuthorChange,
+    addAuthorField,
+    removeAuthorField,
+    handleCourseChange,
+    addCourseField,
+    removeCourseField,
+    handleResourcesDescriptionChange,
+    addResourcesDescriptionField,
+    removeResourcesDescriptionField,
+    handleRelatedSubjectChange,
+    addRelatedSubjectField,
+    removeRelatedSubjectField,
+    eventData,
+    setEventData,
+    selectedDay,
+    setSelectedDay,
+    cleanupHours,
+    setCleanupHours,
+    cleanupMinutes,
+    setCleanupMinutes,
+    showDatePicker,
+    setShowDatePicker,
+    showStartTimePicker,
+    setShowStartTimePicker,
+    showEndTimePicker,
+    setShowEndTimePicker,
+    startTimeDate, 
+    setStartTimeDate,
+    endTimeDate, 
+    setEndTimeDate,
+    handleChange,
+    handleDateChange,
+    handleStartTimeChange,
+    handleEndTimeChange
+  } = usePendingEventEditForm();
 
     useEffect(() => {
       const fetchPendingEvent = async () => {
@@ -109,95 +112,6 @@ const PendingEventEditFormScreen = ({ navigation, route }: Props) => {
   
       fetchPendingEvent();
     }, [auth, eventId]);
-
-    const handleAuthorChange = (index: number, value: string) => {
-      const updatedAuthors = [...eventData.authors];
-      updatedAuthors[index] = value;
-      setEventData(prev => ({ ...prev, authors: updatedAuthors }));
-    };
-    
-    const addAuthorField = () => {
-      setEventData(prev => ({ ...prev, authors: [...prev.authors, ""] }));
-    };
-    
-    const removeAuthorField = (index: number) => {
-      const updatedAuthors = [...eventData.authors];
-      updatedAuthors.splice(index, 1);
-      setEventData(prev => ({ ...prev, authors: updatedAuthors }));
-    };
-    
-    const handleCourseChange = (index: number, value: string) => {
-      const updatedCourses = [...eventData.courses];
-      updatedCourses[index] = value;
-      setEventData(prev => ({ ...prev, courses: updatedCourses }));
-    };
-    
-    const addCourseField = () => {
-      setEventData(prev => ({ ...prev, courses: [...prev.courses, ""] }));
-    };
-    
-    const removeCourseField = (index: number) => {
-      const updatedCourses = [...eventData.courses];
-      updatedCourses.splice(index, 1);
-      setEventData(prev => ({ ...prev, courses: updatedCourses }));
-    };
-  
-    const handleResourcesDescriptionChange = (index: number, value: string) => {
-      const updatedResourcesDescriptions = [...eventData.resourcesDescription];
-      updatedResourcesDescriptions[index] = value;
-      setEventData(prev => ({ ...prev, resourcesDescription: updatedResourcesDescriptions }));
-    };
-    
-    const addResourcesDescriptionField = () => {
-      setEventData(prev => ({ ...prev, resourcesDescription: [...prev.resourcesDescription, ""] }));
-    };
-    
-    const removeResourcesDescriptionField = (index: number) => {
-      const updatedResourcesDescriptions = [...eventData.resourcesDescription];
-      updatedResourcesDescriptions.splice(index, 1);
-      setEventData(prev => ({ ...prev, resourcesDescription: updatedResourcesDescriptions }));
-    };  
-    
-    const handleRelatedSubjectChange = (index: number, value: string) => {
-      const updatedRelatedSubjects = [...eventData.relatedSubjects];
-      updatedRelatedSubjects[index] = value;
-      setEventData(prev => ({ ...prev, relatedSubjects: updatedRelatedSubjects }));
-    };
-    
-    const addRelatedSubjectField = () => {
-      setEventData(prev => ({ ...prev, relatedSubjects: [...prev.relatedSubjects, ""] }));
-    };
-    
-    const removeRelatedSubjectField = (index: number) => {
-      const updatedRelatedSubjects = [...eventData.relatedSubjects];
-      updatedRelatedSubjects.splice(index, 1);
-      setEventData(prev => ({ ...prev, relatedSubjects: updatedRelatedSubjects }));
-    };
-  
-const handleDateChange = (_: any, selectedDate?: Date) => {
-    setShowDatePicker(false);
-    if (!selectedDate) return;
-    setSelectedDay(selectedDate);
-    handleChange("day", format(selectedDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR }));
-  };
-  
-  const handleStartTimeChange = (_: any, selectedDate?: Date) => {
-    setShowStartTimePicker(false);
-    if (!selectedDate) return;
-    setStartTimeDate(selectedDate);
-    handleChange("startTime", format(selectedDate, "HH:mm"));
-  };
-  
-  const handleEndTimeChange = (_: any, selectedDate?: Date) => {
-    setShowEndTimePicker(false);
-    if (!selectedDate) return;
-    setEndTimeDate(selectedDate);
-    handleChange("endTime", format(selectedDate, "HH:mm"));
-  };
-
-  const handleChange = (field: string, value: string) => {
-    setEventData((prev) => ({ ...prev, [field]: value }));
-  };
 
   const handleSubmit = async () => {
     if (!auth?.user) return;
@@ -424,13 +338,14 @@ const handleDateChange = (_: any, selectedDate?: Date) => {
         ))}
       </Picker>
 
-         <Text style={styles.label}>Status:</Text>
+         <Text style={styles.label}>Status do Evento:</Text>
       <Picker
         selectedValue={eventData.status}
         onValueChange={(itemValue) => handleChange("status", itemValue)}
         style={styles.input}
       >
         <Picker.Item label="Em Análise" value="EM_ANALISE" />
+        <Picker.Item label="Indeterminado" value="INDETERMINADO" />
       </Picker>
 
       <Text style={styles.label}>Status Administrativo:</Text>
@@ -448,6 +363,7 @@ const handleDateChange = (_: any, selectedDate?: Date) => {
         onValueChange={(itemValue) => handleChange("priority", itemValue)}
         style={styles.input}
       >
+        <Picker.Item label="Indefinido" value="INDEFINIDO" />
         <Picker.Item label="Muito Baixa" value="MUITO_BAIXA" />
         <Picker.Item label="Baixa" value="BAIXA" />
         <Picker.Item label="Média" value="MEDIA" />

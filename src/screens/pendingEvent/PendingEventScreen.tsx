@@ -1,19 +1,7 @@
 import React, { useState, useContext, useCallback } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  ActivityIndicator,
-  Alert,
-  TouchableOpacity,
-} from "react-native";
+import { View,Text,FlatList,ActivityIndicator,Alert,TouchableOpacity } from "react-native";
 import { AuthContext } from "../../contexts/AuthContext";
-import {
-  getAllPendingEvents,
-  getMyPendingEvents,
-  approvePendingEvent,
-  rejectPendingEvent,
-} from "../../api/pendingEvent";
+import { getAllPendingEvents,getMyPendingEvents,approvePendingEvent,rejectPendingEvent } from "../../api/pendingEvent";
 import styles from "../../styles/PendingEventScreenStyles";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";

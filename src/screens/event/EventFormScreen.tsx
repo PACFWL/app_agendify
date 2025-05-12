@@ -1,14 +1,13 @@
-import React, { useState, useContext } from "react";
-import { Text, TextInput, Button, Alert, ScrollView, TouchableOpacity, Modal, View } from "react-native";
+import React, { useContext } from "react";
+import { Text, TextInput, Alert, ScrollView, TouchableOpacity, View } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { AuthContext } from "../../contexts/AuthContext";
 import { createEvent } from "../../api/event";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../routes/Routes";
 import styles from "../../styles/EventFormScreenStyles";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
 import { Picker } from '@react-native-picker/picker';
+import { useEventForm } from "../../hooks/useEventForm";
 
 type Props = NativeStackScreenProps<RootStackParamList, "EventForm">;
 
@@ -21,146 +20,42 @@ const locationOptionsByFloor: Record<string, string[]> = {
 
 const EventFormScreen = ({ navigation }: Props) => {
   const auth = useContext(AuthContext);
-  
-  const [eventData, setEventData] = useState({
-    name: "",
-    day: "",
-    startTime: "",
-    endTime: "",
-    theme: "",
-    targetAudience: "",
-    mode: "",
-    environment: "",
-    organizer: "",
-    resourcesDescription: [""],
-    disclosureMethod: "",
-    relatedSubjects: [""],
-    teachingStrategy: "",
-    authors: [""],
-    courses: [""],
-    disciplinaryLink: "",
-    locationName: "",
-    locationFloor: "",
-    status: "",
-    administrativeStatus: "",
-    priority: "",
-    observation: "",
-  });
-
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showStartTimePicker, setShowStartTimePicker] = useState(false);
-  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
-  const [selectedDay, setSelectedDay] = useState<Date | null>(null);
-  const [cleanupHours, setCleanupHours] = useState("");
-  const [cleanupMinutes, setCleanupMinutes] = useState("");
-  
-
-  const handleAuthorChange = (index: number, value: string) => {
-    const updatedAuthors = [...eventData.authors];
-    updatedAuthors[index] = value;
-    setEventData(prev => ({ ...prev, authors: updatedAuthors }));
-  };
-  
-  const addAuthorField = () => {
-    setEventData(prev => ({ ...prev, authors: [...prev.authors, ""] }));
-  };
-  
-  const removeAuthorField = (index: number) => {
-    const updatedAuthors = [...eventData.authors];
-    updatedAuthors.splice(index, 1);
-    setEventData(prev => ({ ...prev, authors: updatedAuthors }));
-  };
-  
-  const handleCourseChange = (index: number, value: string) => {
-    const updatedCourses = [...eventData.courses];
-    updatedCourses[index] = value;
-    setEventData(prev => ({ ...prev, courses: updatedCourses }));
-  };
-  
-  const addCourseField = () => {
-    setEventData(prev => ({ ...prev, courses: [...prev.courses, ""] }));
-  };
-  
-  const removeCourseField = (index: number) => {
-    const updatedCourses = [...eventData.courses];
-    updatedCourses.splice(index, 1);
-    setEventData(prev => ({ ...prev, courses: updatedCourses }));
-  };
-
-  const handleResourcesDescriptionChange = (index: number, value: string) => {
-    const updatedResourcesDescriptions = [...eventData.resourcesDescription];
-    updatedResourcesDescriptions[index] = value;
-    setEventData(prev => ({ ...prev, resourcesDescription: updatedResourcesDescriptions }));
-  };
-  
-  const addResourcesDescriptionField = () => {
-    setEventData(prev => ({ ...prev, resourcesDescription: [...prev.resourcesDescription, ""] }));
-  };
-  
-  const removeResourcesDescriptionField = (index: number) => {
-    const updatedResourcesDescriptions = [...eventData.resourcesDescription];
-    updatedResourcesDescriptions.splice(index, 1);
-    setEventData(prev => ({ ...prev, resourcesDescription: updatedResourcesDescriptions }));
-  };  
-  
-  const handleRelatedSubjectChange = (index: number, value: string) => {
-    const updatedRelatedSubjects = [...eventData.relatedSubjects];
-    updatedRelatedSubjects[index] = value;
-    setEventData(prev => ({ ...prev, relatedSubjects: updatedRelatedSubjects }));
-  };
-  
-  const addRelatedSubjectField = () => {
-    setEventData(prev => ({ ...prev, relatedSubjects: [...prev.relatedSubjects, ""] }));
-  };
-  
-  const removeRelatedSubjectField = (index: number) => {
-    const updatedRelatedSubjects = [...eventData.relatedSubjects];
-    updatedRelatedSubjects.splice(index, 1);
-    setEventData(prev => ({ ...prev, relatedSubjects: updatedRelatedSubjects }));
-  };
-
-  const handleDateChange = (_: any, selectedDate?: Date) => {
-    setShowDatePicker(false);
-    if (!selectedDate) return;
-  
-    setSelectedDay(selectedDate);
-    setEventData((prev) => ({
-      ...prev,
-      day: format(selectedDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR }),
-    }));
-  };
-  
-  const handleStartTimeChange = (_: any, selectedDate?: Date) => {
-    setShowStartTimePicker(false);
-    if (!selectedDate) return;
-  
-    setEventData((prev) => ({
-      ...prev,
-      startTime: format(selectedDate, "HH:mm"),
-    }));
-  };
  
-  const handleEndTimeChange = (_: any, selectedDate?: Date) => {
-    setShowEndTimePicker(false);
-    if (!selectedDate) return;
-  
-    setEventData((prev) => ({
-      ...prev,
-      endTime: format(selectedDate, "HH:mm"),
-    }));
-  };  
+  const {
+   handleAuthorChange,
+    addAuthorField,
+    removeAuthorField,
+    handleCourseChange,
+    addCourseField,
+    removeCourseField,
+    handleResourcesDescriptionChange,
+    addResourcesDescriptionField,
+    removeResourcesDescriptionField,
+    handleRelatedSubjectChange,
+    addRelatedSubjectField,
+    removeRelatedSubjectField,
+    showPicker,
+    eventData,
+    setEventData,
+    selectedDay,
+    setSelectedDay,
+    cleanupHours,
+    setCleanupHours,
+    cleanupMinutes,
+    setCleanupMinutes,
+    showDatePicker,
+    setShowDatePicker,
+    showStartTimePicker,
+    setShowStartTimePicker,
+    showEndTimePicker,
+    setShowEndTimePicker,
+    handleChange,
+    handleDateChange,
+    handleStartTimeChange,
+    handleEndTimeChange
+  } = useEventForm();
 
-  const showPicker = (type: "date" | "start" | "end") => {
-    if (type === "date") setShowDatePicker(true);
-    else if (type === "start") setShowStartTimePicker(true);
-    else if (type === "end") setShowEndTimePicker(true);
-  };
-
-  const handleChange = (field: string, value: string) => {
-    setEventData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleSubmit = async () => {
+   const handleSubmit = async () => {
     if (!auth?.user) return;
   
     try {
@@ -205,6 +100,7 @@ const EventFormScreen = ({ navigation }: Props) => {
       Alert.alert("Erro", "Erro ao criar evento.");
     }
   };
+
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 30 }}>
@@ -391,7 +287,7 @@ const EventFormScreen = ({ navigation }: Props) => {
         <Picker.Item key={location} label={location} value={location} />
       ))}
     </Picker>
-          <Text style={styles.label}>Status:</Text>
+          <Text style={styles.label}>Status do Evento:</Text>
     <Picker
       selectedValue={eventData.status}
       onValueChange={(itemValue) => handleChange("status", itemValue)}
@@ -424,13 +320,14 @@ const EventFormScreen = ({ navigation }: Props) => {
             style={styles.input}
           >
             <Picker.Item label="Selecione a prioridade" value="" />
+            <Picker.Item label="Indefinido" value="INDEFINIDO" />
             <Picker.Item label="Muito Baixa" value="MUITO_BAIXA" />
             <Picker.Item label="Baixa" value="BAIXA" />
             <Picker.Item label="Média" value="MEDIA" />
             <Picker.Item label="Alta" value="ALTA" />
             <Picker.Item label="Crítica" value="CRITICA" />
           </Picker>
-
+ 
       <Text style={styles.label}>Duração de Limpeza</Text>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <TextInput

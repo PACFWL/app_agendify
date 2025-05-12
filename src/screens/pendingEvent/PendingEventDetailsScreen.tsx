@@ -56,15 +56,9 @@ const formatStatus = (status: string) => {
     EM_BREVE: "Em Breve",
     EM_ANDAMENTO: "Em Andamento",
     EM_PAUSA: "Em Pausa",
-    URGENTE: "Urgente",
     FINALIZADO: "Finalizado",
-    CANCELADO: "Cancelado",
-    ADIADO: "Adiado",
-    ATRASADO: "Atrasado",
-    INDEFINIDO: "Indefinido",
-    APROVADO: "Aprovado",
-    PENDENTE: "Pendente",
-    EM_ANALISE: "Em Análise"
+    EM_ANALISE: "Em Análise",
+    INDETERMINADO: "Indeterminado"
   };
   return map[status] || status;
 };
@@ -86,6 +80,7 @@ const formatAdministrativeStatus = (status: string) => {
 
 const formatPriority = (priority: string) => {
   const map: { [key: string]: string } = {
+    INDEFINIDO: "Indefinido",
     MUITO_BAIXA: "Muito Baixa",
     BAIXA: "Baixa",
     MEDIA: "Média",

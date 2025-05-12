@@ -1,41 +1,44 @@
-import { useState } from "react";
+
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { useState } from "react";
 
-export const useEventForm = () => {
+export const useEventEditForm = () => {
 
  const [eventData, setEventData] = useState({
-    name: "",
-    day: "",
-    startTime: "",
-    endTime: "",
-    theme: "",
-    targetAudience: "",
-    mode: "",
-    environment: "",
-    organizer: "",
-    resourcesDescription: [""],
-    disclosureMethod: "",
-    relatedSubjects: [""],
-    teachingStrategy: "",
-    authors: [""],
-    courses: [""],
-    disciplinaryLink: "",
-    locationName: "",
-    locationFloor: "",
-    status: "",
-    administrativeStatus: "",
-    priority: "",
-    observation: "",
-  });
+     name: "",
+     day: "",
+     startTime: "",
+     endTime: "",
+     theme: "",
+     targetAudience: "",
+     mode: "",
+     environment: "",
+     organizer: "",
+     resourcesDescription: [""],
+     disclosureMethod: "",
+     relatedSubjects: [""],
+     teachingStrategy: "",
+     authors: [""],
+     courses: [""],
+     disciplinaryLink: "", 
+     locationName: "",
+     locationFloor: "",
+     status: "",
+     administrativeStatus: "",
+     priority: "",
+     cleanupDuration: "",  
+     observation: "",
+   });
 
-  const [selectedDay, setSelectedDay] = useState<Date | null>(null);
-  const [cleanupHours, setCleanupHours] = useState("");
-  const [cleanupMinutes, setCleanupMinutes] = useState("");
-  const [showDatePicker, setShowDatePicker] = useState(false);
+const [showDatePicker, setShowDatePicker] = useState(false);
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
-
+  const [selectedDay, setSelectedDay] = useState<Date | null>(null);
+  const [startTimeDate, setStartTimeDate] = useState<Date | null>(null);
+  const [endTimeDate, setEndTimeDate] = useState<Date | null>(null);
+  const [cleanupHours, setCleanupHours] = useState("");
+  const [cleanupMinutes, setCleanupMinutes] = useState("");
 
   const handleAuthorChange = (index: number, value: string) => {
     const updatedAuthors = [...eventData.authors];
@@ -104,44 +107,27 @@ export const useEventForm = () => {
   const handleDateChange = (_: any, selectedDate?: Date) => {
     setShowDatePicker(false);
     if (!selectedDate) return;
-  
     setSelectedDay(selectedDate);
-    setEventData((prev) => ({
-      ...prev,
-      day: format(selectedDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR }),
-    }));
+    handleChange("day", format(selectedDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR }));
   };
   
   const handleStartTimeChange = (_: any, selectedDate?: Date) => {
     setShowStartTimePicker(false);
     if (!selectedDate) return;
-  
-    setEventData((prev) => ({
-      ...prev,
-      startTime: format(selectedDate, "HH:mm"),
-    }));
+    setStartTimeDate(selectedDate);
+    handleChange("startTime", format(selectedDate, "HH:mm"));
   };
- 
+  
   const handleEndTimeChange = (_: any, selectedDate?: Date) => {
     setShowEndTimePicker(false);
     if (!selectedDate) return;
-  
-    setEventData((prev) => ({
-      ...prev,
-      endTime: format(selectedDate, "HH:mm"),
-    }));
-  };  
-
-  const showPicker = (type: "date" | "start" | "end") => {
-    if (type === "date") setShowDatePicker(true);
-    else if (type === "start") setShowStartTimePicker(true);
-    else if (type === "end") setShowEndTimePicker(true);
+    setEndTimeDate(selectedDate);
+    handleChange("endTime", format(selectedDate, "HH:mm"));
   };
 
   const handleChange = (field: string, value: string) => {
     setEventData((prev) => ({ ...prev, [field]: value }));
   };
-
 
   return {
     handleAuthorChange,
@@ -156,7 +142,6 @@ export const useEventForm = () => {
     handleRelatedSubjectChange,
     addRelatedSubjectField,
     removeRelatedSubjectField,
-    showPicker,
     eventData,
     setEventData,
     selectedDay,
@@ -171,6 +156,10 @@ export const useEventForm = () => {
     setShowStartTimePicker,
     showEndTimePicker,
     setShowEndTimePicker,
+    startTimeDate,
+    setStartTimeDate,
+    endTimeDate,
+    setEndTimeDate,
     handleChange,
     handleDateChange,
     handleStartTimeChange,

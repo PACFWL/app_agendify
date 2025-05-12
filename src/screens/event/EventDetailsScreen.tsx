@@ -48,6 +48,7 @@ const formatMode = (mode: string) => {
 
 const formatStatus = (status: string) => {
   const map: { [key: string]: string } = {
+    INDETERMINADO: "Indeterminado",
     PLANEJADO: "Planejado",
     EM_BREVE: "Em Breve",
     EM_ANDAMENTO: "Em Andamento",
@@ -60,6 +61,7 @@ const formatStatus = (status: string) => {
 
 const formatPriority = (priority: string) => {
   const map: { [key: string]: string } = {
+    INDEFINIDO: "Indefinido",
     MUITO_BAIXA: "Muito Baixa",
     BAIXA: "Baixa",
     MEDIA: "Média",
