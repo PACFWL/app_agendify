@@ -16,6 +16,13 @@ type Event = {
   startTime: string;
   endTime: string;
   status: string;
+  theme: string;
+  targetAudience: string;
+  mode: string;
+  environment: string;
+  organizer: string;
+ location: { name: string; floor: string };
+  priority: string;
 };
 
 const formatStatusText = (status: string): string => {

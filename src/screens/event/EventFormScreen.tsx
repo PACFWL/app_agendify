@@ -106,7 +106,7 @@ const EventFormScreen = ({ navigation }: Props) => {
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 30 }}>
 
       <Text style={styles.title}>Criar Novo Evento</Text>
-  
+
       <Text style={styles.label}>Nome:</Text>
       <TextInput style={styles.input} placeholder="Nome" onChangeText={(text) => handleChange("name", text)} />
       <Text style={styles.label}>Data:</Text>

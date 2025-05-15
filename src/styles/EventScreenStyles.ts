@@ -54,6 +54,10 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#666",
   },
+  eventLocation: {
+    fontSize: 13,
+    color: "#666",
+  },
   fab: {
     position: "absolute",
     right: 20,
@@ -76,6 +80,44 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  tagsRow: {
+  flexDirection: "row",
+  marginTop: 6,
+  gap: 8,
+  flexWrap: "wrap",
+},
+
+tag: {
+  color: "white",
+  paddingHorizontal: 8,
+  paddingVertical: 4,
+  borderRadius: 12,
+  fontSize: 12,
+  overflow: "hidden",
+},
+
+locationRow: {
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+  marginTop: 4,
+},
+locationName: {
+  fontSize: 13,
+},
+locationFloor: {
+  fontSize: 13,
+  color: "#555",
+},
+locationTag: {
+  fontSize: 12,
+  color: "#fff",
+  paddingHorizontal: 8,
+  paddingVertical: 4,
+  borderRadius: 12,
+  overflow: "hidden",
+},
+
 });
 
 export default styles;
