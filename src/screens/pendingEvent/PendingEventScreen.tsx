@@ -189,14 +189,17 @@ const EventCard = ({
               </Text>
             </View>
   <View style={styles.tagsRow}>
-        <Text
-          style={[
-            styles.tag,
-            { backgroundColor: getPriorityColor(event.priority) },
-          ]}
-        >
-          {formatPriority(event.priority)}
-        </Text>
+        {user.role === "MASTER" && (
+  <Text
+    style={[
+      styles.tag,
+      { backgroundColor: getPriorityColor(event.priority) },
+    ]}
+  >
+    {formatPriority(event.priority)}
+  </Text>
+)}
+
 
   <Text style={[styles.tag, { backgroundColor: getModeColor(event.mode) }]}>
   {formatMode(event.mode)}
