@@ -20,7 +20,7 @@ const locationOptionsByFloor: Record<string, string[]> = {
 
 const EventFormScreen = ({ navigation }: Props) => {
   const auth = useContext(AuthContext);
-  const [errors, setErrors] = useState<Record<string, string>>({});
+
   const {
    handleAuthorChange,
     addAuthorField,
@@ -52,36 +52,13 @@ const EventFormScreen = ({ navigation }: Props) => {
     handleChange,
     handleDateChange,
     handleStartTimeChange,
-    handleEndTimeChange
+    handleEndTimeChange,
+    validateFields,
+    errors, 
+    setErrors
   } = useEventForm();
 
-  const validateFields = () => {
-    const newErrors: Record<string, string> = {};
-
-    if (!eventData.name.trim()) {
-      newErrors.name = "O nome do evento é obrigatório.";
-    }
-
-    if (!selectedDay) {
-      newErrors.day = "A data do evento é obrigatória.";
-    }
-
-    if (!eventData.startTime) {
-      newErrors.startTime = "O horário de início é obrigatório.";
-    }
-
-    if (!eventData.endTime) {
-      newErrors.endTime = "O horário de término é obrigatório.";
-    }
-
-    if (!eventData.theme.trim()) {
-      newErrors.theme = "O tema é obrigatório.";
-    } else if (!/[a-zA-Z]/.test(eventData.theme)) {
-      newErrors.theme = "O tema deve conter letras.";
-    }
-
-    return newErrors;
-  };
+ 
 
    const handleSubmit = async () => {
    const validationErrors = validateFields();
@@ -209,8 +186,16 @@ const EventFormScreen = ({ navigation }: Props) => {
       {errors.theme && <Text style={{ color: "red", marginBottom: 5 }}>{errors.theme}</Text>}
 
       <Text style={styles.label}>Público-alvo:</Text>
-      <TextInput style={styles.input} placeholder="Público-alvo" onChangeText={(text) => handleChange("targetAudience", text)} />
-  
+      <TextInput 
+      style={styles.input} 
+      placeholder="Público-alvo" 
+      onChangeText={(text) => {
+          handleChange("targetAudience", text);
+          setErrors((prev) => ({ ...prev, targetAudience: "" }));
+        }}
+      />
+  {errors.targetAudience && <Text style={{ color: "red", marginBottom: 5 }}>{errors.targetAudience}</Text>}
+
       <Text style={styles.label}>Modalidade:</Text>
       <Picker
         selectedValue={eventData.mode}
@@ -222,7 +207,8 @@ const EventFormScreen = ({ navigation }: Props) => {
         <Picker.Item label="Online" value="ONLINE" />
         <Picker.Item label="Híbrido" value="HIBRIDO" />
       </Picker>
-      
+      {errors.mode && <Text style={{ color: "red", marginBottom: 5 }}>{errors.mode}</Text>}
+
       <Text style={styles.label}>Ambiente:</Text>
       <TextInput style={styles.input} placeholder="Ambiente" onChangeText={(text) => handleChange("environment", text)} />
   
@@ -252,6 +238,7 @@ const EventFormScreen = ({ navigation }: Props) => {
     <TouchableOpacity style={styles.addButton} onPress={addResourcesDescriptionField}>
       <Text style={styles.addButtonText}>Adicionar Recurso</Text>
     </TouchableOpacity>
+{errors.resourcesDescription && <Text style={{ color: "red", marginBottom: 5 }}>{errors.resourcesDescription}</Text>}
 
           <Text style={styles.label}>Forma de Divulgação:</Text>
           <TextInput style={styles.input} placeholder="Forma de Divulgação" onChangeText={(text) => handleChange("disclosureMethod", text)} />
@@ -330,32 +317,39 @@ const EventFormScreen = ({ navigation }: Props) => {
       <Text style={styles.label}>Vínculo Disciplinar:</Text>
       <TextInput style={styles.input} placeholder="Vínculo Disciplinar" onChangeText={(text) => handleChange("disciplinaryLink", text)} />
   
-      <Text style={styles.label}>Andar do Local:</Text>
+    <Text style={styles.label}>Local:</Text>
+<Picker
+  selectedValue={eventData.locationName}
+  onValueChange={(itemValue) => {
+    handleChange("locationName", itemValue);
+    setErrors((prev) => ({ ...prev, locationName: "" }));
+  }}
+  style={styles.input}
+>
+  <Picker.Item label="Selecione o local" value="" />
+  {locationOptionsByFloor[eventData.locationFloor]?.map((location, index) => (
+    <Picker.Item key={index} label={location} value={location} />
+  ))}
+</Picker>
+{errors.locationName && <Text style={{ color: "red", marginBottom: 5 }}>{errors.locationName}</Text>}
 
-      <Picker
-        selectedValue={eventData.locationFloor}
-        onValueChange={(itemValue) => handleChange("locationFloor", itemValue)}
-        style={styles.input}
-      >
-        <Picker.Item label="Selecione o andar" value="" />
-        <Picker.Item label="Térreo" value="0" />
-        <Picker.Item label="1º Andar" value="1" />
-        <Picker.Item label="2º Andar" value="2" />
-        <Picker.Item label="Bloco C" value="3" />
-      </Picker>
+<Text style={styles.label}>Andar:</Text>
+<Picker
+  selectedValue={eventData.locationFloor}
+  onValueChange={(itemValue) => {
+    handleChange("locationFloor", itemValue);
+    setErrors((prev) => ({ ...prev, locationFloor: "" }));
+  }}
+  style={styles.input}
+>
+  <Picker.Item label="Selecione o andar" value="" />
+  <Picker.Item label="Térreo" value="0" />
+  <Picker.Item label="1º Andar" value="1" />
+  <Picker.Item label="2º Andar" value="2" />
+  <Picker.Item label="3º Andar" value="3" />
+</Picker>
+{errors.locationFloor && <Text style={{ color: "red", marginBottom: 5 }}>{errors.locationFloor}</Text>}
 
-      <Text style={styles.label}>Local do Evento:</Text>
-      <Picker
-        selectedValue={eventData.locationName}
-        onValueChange={(itemValue) => handleChange("locationName", itemValue)}
-        style={styles.input}
-        enabled={!!eventData.locationFloor && locationOptionsByFloor[eventData.locationFloor]?.length > 0}
-      >
-      <Picker.Item label="Selecione o local" value="" />
-      {(locationOptionsByFloor[eventData.locationFloor] || []).map((location) => (
-        <Picker.Item key={location} label={location} value={location} />
-      ))}
-    </Picker>
           <Text style={styles.label}>Status do Evento:</Text>
     <Picker
       selectedValue={eventData.status}

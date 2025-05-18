@@ -35,6 +35,7 @@ export const useEventForm = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleAuthorChange = (index: number, value: string) => {
     const updatedAuthors = [...eventData.authors];
@@ -140,6 +141,81 @@ export const useEventForm = () => {
     setEventData((prev) => ({ ...prev, [field]: value }));
   };
 
+   const validateFields = () => {
+    const newErrors: Record<string, string> = {};
+
+    if (!eventData.name.trim()) {
+      newErrors.name = "O nome do evento é obrigatório.";
+    }
+
+    if (!selectedDay) {
+      newErrors.day = "A data do evento é obrigatória.";
+    }
+
+    if (!eventData.startTime) {
+      newErrors.startTime = "O horário de início é obrigatório.";
+    }
+
+    if (!eventData.endTime) {
+      newErrors.endTime = "O horário de término é obrigatório.";
+    }
+
+    if (!eventData.theme.trim()) {
+      newErrors.theme = "O tema é obrigatório.";
+    } else if (!/[a-zA-Z]/.test(eventData.theme)) {
+      newErrors.theme = "O tema deve conter letras.";
+    }
+
+  if (!eventData.theme.trim()) {
+      newErrors.theme = "O tema é obrigatório.";
+    } else if (!/[a-zA-Z]/.test(eventData.theme)) {
+      newErrors.theme = "O tema deve conter letras.";
+    }
+    
+  if (!eventData.targetAudience.trim()) {
+      newErrors.targetAudience = "O público alvo é obrigatório.";
+    } else if (!/[a-zA-Z]/.test(eventData.targetAudience)) {
+      newErrors.targetAudience = "O público alvo deve conter letras.";
+    }
+
+if (!eventData.mode) {
+  newErrors.mode = "A modalidade é obrigatória.";
+}
+
+const nonEmptyResources = eventData.resourcesDescription.filter(resource => resource.trim() !== "");
+
+if (nonEmptyResources.length === 0) {
+  newErrors.resourcesDescription = "Informe pelo menos um recurso.";
+} else if (nonEmptyResources.some(resource => !/[a-zA-Z]/.test(resource))) {
+  newErrors.resourcesDescription = "Cada recurso deve conter letras.";
+}
+
+if (!eventData.locationName) {
+  newErrors.locationName = "O local é obrigatório.";
+}
+
+if (!eventData.locationFloor) {
+  newErrors.locationFloor = "O andar é obrigatório.";
+}
+
+if (eventData.startTime && eventData.endTime) {
+  const [startHour, startMinute] = eventData.startTime.split(":").map(Number);
+  const [endHour, endMinute] = eventData.endTime.split(":").map(Number);
+  const start = new Date();
+  const end = new Date();
+
+  start.setHours(startHour, startMinute, 0);
+  end.setHours(endHour, endMinute, 0);
+
+  if (start >= end) {
+    newErrors.startTime = "O horário de início deve ser menor que o horário de término.";
+    newErrors.endTime = "O horário de término deve ser maior que o horário de início.";
+  }
+}
+
+    return newErrors;
+  };
+
   return {
     handleAuthorChange,
     addAuthorField,
@@ -171,6 +247,9 @@ export const useEventForm = () => {
     handleChange,
     handleDateChange,
     handleStartTimeChange,
-    handleEndTimeChange
+    handleEndTimeChange,
+    validateFields,
+    errors, 
+    setErrors
   };
 };
