@@ -165,12 +165,6 @@ export const useEventForm = () => {
     } else if (!/[a-zA-Z]/.test(eventData.theme)) {
       newErrors.theme = "O tema deve conter letras.";
     }
-
-  if (!eventData.theme.trim()) {
-      newErrors.theme = "O tema é obrigatório.";
-    } else if (!/[a-zA-Z]/.test(eventData.theme)) {
-      newErrors.theme = "O tema deve conter letras.";
-    }
     
   if (!eventData.targetAudience.trim()) {
       newErrors.targetAudience = "O público alvo é obrigatório.";
@@ -178,8 +172,50 @@ export const useEventForm = () => {
       newErrors.targetAudience = "O público alvo deve conter letras.";
     }
 
+  if (!eventData.environment.trim()) {
+      newErrors.environment = "O ambiente é obrigatório.";
+    } else if (!/[a-zA-Z]/.test(eventData.environment)) {
+      newErrors.environment = "O ambiente deve conter letras.";
+    }
+
+    if (!eventData.organizer.trim()) {
+      newErrors.organizer = "A organização é obrigatória.";
+    } else if (!/[a-zA-Z]/.test(eventData.organizer)) {
+      newErrors.organizer = "A organização deve conter letras.";
+    }
+
+  if (!eventData.disciplinaryLink.trim()) {
+      newErrors.disciplinaryLink = "O vinculo disciplinar é obrigatório.";
+    } else if (!/[a-zA-Z]/.test(eventData.disciplinaryLink)) {
+      newErrors.disciplinaryLink = "O vinculo disciplinar deve conter letras.";
+    }
+
+     if (!eventData.disclosureMethod.trim()) {
+      newErrors.disclosureMethod = "A forma de divulgação é obrigatório.";
+    } else if (!/[a-zA-Z]/.test(eventData.disclosureMethod)) {
+      newErrors.disclosureMethod = "A forma de divulgação deve conter letras.";
+    }
+
+    if (!eventData.teachingStrategy.trim()) {
+      newErrors.teachingStrategy = "A estratégia de ensino é obrigatória.";
+    } else if (!/[a-zA-Z]/.test(eventData.teachingStrategy)) {
+      newErrors.teachingStrategy = "A estratégia de ensino deve conter letras.";
+    }
+
 if (!eventData.mode) {
   newErrors.mode = "A modalidade é obrigatória.";
+}
+
+if (!eventData.status) {
+  newErrors.status = "O status do evento é obrigatório.";
+}
+
+if (!eventData.administrativeStatus) {
+  newErrors.administrativeStatus = "O status administrativo é obrigatório.";
+}
+
+if (!eventData.priority) {
+  newErrors.priority = "A prioridade é obrigatório.";
 }
 
 const nonEmptyResources = eventData.resourcesDescription.filter(resource => resource.trim() !== "");
@@ -188,6 +224,30 @@ if (nonEmptyResources.length === 0) {
   newErrors.resourcesDescription = "Informe pelo menos um recurso.";
 } else if (nonEmptyResources.some(resource => !/[a-zA-Z]/.test(resource))) {
   newErrors.resourcesDescription = "Cada recurso deve conter letras.";
+}
+
+const nonEmptySubjects = eventData.relatedSubjects.filter(subject => subject.trim() !== "");
+
+if (nonEmptySubjects.length === 0) {
+  newErrors.relatedSubjects = "Informe pelo menos um disciplina.";
+} else if (nonEmptySubjects.some(subject => !/[a-zA-Z]/.test(subject))) {
+  newErrors.relatedSubjects = "Cada recurso deve conter letras.";
+}
+
+const nonEmptyAuthors = eventData.authors.filter(author => author.trim() !== "");
+
+if (nonEmptyAuthors.length === 0) {
+  newErrors.authors = "Informe pelo menos um autor.";
+} else if (nonEmptyAuthors.some(author => !/[a-zA-Z]/.test(author))) {
+  newErrors.authors = "Cada recurso deve conter letras.";
+}
+
+const nonEmptyCourses = eventData.courses.filter(course => course.trim() !== "");
+
+if (nonEmptyCourses.length === 0) {
+  newErrors.courses = "Informe pelo menos um curso.";
+} else if (nonEmptyCourses.some(course => !/[a-zA-Z]/.test(course))) {
+  newErrors.courses = "Cada recurso deve conter letras.";
 }
 
 if (!eventData.locationName) {

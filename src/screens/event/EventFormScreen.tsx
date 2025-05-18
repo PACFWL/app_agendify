@@ -58,8 +58,6 @@ const EventFormScreen = ({ navigation }: Props) => {
     setErrors
   } = useEventForm();
 
- 
-
    const handleSubmit = async () => {
    const validationErrors = validateFields();
     setErrors(validationErrors);
@@ -194,7 +192,7 @@ const EventFormScreen = ({ navigation }: Props) => {
           setErrors((prev) => ({ ...prev, targetAudience: "" }));
         }}
       />
-  {errors.targetAudience && <Text style={{ color: "red", marginBottom: 5 }}>{errors.targetAudience}</Text>}
+    {errors.targetAudience && <Text style={{ color: "red", marginBottom: 5 }}>{errors.targetAudience}</Text>}
 
       <Text style={styles.label}>Modalidade:</Text>
       <Picker
@@ -210,13 +208,28 @@ const EventFormScreen = ({ navigation }: Props) => {
       {errors.mode && <Text style={{ color: "red", marginBottom: 5 }}>{errors.mode}</Text>}
 
       <Text style={styles.label}>Ambiente:</Text>
-      <TextInput style={styles.input} placeholder="Ambiente" onChangeText={(text) => handleChange("environment", text)} />
-  
+        <TextInput 
+          style={styles.input} 
+          placeholder="Ambiente" 
+          onChangeText={(text) =>  {
+          handleChange("environment", text);
+          setErrors((prev) => ({ ...prev, environment: "" }));
+        }}
+      />
+      {errors.environment && <Text style={{ color: "red", marginBottom: 5 }}>{errors.environment}</Text>}
+
       <Text style={styles.label}>Organizador:</Text>
-      <TextInput style={styles.input} placeholder="Organizador" onChangeText={(text) => handleChange("organizer", text)} />
-  
+        <TextInput 
+          style={styles.input} 
+          placeholder="Organizador" 
+          onChangeText={(text) =>  {
+          handleChange("organizer", text);
+          setErrors((prev) => ({ ...prev, organizer: "" }));
+        }}
+      />
+      {errors.organizer && <Text style={{ color: "red", marginBottom: 5 }}>{errors.organizer}</Text>}
+
       <Text style={styles.label}>Recursos:</Text>
-      
         {eventData.resourcesDescription.map((resource, index) => (
           <React.Fragment key={index}>
             <TextInput
@@ -226,27 +239,30 @@ const EventFormScreen = ({ navigation }: Props) => {
               onChangeText={(text) => handleResourcesDescriptionChange(index, text)}
             />
             {index > 0 && (
-
        <TouchableOpacity style={styles.removeButton}  onPress={() => removeResourcesDescriptionField(index)}>
           <Text style={styles.addButtonText}>Remover</Text>
        </TouchableOpacity>
-
             )}
           </React.Fragment>
         ))}
-
     <TouchableOpacity style={styles.addButton} onPress={addResourcesDescriptionField}>
       <Text style={styles.addButtonText}>Adicionar Recurso</Text>
     </TouchableOpacity>
-{errors.resourcesDescription && <Text style={{ color: "red", marginBottom: 5 }}>{errors.resourcesDescription}</Text>}
+    {errors.resourcesDescription && <Text style={{ color: "red", marginBottom: 5 }}>{errors.resourcesDescription}</Text>}
 
           <Text style={styles.label}>Forma de Divulgação:</Text>
-          <TextInput style={styles.input} placeholder="Forma de Divulgação" onChangeText={(text) => handleChange("disclosureMethod", text)} />
+            <TextInput 
+              style={styles.input} 
+              placeholder="Forma de Divulgação" 
+              onChangeText={(text) =>  {
+          handleChange("disclosureMethod", text);
+          setErrors((prev) => ({ ...prev, disclosureMethod: "" }));
+        }}
+      />
+      {errors.disclosureMethod && <Text style={{ color: "red", marginBottom: 5 }}>{errors.disclosureMethod}</Text>}
 
           <Text style={styles.label}>Disciplinas Relacionadas:</Text>
-    
     {eventData.relatedSubjects.map((relatedSubject, index) => (
-
       <React.Fragment key={index}>
         <TextInput
           style={styles.input}
@@ -261,15 +277,22 @@ const EventFormScreen = ({ navigation }: Props) => {
         )}
       </React.Fragment>
     ))}
-
     <TouchableOpacity style={styles.addButton} onPress={addRelatedSubjectField}>
       <Text style={styles.addButtonText}>Adicionar Disciplina</Text>
     </TouchableOpacity>
+    {errors.relatedSubjects && <Text style={{ color: "red", marginBottom: 5 }}>{errors.relatedSubjects}</Text>}
 
       <Text style={styles.label}>Estratégia de Ensino:</Text>
+        <TextInput 
+          style={styles.input} 
+          placeholder="Estratégia de Ensino" 
+          onChangeText={(text) =>  {
+          handleChange("teachingStrategy", text);
+          setErrors((prev) => ({ ...prev, teachingStrategy: "" }));
+        }}
+      />
+      {errors.teachingStrategy && <Text style={{ color: "red", marginBottom: 5 }}>{errors.teachingStrategy}</Text>}
 
-      <TextInput style={styles.input} placeholder="Estratégia de Ensino" onChangeText={(text) => handleChange("teachingStrategy", text)} />
-  
       <Text style={styles.label}>Autores:</Text>
 
         {eventData.authors.map((author, index) => (
@@ -291,7 +314,9 @@ const EventFormScreen = ({ navigation }: Props) => {
 
           <TouchableOpacity style={styles.addButton} onPress={addAuthorField}>
             <Text style={styles.addButtonText}>Adicionar Autor</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> 
+      {errors.authors && <Text style={{ color: "red", marginBottom: 5 }}>{errors.authors}</Text>}
+
 
       <Text style={styles.label}>Cursos:</Text>
 
@@ -313,42 +338,51 @@ const EventFormScreen = ({ navigation }: Props) => {
       <TouchableOpacity style={styles.addButton} onPress={addCourseField}>
         <Text style={styles.addButtonText}>Adicionar Curso</Text>
       </TouchableOpacity>
+      {errors.courses && <Text style={{ color: "red", marginBottom: 5 }}>{errors.courses}</Text>}
 
       <Text style={styles.label}>Vínculo Disciplinar:</Text>
-      <TextInput style={styles.input} placeholder="Vínculo Disciplinar" onChangeText={(text) => handleChange("disciplinaryLink", text)} />
-  
-    <Text style={styles.label}>Local:</Text>
-<Picker
-  selectedValue={eventData.locationName}
-  onValueChange={(itemValue) => {
-    handleChange("locationName", itemValue);
-    setErrors((prev) => ({ ...prev, locationName: "" }));
-  }}
-  style={styles.input}
->
-  <Picker.Item label="Selecione o local" value="" />
-  {locationOptionsByFloor[eventData.locationFloor]?.map((location, index) => (
-    <Picker.Item key={index} label={location} value={location} />
-  ))}
-</Picker>
-{errors.locationName && <Text style={{ color: "red", marginBottom: 5 }}>{errors.locationName}</Text>}
+        <TextInput 
+          style={styles.input} 
+          placeholder="Vínculo Disciplinar" 
+          onChangeText={(text) => {
+          handleChange("disciplinaryLink", text);
+          setErrors((prev) => ({ ...prev, disciplinaryLink: "" }));
+        }}
+      />
+      {errors.disciplinaryLink && <Text style={{ color: "red", marginBottom: 5 }}>{errors.disciplinaryLink}</Text>}
 
-<Text style={styles.label}>Andar:</Text>
-<Picker
-  selectedValue={eventData.locationFloor}
-  onValueChange={(itemValue) => {
-    handleChange("locationFloor", itemValue);
-    setErrors((prev) => ({ ...prev, locationFloor: "" }));
-  }}
-  style={styles.input}
->
-  <Picker.Item label="Selecione o andar" value="" />
-  <Picker.Item label="Térreo" value="0" />
-  <Picker.Item label="1º Andar" value="1" />
-  <Picker.Item label="2º Andar" value="2" />
-  <Picker.Item label="3º Andar" value="3" />
-</Picker>
-{errors.locationFloor && <Text style={{ color: "red", marginBottom: 5 }}>{errors.locationFloor}</Text>}
+      <Text style={styles.label}>Andar:</Text>
+      <Picker
+        selectedValue={eventData.locationFloor}
+        onValueChange={(itemValue) => {
+          handleChange("locationFloor", itemValue);
+          setErrors((prev) => ({ ...prev, locationFloor: "" }));
+        }}
+        style={styles.input}
+      >
+        <Picker.Item label="Selecione o andar" value="" />
+        <Picker.Item label="Térreo" value="0" />
+        <Picker.Item label="1º Andar" value="1" />
+        <Picker.Item label="2º Andar" value="2" />
+        <Picker.Item label="3º Andar" value="3" />
+      </Picker>
+      {errors.locationFloor && <Text style={{ color: "red", marginBottom: 5 }}>{errors.locationFloor}</Text>}
+
+      <Text style={styles.label}>Local:</Text>
+      <Picker
+        selectedValue={eventData.locationName}
+        onValueChange={(itemValue) => {
+          handleChange("locationName", itemValue);
+          setErrors((prev) => ({ ...prev, locationName: "" }));
+        }}
+        style={styles.input}
+      >
+        <Picker.Item label="Selecione o local" value="" />
+        {locationOptionsByFloor[eventData.locationFloor]?.map((location, index) => (
+          <Picker.Item key={index} label={location} value={location} />
+        ))}
+      </Picker>
+      {errors.locationName && <Text style={{ color: "red", marginBottom: 5 }}>{errors.locationName}</Text>}
 
           <Text style={styles.label}>Status do Evento:</Text>
     <Picker
@@ -359,7 +393,7 @@ const EventFormScreen = ({ navigation }: Props) => {
       <Picker.Item label="Selecione o status" value="" />
       <Picker.Item label="Planejado" value="PLANEJADO" />
     </Picker>
-
+   {errors.status && <Text style={{ color: "red", marginBottom: 5 }}>{errors.status}</Text>}
       <Text style={styles.label}>Status Administrativo:</Text>
       <Picker
         selectedValue={eventData.administrativeStatus}
@@ -376,6 +410,8 @@ const EventFormScreen = ({ navigation }: Props) => {
         <Picker.Item label="Atrasado" value="ATRASADO" />
         <Picker.Item label="Indefinido" value="INDEFINIDO" />
       </Picker>
+       {errors.administrativeStatus && <Text style={{ color: "red", marginBottom: 5 }}>{errors.administrativeStatus}</Text>}
+        
           <Text style={styles.label}>Prioridade:</Text>
           <Picker
             selectedValue={eventData.priority}
@@ -390,7 +426,8 @@ const EventFormScreen = ({ navigation }: Props) => {
             <Picker.Item label="Alta" value="ALTA" />
             <Picker.Item label="Crítica" value="CRITICA" />
           </Picker>
-
+  {errors.priority && <Text style={{ color: "red", marginBottom: 5 }}>{errors.priority}</Text>}
+     
       <Text style={styles.label}>Duração de Limpeza</Text>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <TextInput
