@@ -112,12 +112,27 @@ const EventCard = ({
       style={styles.eventCard}
     >
       <Text style={styles.eventDate}>{event.day}</Text>
+
       <Text style={styles.eventName}>{event.name}</Text>
-      <View style={styles.eventInfoRow}>
-        <Text style={styles.eventTime}>{`${event.startTime} - ${event.endTime}`}</Text>
-        <Text style={styles.eventTheme}>Tema: {event.theme}</Text>
-      </View>
-      <Text style={styles.eventOrganizer}>Organizador: {event.organizer}</Text>
+
+      <View style={styles.tagsRow}>
+      <Text style={[styles.tag, { backgroundColor: "#37474f" }]}>
+        Início: {event.startTime}
+      </Text>
+
+      <Text style={[styles.tag, { backgroundColor: "#37474f" }]}>
+        Término: {event.endTime}
+      </Text>
+
+      <Text style={[styles.tag, { backgroundColor: "#6a1b9a" }]}>
+        Tema: {event.theme}
+      </Text>
+
+      <Text style={[styles.tag, { backgroundColor: "#00796b" }]}>
+        Organizador: {event.organizer}
+      </Text>
+
+    </View>
 
       <View style={styles.locationRow}>
         <Text

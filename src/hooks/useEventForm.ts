@@ -36,7 +36,6 @@ export const useEventForm = () => {
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
 
-
   const handleAuthorChange = (index: number, value: string) => {
     const updatedAuthors = [...eventData.authors];
     updatedAuthors[index] = value;
@@ -125,7 +124,6 @@ export const useEventForm = () => {
   const handleEndTimeChange = (_: any, selectedDate?: Date) => {
     setShowEndTimePicker(false);
     if (!selectedDate) return;
-  
     setEventData((prev) => ({
       ...prev,
       endTime: format(selectedDate, "HH:mm"),
@@ -141,7 +139,6 @@ export const useEventForm = () => {
   const handleChange = (field: string, value: string) => {
     setEventData((prev) => ({ ...prev, [field]: value }));
   };
-
 
   return {
     handleAuthorChange,

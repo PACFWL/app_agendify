@@ -180,7 +180,7 @@ const EventDetailsScreen = ({ route, navigation }: Props) => {
         <Text style={styles.detail}><Text style={styles.label}>Criado em:</Text> {new Date(event.createdAt).toLocaleString("pt-BR")}</Text>
         <Text style={styles.detail}><Text style={styles.label}>Última Modificação:</Text> {new Date(event.lastModifiedAt).toLocaleString("pt-BR")}</Text>
       </View>
-
+      
       <View style={styles.buttonContainer}>
         {auth?.user?.role === "MASTER" && (
           <>

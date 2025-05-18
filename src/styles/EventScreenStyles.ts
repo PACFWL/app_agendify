@@ -89,11 +89,13 @@ const styles = StyleSheet.create({
 
 tag: {
   color: "white",
-  paddingHorizontal: 8,
-  paddingVertical: 4,
-  borderRadius: 12,
+  paddingHorizontal: 10,
+  paddingVertical: 5,
+  borderRadius: 14,
   fontSize: 12,
+  fontWeight: "600",
   overflow: "hidden",
+  textAlign: "center",
 },
 
 locationRow: {
@@ -117,7 +119,6 @@ locationTag: {
   borderRadius: 12,
   overflow: "hidden",
 },
-
 });
 
 export default styles;

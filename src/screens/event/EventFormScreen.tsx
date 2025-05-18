@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Text, TextInput, Alert, ScrollView, TouchableOpacity, View } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { AuthContext } from "../../contexts/AuthContext";
@@ -20,7 +20,7 @@ const locationOptionsByFloor: Record<string, string[]> = {
 
 const EventFormScreen = ({ navigation }: Props) => {
   const auth = useContext(AuthContext);
- 
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const {
    handleAuthorChange,
     addAuthorField,
@@ -55,14 +55,50 @@ const EventFormScreen = ({ navigation }: Props) => {
     handleEndTimeChange
   } = useEventForm();
 
+  const validateFields = () => {
+    const newErrors: Record<string, string> = {};
+
+    if (!eventData.name.trim()) {
+      newErrors.name = "O nome do evento é obrigatório.";
+    }
+
+    if (!selectedDay) {
+      newErrors.day = "A data do evento é obrigatória.";
+    }
+
+    if (!eventData.startTime) {
+      newErrors.startTime = "O horário de início é obrigatório.";
+    }
+
+    if (!eventData.endTime) {
+      newErrors.endTime = "O horário de término é obrigatório.";
+    }
+
+    if (!eventData.theme.trim()) {
+      newErrors.theme = "O tema é obrigatório.";
+    } else if (!/[a-zA-Z]/.test(eventData.theme)) {
+      newErrors.theme = "O tema deve conter letras.";
+    }
+
+    return newErrors;
+  };
+
    const handleSubmit = async () => {
-    if (!auth?.user) return;
-  
+   const validationErrors = validateFields();
+    setErrors(validationErrors);
+
+     if (Object.keys(validationErrors).length > 0) {
+      return;
+    }
+    if (!auth?.user) return; 
+
     try {
 
       let cleanupDurationISO = "";
+      
       if (cleanupHours || cleanupMinutes) {
         cleanupDurationISO = "PT";
+
         if (cleanupHours) cleanupDurationISO += `${parseInt(cleanupHours)}H`;
         if (cleanupMinutes) cleanupDurationISO += `${parseInt(cleanupMinutes)}M`;
       }
@@ -79,9 +115,9 @@ const EventFormScreen = ({ navigation }: Props) => {
         location: { name: eventData.locationName, floor: eventData.locationFloor },
         cleanupDuration: cleanupDurationISO || null,
       };
-  
+
       const result = await createEvent(auth.user.token, formattedData);
-   
+      
       if (!result.conflict) {
         Alert.alert("Sucesso", "Evento criado com sucesso!");
         navigation.goBack();
@@ -101,55 +137,77 @@ const EventFormScreen = ({ navigation }: Props) => {
     }
   };
 
-
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 30 }}>
 
       <Text style={styles.title}>Criar Novo Evento</Text>
 
       <Text style={styles.label}>Nome:</Text>
-      <TextInput style={styles.input} placeholder="Nome" onChangeText={(text) => handleChange("name", text)} />
+      <TextInput
+        style={styles.input}
+        placeholder="Nome"
+        onChangeText={(text) => {
+          handleChange("name", text);
+          setErrors((prev) => ({ ...prev, name: "" }));
+        }}
+      />
+      {errors.name && <Text style={{ color: "red", marginBottom: 5 }}>{errors.name}</Text>}
+
       <Text style={styles.label}>Data:</Text>
-            <TouchableOpacity onPress={() => showPicker("date")}>
-              <Text style={styles.input}>{eventData.day || "Selecionar data"}</Text>
-            </TouchableOpacity>
-            {showDatePicker && (
-              <DateTimePicker
-                mode="date"
-                display="default"
-                value={selectedDay ?? new Date()}
-                onChange={handleDateChange}
-              />
-            )}
-            <Text style={styles.label}>Horário de Início:</Text>
-            <TouchableOpacity onPress={() => showPicker("start")}>
-              <Text style={styles.input}>{eventData.startTime || "Selecionar horário"}</Text>
-            </TouchableOpacity>
-            {showStartTimePicker && (
-              <DateTimePicker
-                mode="time"
-                display="default"
-                value={new Date()}
-                onChange={handleStartTimeChange}
-                is24Hour={true}
-              />
-            )}
-            <Text style={styles.label}>Horário de Término:</Text>
-            <TouchableOpacity onPress={() => showPicker("end")}>
-              <Text style={styles.input}>{eventData.endTime || "Selecionar horário"}</Text>
-            </TouchableOpacity>
-            {showEndTimePicker && (
-              <DateTimePicker
-                mode="time"
-                display="default"
-                value={new Date()}
-                onChange={handleEndTimeChange}
-                is24Hour={true}
-              />
-            )}  
+      <TouchableOpacity onPress={() => showPicker("date")}>
+        <Text style={styles.input}>{eventData.day || "Selecionar data"}</Text>
+      </TouchableOpacity>
+      {errors.day && <Text style={{ color: "red", marginBottom: 5 }}>{errors.day}</Text>}
+      {showDatePicker && (
+        <DateTimePicker
+          mode="date"
+          display="default"
+          value={selectedDay ?? new Date()}
+          onChange={handleDateChange}
+        />
+      )}
+
+      <Text style={styles.label}>Horário de Início:</Text>
+      <TouchableOpacity onPress={() => showPicker("start")}>
+        <Text style={styles.input}>{eventData.startTime || "Selecionar horário"}</Text>
+      </TouchableOpacity>
+      {errors.startTime && <Text style={{ color: "red", marginBottom: 5 }}>{errors.startTime}</Text>}
+      {showStartTimePicker && (
+        <DateTimePicker
+          mode="time"
+          display="default"
+          value={new Date()}
+          onChange={handleStartTimeChange}
+          is24Hour={true}
+        />
+      )}
+
+      <Text style={styles.label}>Horário de Término:</Text>
+      <TouchableOpacity onPress={() => showPicker("end")}>
+        <Text style={styles.input}>{eventData.endTime || "Selecionar horário"}</Text>
+      </TouchableOpacity>
+      {errors.endTime && <Text style={{ color: "red", marginBottom: 5 }}>{errors.endTime}</Text>}
+      {showEndTimePicker && (
+        <DateTimePicker
+          mode="time"
+          display="default"
+          value={new Date()}
+          onChange={handleEndTimeChange}
+          is24Hour={true}
+        />
+      )}
+
       <Text style={styles.label}>Tema:</Text>
-      <TextInput style={styles.input} placeholder="Tema" onChangeText={(text) => handleChange("theme", text)} />
-  
+      <TextInput
+        style={styles.input}
+        placeholder="Tema"
+        onChangeText={(text) => {
+          handleChange("theme", text);
+          setErrors((prev) => ({ ...prev, theme: "" }));
+        }}
+      />
+      {errors.theme && <Text style={{ color: "red", marginBottom: 5 }}>{errors.theme}</Text>}
+
       <Text style={styles.label}>Público-alvo:</Text>
       <TextInput style={styles.input} placeholder="Público-alvo" onChangeText={(text) => handleChange("targetAudience", text)} />
   
@@ -172,6 +230,7 @@ const EventFormScreen = ({ navigation }: Props) => {
       <TextInput style={styles.input} placeholder="Organizador" onChangeText={(text) => handleChange("organizer", text)} />
   
       <Text style={styles.label}>Recursos:</Text>
+      
         {eventData.resourcesDescription.map((resource, index) => (
           <React.Fragment key={index}>
             <TextInput
@@ -189,15 +248,18 @@ const EventFormScreen = ({ navigation }: Props) => {
             )}
           </React.Fragment>
         ))}
+
     <TouchableOpacity style={styles.addButton} onPress={addResourcesDescriptionField}>
       <Text style={styles.addButtonText}>Adicionar Recurso</Text>
     </TouchableOpacity>
 
           <Text style={styles.label}>Forma de Divulgação:</Text>
           <TextInput style={styles.input} placeholder="Forma de Divulgação" onChangeText={(text) => handleChange("disclosureMethod", text)} />
-      
+
           <Text style={styles.label}>Disciplinas Relacionadas:</Text>
+    
     {eventData.relatedSubjects.map((relatedSubject, index) => (
+
       <React.Fragment key={index}>
         <TextInput
           style={styles.input}
@@ -212,14 +274,17 @@ const EventFormScreen = ({ navigation }: Props) => {
         )}
       </React.Fragment>
     ))}
+
     <TouchableOpacity style={styles.addButton} onPress={addRelatedSubjectField}>
       <Text style={styles.addButtonText}>Adicionar Disciplina</Text>
     </TouchableOpacity>
 
       <Text style={styles.label}>Estratégia de Ensino:</Text>
+
       <TextInput style={styles.input} placeholder="Estratégia de Ensino" onChangeText={(text) => handleChange("teachingStrategy", text)} />
   
       <Text style={styles.label}>Autores:</Text>
+
         {eventData.authors.map((author, index) => (
           <React.Fragment key={index}>
             <TextInput
@@ -228,6 +293,7 @@ const EventFormScreen = ({ navigation }: Props) => {
               value={author}
               onChangeText={(text) => handleAuthorChange(index, text)}
             />
+
             {index > 0 && (
               <TouchableOpacity style={styles.removeButton}   onPress={() => removeAuthorField(index)}>
                   <Text style={styles.addButtonText}>Remover</Text>
@@ -235,11 +301,13 @@ const EventFormScreen = ({ navigation }: Props) => {
             )}
           </React.Fragment>
         ))}
+
           <TouchableOpacity style={styles.addButton} onPress={addAuthorField}>
             <Text style={styles.addButtonText}>Adicionar Autor</Text>
           </TouchableOpacity>
 
       <Text style={styles.label}>Cursos:</Text>
+
       {eventData.courses.map((course, index) => (
         <React.Fragment key={index}>
           <TextInput
@@ -263,6 +331,7 @@ const EventFormScreen = ({ navigation }: Props) => {
       <TextInput style={styles.input} placeholder="Vínculo Disciplinar" onChangeText={(text) => handleChange("disciplinaryLink", text)} />
   
       <Text style={styles.label}>Andar do Local:</Text>
+
       <Picker
         selectedValue={eventData.locationFloor}
         onValueChange={(itemValue) => handleChange("locationFloor", itemValue)}
@@ -327,7 +396,7 @@ const EventFormScreen = ({ navigation }: Props) => {
             <Picker.Item label="Alta" value="ALTA" />
             <Picker.Item label="Crítica" value="CRITICA" />
           </Picker>
- 
+
       <Text style={styles.label}>Duração de Limpeza</Text>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <TextInput
@@ -345,7 +414,7 @@ const EventFormScreen = ({ navigation }: Props) => {
             onChangeText={setCleanupMinutes}
           />
         </View>
-
+        
       <Text style={styles.label}>Observação:</Text>
       <TextInput style={styles.input} placeholder="Observação" onChangeText={(text) => handleChange("observation", text)} />
 
