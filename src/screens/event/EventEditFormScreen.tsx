@@ -165,7 +165,6 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
   return (
     <ScrollView  style={[styles.container, { backgroundColor: colors.background }]} contentContainerStyle={{ paddingBottom: 40 }}>
       <Text style={[styles.title, { color: colors.primary }]}>Editar Evento</Text>
-
       <Text style={[styles.label, { color: colors.text }]}>Nome:</Text>
       <TextInput 
       style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]} value={eventData.name} 
@@ -231,16 +230,19 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
       onChangeText={(text) => handleChange("targetAudience", text)} />
 
       <Text style={[styles.label, { color: colors.text }]}>Modalidade:</Text>
+       <View style={[styles.pickerContainer, { backgroundColor: colors.card, borderColor: colors.accent }]}>
       <Picker
         selectedValue={eventData.mode}
         onValueChange={(itemValue) => handleChange("mode", itemValue)}
-        style={styles.input}
+        style={[styles.picker, { color: colors.text }]}
+        dropdownIconColor={colors.text}
       >
         <Picker.Item label="Presencial" value="PRESENCIAL" />
         <Picker.Item label="Online" value="ONLINE" />
         <Picker.Item label="Híbrido" value="HIBRIDO" />
       </Picker>
-
+</View>
+  
       <Text style={[styles.label, { color: colors.text }]}>Ambiente:</Text>
       <TextInput 
       style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]} 
@@ -365,22 +367,27 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
       onChangeText={(text) => handleChange("disciplinaryLink", text)} />
 
       <Text style={[styles.label, { color: colors.text }]}>Andar do Local:</Text>
+       <View style={[styles.pickerContainer, { backgroundColor: colors.card, borderColor: colors.accent }]}>
       <Picker
         selectedValue={eventData.locationFloor}
         onValueChange={(itemValue) => handleChange("locationFloor", itemValue)}
-        style={styles.input}
+        style={[styles.picker, { color: colors.text }]}
+        dropdownIconColor={colors.text}
       >
         <Picker.Item label="Térreo" value="0" />
         <Picker.Item label="1º Andar" value="1" />
         <Picker.Item label="2º Andar" value="2" />
         <Picker.Item label="Bloco C" value="3" />
       </Picker>
+</View>
 
       <Text style={[styles.label, { color: colors.text }]}>Local do Evento:</Text>
+       <View style={[styles.pickerContainer, { backgroundColor: colors.card, borderColor: colors.accent }]}>
       <Picker
         selectedValue={eventData.locationName}
         onValueChange={(itemValue) => handleChange("locationName", itemValue)}
-        style={styles.input}
+        style={[styles.picker, { color: colors.text }]}
+        dropdownIconColor={colors.text}
         enabled={!!eventData.locationFloor && locationOptionsByFloor[eventData.locationFloor]?.length > 0}
         >
         <Picker.Item label="Selecione o local" value="" />
@@ -388,12 +395,14 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
           <Picker.Item key={location} label={location} value={location} />
         ))}
         </Picker>
-
+</View>
       <Text style={[styles.label, { color: colors.text }]}>Status:</Text>
+       <View style={[styles.pickerContainer, { backgroundColor: colors.card, borderColor: colors.accent }]}>
       <Picker
         selectedValue={eventData.status}
         onValueChange={(itemValue) => handleChange("status", itemValue)}
-        style={styles.input}
+        style={[styles.picker, { color: colors.text }]}
+        dropdownIconColor={colors.text}
       > 
         <Picker.Item label="Indeterminado" value="INDETERMINADO" />
         <Picker.Item label="Planejado" value="PLANEJADO" />
@@ -403,12 +412,14 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
         <Picker.Item label="Finalizado" value="FINALIZADO" />
         <Picker.Item label="Aprovado" value="APROVADO" />
       </Picker>
-
+</View>
       <Text style={[styles.label, { color: colors.text }]}>Status Administrativo:</Text>
+      <View style={[styles.pickerContainer, { backgroundColor: colors.card, borderColor: colors.accent }]}>
       <Picker
         selectedValue={eventData.administrativeStatus}
         onValueChange={(itemValue) => handleChange("administrativeStatus", itemValue)}
-        style={styles.input}
+        style={[styles.picker, { color: colors.text }]}
+        dropdownIconColor={colors.text}
       >
         <Picker.Item label="Normal" value="NORMAL" />
         <Picker.Item label="Aprovado" value="APROVADO" />
@@ -419,12 +430,14 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
         <Picker.Item label="Atrasado" value="ATRASADO" />
         <Picker.Item label="Indefinido" value="INDEFINIDO" />
       </Picker>
-
+</View>
       <Text style={[styles.label, { color: colors.text }]}>Prioridade:</Text>
+       <View style={[styles.pickerContainer, { backgroundColor: colors.card, borderColor: colors.accent }]}>
       <Picker
         selectedValue={eventData.priority}
         onValueChange={(itemValue) => handleChange("priority", itemValue)}
-        style={styles.input}
+        style={[styles.picker, { color: colors.text }]}
+        dropdownIconColor={colors.text}
       >
         <Picker.Item label="Indefinido" value="INDEFINIDO" />
         <Picker.Item label="Muito Baixa" value="MUITO_BAIXA" />
@@ -433,7 +446,7 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
         <Picker.Item label="Alta" value="ALTA" />
         <Picker.Item label="Crítica" value="CRITICA" />
       </Picker>
-
+</View>
       <Text style={[styles.label, { color: colors.text }]}>Duração da Limpeza</Text>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <TextInput
