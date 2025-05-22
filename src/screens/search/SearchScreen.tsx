@@ -249,23 +249,38 @@ const showPicker = (type: "date" | "start" | "end") => {
               </Picker>
             </View>
             <TextInput style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}
-  placeholderTextColor={theme === "dark" ? "#aaa" : "#666"} placeholder="Público-alvo" value={targetAudience} onChangeText={setTargetAudience} />
+              placeholderTextColor={theme === "dark" ? "#aaa" : "#666"} 
+              placeholder="Público-alvo" 
+              value={targetAudience} 
+              onChangeText={setTargetAudience} />
             <TextInput style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}
-  placeholderTextColor={theme === "dark" ? "#aaa" : "#666"} placeholder="Ambiente" value={environment} onChangeText={setEnvironment} />
+              placeholderTextColor={theme === "dark" ? "#aaa" : "#666"} 
+              placeholder="Ambiente" 
+              value={environment} 
+              onChangeText={setEnvironment} />
             <TextInput style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}
-  placeholderTextColor={theme === "dark" ? "#aaa" : "#666"} placeholder="Método de divulgação" value={disclosureMethod} onChangeText={setDisclosureMethod} />
+              placeholderTextColor={theme === "dark" ? "#aaa" : "#666"} 
+              placeholder="Método de divulgação" 
+              value={disclosureMethod} 
+              onChangeText={setDisclosureMethod} />
             <TextInput style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}
-  placeholderTextColor={theme === "dark" ? "#aaa" : "#666"} placeholder="Estratégia de ensino" value={teachingStrategy} onChangeText={setTeachingStrategy} />
+              placeholderTextColor={theme === "dark" ? "#aaa" : "#666"} 
+              placeholder="Estratégia de ensino" 
+              value={teachingStrategy} 
+              onChangeText={setTeachingStrategy} />
             <TextInput style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}
-  placeholderTextColor={theme === "dark" ? "#aaa" : "#666"} placeholder="Vínculo disciplinar" value={disciplinaryLink} onChangeText={setDisciplinaryLink} />
+              placeholderTextColor={theme === "dark" ? "#aaa" : "#666"} 
+              placeholder="Vínculo disciplinar" 
+              value={disciplinaryLink} 
+              onChangeText={setDisciplinaryLink} />
              <Text  style={[styles.label, { color: colors.text }]}>Status Administrativo</Text>
             <View style={[styles.input, { backgroundColor: colors.card, borderColor: colors.accent }]}>
               <Picker
                 selectedValue={administrativeStatus}
                 onValueChange={(itemValue) => setAdministrativeStatus(itemValue)}
-                                style={{ color: colors.text }} 
-    dropdownIconColor={colors.text} 
-    itemStyle={{ color: colors.text }} 
+                style={{ color: colors.text }} 
+                dropdownIconColor={colors.text} 
+                itemStyle={{ color: colors.text }} 
               >
                 <Picker.Item label="Selecione o status administrativo" value="" />
                 <Picker.Item label="Normal" value="NORMAL" />
