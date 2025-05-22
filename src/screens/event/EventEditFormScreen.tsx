@@ -11,6 +11,8 @@ import { ptBR } from "date-fns/locale";
 import { TouchableOpacity } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { useEventEditForm } from "../../hooks/useEventEditForm";
+import { ThemeContext } from "../../contexts/ThemeContext";
+import { getColors } from "../../styles/themeColors";
 
 type Props = NativeStackScreenProps<RootStackParamList, "EventEditForm">;
 
@@ -24,6 +26,9 @@ const locationOptionsByFloor: Record<string, string[]> = {
 const EventEditFormScreen = ({ route, navigation }: Props) => {
   const { eventId } = route.params;
   const auth = useContext(AuthContext); 
+
+ const {  theme } = useContext(ThemeContext);
+  const colors = getColors(theme);
 
    const {
    handleAuthorChange,
@@ -158,11 +163,15 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }}>
-      <Text style={styles.title}>Editar Evento</Text>
+    <ScrollView  style={[styles.container, { backgroundColor: colors.background }]} contentContainerStyle={{ paddingBottom: 40 }}>
+      <Text style={[styles.title, { color: colors.primary }]}>Editar Evento</Text>
 
       <Text style={styles.label}>Nome:</Text>
-      <TextInput style={styles.input} value={eventData.name} placeholder="Nome" onChangeText={(text) => handleChange("name", text)} />
+      <TextInput 
+      style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]} value={eventData.name} 
+      placeholder="Nome" 
+      placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
+      onChangeText={(text) => handleChange("name", text)} />
 
       <Text style={styles.label}>Data:</Text>
       <TouchableOpacity onPress={() => setShowDatePicker(true)}>
@@ -206,10 +215,20 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
       )}
 
       <Text style={styles.label}>Tema:</Text>
-      <TextInput style={styles.input} value={eventData.theme} placeholder="Tema" onChangeText={(text) => handleChange("theme", text)} />
+      <TextInput 
+      style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]} 
+      value={eventData.theme} 
+      placeholder="Tema"
+      placeholderTextColor={theme === "dark" ? "#aaa" : "#666"} 
+      onChangeText={(text) => handleChange("theme", text)} />
 
       <Text style={styles.label}>Público-alvo:</Text>
-      <TextInput style={styles.input} value={eventData.targetAudience} placeholder="Público-alvo" onChangeText={(text) => handleChange("targetAudience", text)} />
+      <TextInput 
+      style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]} 
+      value={eventData.targetAudience} 
+      placeholder="Público-alvo" 
+      placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
+      onChangeText={(text) => handleChange("targetAudience", text)} />
 
       <Text style={styles.label}>Modalidade:</Text>
       <Picker
@@ -223,10 +242,20 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
       </Picker>
 
       <Text style={styles.label}>Ambiente:</Text>
-      <TextInput style={styles.input} value={eventData.environment} placeholder="Ambiente" onChangeText={(text) => handleChange("environment", text)} />
+      <TextInput 
+      style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]} 
+      value={eventData.environment} 
+      placeholder="Ambiente" 
+      placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
+      onChangeText={(text) => handleChange("environment", text)} />
 
       <Text style={styles.label}>Organizador:</Text>
-      <TextInput style={styles.input} value={eventData.organizer} placeholder="Organizador" onChangeText={(text) => handleChange("organizer", text)} />
+      <TextInput 
+      style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]} 
+      value={eventData.organizer} 
+      placeholder="Organizador" 
+      placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
+      onChangeText={(text) => handleChange("organizer", text)} />
 
       <Text style={styles.label}>Recursos:</Text>
         {eventData.resourcesDescription.map((resource, index) => (
@@ -249,7 +278,11 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
     </TouchableOpacity>
 
       <Text style={styles.label}>Forma de Divulgação:</Text>
-      <TextInput style={styles.input} value={eventData.disclosureMethod} placeholder="Forma de Divulgação" onChangeText={(text) => handleChange("disclosureMethod", text)} />
+      <TextInput 
+      style={styles.input} value={eventData.disclosureMethod} 
+      placeholder="Forma de Divulgação" 
+      placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
+      onChangeText={(text) => handleChange("disclosureMethod", text)} />
 
       <Text style={styles.label}>Disciplinas Relacionadas:</Text>
         {eventData.relatedSubjects.map((relatedSubject, index) => (
@@ -272,7 +305,12 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
         </TouchableOpacity>
 
       <Text style={styles.label}>Estratégia de Ensino:</Text>
-      <TextInput style={styles.input} value={eventData.teachingStrategy} placeholder="Estratégia de Ensino" onChangeText={(text) => handleChange("teachingStrategy", text)} />
+      <TextInput 
+      style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]} 
+      value={eventData.teachingStrategy} 
+      placeholder="Estratégia de Ensino" 
+      placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
+      onChangeText={(text) => handleChange("teachingStrategy", text)} />
 
       <Text style={styles.label}>Autores:</Text>
         {eventData.authors.map((author, index) => (
@@ -315,7 +353,12 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
       </TouchableOpacity>
 
       <Text style={styles.label}>Vínculo Disciplinar:</Text>
-      <TextInput style={styles.input} value={eventData.disciplinaryLink} placeholder="Vínculo Disciplinar" onChangeText={(text) => handleChange("disciplinaryLink", text)} />
+      <TextInput 
+      style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]} 
+      value={eventData.disciplinaryLink} 
+      placeholder="Vínculo Disciplinar" 
+      placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
+      onChangeText={(text) => handleChange("disciplinaryLink", text)} />
 
       <Text style={styles.label}>Andar do Local:</Text>
       <Picker
@@ -390,23 +433,30 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
       <Text style={styles.label}>Duração da Limpeza</Text>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <TextInput
-            style={[styles.input, { flex: 1, marginRight: 8 }]}
+           style={[styles.input, { color: colors.text }, { backgroundColor: colors.card, borderColor: colors.accent }, { flex: 1, marginRight: 8 }]}
             placeholder="Horas"
+            placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
             keyboardType="numeric"
             value={cleanupHours}
             onChangeText={setCleanupHours}
           />
           <TextInput
-            style={[styles.input, { flex: 1 }]}
+            style={[styles.input, { color: colors.text }, { backgroundColor: colors.card, borderColor: colors.accent }, { flex: 1}]}
             placeholder="Minutos"
+            placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
             keyboardType="numeric"
             value={cleanupMinutes}
             onChangeText={setCleanupMinutes}
           />
         </View>
 
-      <Text style={styles.label}>Observação:</Text>
-      <TextInput style={styles.input} value={eventData.observation} placeholder="Observação" onChangeText={(text) => handleChange("observation", text)} />
+      <Text style={[styles.label, { color: colors.text }]}>Observação:</Text>
+      <TextInput 
+      style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]} 
+      value={eventData.observation} 
+      placeholder="Observação" 
+      placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
+      onChangeText={(text) => handleChange("observation", text)} />
       <TouchableOpacity style={styles.addButton} onPress={handleSubmit}>
         <Text style={styles.addButtonText}>Salvar Alterações</Text>
       </TouchableOpacity>

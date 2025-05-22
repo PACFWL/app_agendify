@@ -2,13 +2,14 @@ import React, { useState, useEffect, useContext } from "react";
 import { View, Text, FlatList, TouchableOpacity } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { AuthContext } from "../../contexts/AuthContext";
+import { ThemeContext } from "../../contexts/ThemeContext"; 
 import { getAllEvents } from "../../api/event";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../routes/Routes";
 import { useNavigation } from "@react-navigation/native";
 import { LocaleConfig } from "react-native-calendars";
-
-import styles from "../../styles/CalendarScreenStyles";
+import getCalendarScreenStyles from "../../styles/CalendarScreenStyles";
+import { getColors } from "../../styles/themeColors";
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamList>;
 
@@ -85,6 +86,8 @@ const formatMonthYear = (dateString: string): string => {
 
 const CalendarScreen = () => {
   const auth = useContext(AuthContext);
+  const { theme } = useContext(ThemeContext);
+  const styles = getCalendarScreenStyles(theme);
   const navigation = useNavigation<NavigationProps>();
   const [events, setEvents] = useState<EventType[]>([]);
   const [selectedDate, setSelectedDate] = useState<string>("");
@@ -201,12 +204,20 @@ const CalendarScreen = () => {
     .filter((event) => event.day === selectedDate)
     .sort((a, b) => a.startTime.localeCompare(b.startTime));
 
-  return (
+return (
     <View style={styles.container}>
       <Text style={styles.titleToday}>{nowInBrazil}</Text>
 
       <Calendar
         markingType="custom"
+      theme={{
+          calendarBackground: getColors(theme).background,
+          dayTextColor: getColors(theme).text,
+          monthTextColor: getColors(theme).primary,
+          selectedDayBackgroundColor: getColors(theme).primary,
+          todayTextColor: getColors(theme).accent,
+          arrowColor: getColors(theme).primary,
+        }}
         onDayPress={(day) => setSelectedDate(day.dateString)}
         onMonthChange={(month) => {
           const formatted = formatMonthYear(month.dateString);
@@ -244,9 +255,9 @@ const CalendarScreen = () => {
             }
           >
             <Text style={styles.eventName}>{item.name}</Text>
-            <Text style={{ color: "#555" }}>{`${item.startTime} - ${item.endTime}`}</Text>
-            <Text style={{ color: "#666" }}>Status: {item.status}</Text>
-            <Text style={{ color: "#666" }}>{`${item.location.name} - ${item.location.floor}`}</Text>
+            <Text style={{ color: getColors(theme).text }}>{`${item.startTime} - ${item.endTime}`}</Text>
+            <Text style={{ color: getColors(theme).text }}>Status: {item.status}</Text>
+            <Text style={{ color: getColors(theme).text }}>{`${item.location.name} - ${item.location.floor}`}</Text>
           </TouchableOpacity>
         )}
         contentContainerStyle={{ paddingBottom: 80 }}

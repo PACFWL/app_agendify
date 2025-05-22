@@ -49,61 +49,61 @@ export const usePendingEventEditForm = () => {
         setEventData(prev => ({ ...prev, authors: [...prev.authors, ""] }));
       };
       
-      const removeAuthorField = (index: number) => {
+    const removeAuthorField = (index: number) => {
         const updatedAuthors = [...eventData.authors];
         updatedAuthors.splice(index, 1);
         setEventData(prev => ({ ...prev, authors: updatedAuthors }));
       };
       
-      const handleCourseChange = (index: number, value: string) => {
+    const handleCourseChange = (index: number, value: string) => {
         const updatedCourses = [...eventData.courses];
         updatedCourses[index] = value;
         setEventData(prev => ({ ...prev, courses: updatedCourses }));
       };
       
-      const addCourseField = () => {
+    const addCourseField = () => {
         setEventData(prev => ({ ...prev, courses: [...prev.courses, ""] }));
       };
       
-      const removeCourseField = (index: number) => {
+    const removeCourseField = (index: number) => {
         const updatedCourses = [...eventData.courses];
         updatedCourses.splice(index, 1);
         setEventData(prev => ({ ...prev, courses: updatedCourses }));
       };
     
-      const handleResourcesDescriptionChange = (index: number, value: string) => {
+    const handleResourcesDescriptionChange = (index: number, value: string) => {
         const updatedResourcesDescriptions = [...eventData.resourcesDescription];
         updatedResourcesDescriptions[index] = value;
         setEventData(prev => ({ ...prev, resourcesDescription: updatedResourcesDescriptions }));
       };
       
-      const addResourcesDescriptionField = () => {
+    const addResourcesDescriptionField = () => {
         setEventData(prev => ({ ...prev, resourcesDescription: [...prev.resourcesDescription, ""] }));
       };
       
-      const removeResourcesDescriptionField = (index: number) => {
+    const removeResourcesDescriptionField = (index: number) => {
         const updatedResourcesDescriptions = [...eventData.resourcesDescription];
         updatedResourcesDescriptions.splice(index, 1);
         setEventData(prev => ({ ...prev, resourcesDescription: updatedResourcesDescriptions }));
       };  
       
-      const handleRelatedSubjectChange = (index: number, value: string) => {
+    const handleRelatedSubjectChange = (index: number, value: string) => {
         const updatedRelatedSubjects = [...eventData.relatedSubjects];
         updatedRelatedSubjects[index] = value;
         setEventData(prev => ({ ...prev, relatedSubjects: updatedRelatedSubjects }));
       };
       
-      const addRelatedSubjectField = () => {
+    const addRelatedSubjectField = () => {
         setEventData(prev => ({ ...prev, relatedSubjects: [...prev.relatedSubjects, ""] }));
       };
       
-      const removeRelatedSubjectField = (index: number) => {
+    const removeRelatedSubjectField = (index: number) => {
         const updatedRelatedSubjects = [...eventData.relatedSubjects];
         updatedRelatedSubjects.splice(index, 1);
         setEventData(prev => ({ ...prev, relatedSubjects: updatedRelatedSubjects }));
       };
     
-  const handleDateChange = (_: any, selectedDate?: Date) => {
+    const handleDateChange = (_: any, selectedDate?: Date) => {
       setShowDatePicker(false);
       if (!selectedDate) return;
       setSelectedDay(selectedDate);

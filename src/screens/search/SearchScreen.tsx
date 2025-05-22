@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import {View,Text,TextInput,Button,ScrollView,TouchableOpacity,KeyboardAvoidingView,Platform, Switch} from "react-native";
+import {View,Text,TextInput,ScrollView,TouchableOpacity,KeyboardAvoidingView,Platform, Switch} from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { AuthContext } from "../../contexts/AuthContext";
 import { searchEvents } from "../../api/event";
@@ -10,6 +10,9 @@ import { RootStackParamList } from "../../routes/Routes";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { ThemeContext } from "../../contexts/ThemeContext";
+import { getColors } from "../../styles/themeColors";
+
 
 type Props = NativeStackScreenProps<RootStackParamList, "Search">;
 
@@ -35,7 +38,25 @@ type Event = {
  
 const SearchScreen = ({ navigation }: Props) => {
   const auth = useContext(AuthContext);
-  const [name, setName] = useState("");
+
+    const locationOptionsByFloor: Record<string, string[]> = {
+    "0": ["A definir", "Auditório", "Sala Maker", "Hall Principal", "Sala T01", "Sala T02", "Sala T03"],
+    "1": ["A definir", "Sala de Informática 001", "Sala de Informática 002", "Sala de Informática 003", "Sala de Informática 004",
+      "Sala 111", "Sala de Aula 001", "Sala de Aula 002", "Sala de Aula 003", "Sala de Aula 004",
+      "Sala de Aula 005", "Sala de Aula 006", "Sala de Aula 007", "Sala de Aula 008", "Sala de Aula 009"
+    ],
+    "2": ["A definir", "Sala de Informática 001", "Sala de Informática 002", "Sala de Informática 003", "Sala de Informática 004",
+      "Sala de Aula 001", "Sala de Aula 002", "Sala de Aula 003", "Sala de Aula 004",
+      "Sala de Aula 005", "Sala de Aula 006", "Sala de Aula 007", "Sala de Aula 008",
+      "Sala de Aula 009", "Sala de Aula 010"
+    ],
+    "3": ["A definir", "Sala de Aula 1", "Sala de Aula 2"],
+  };
+
+  const {  theme: currentTheme } = useContext(ThemeContext);
+  const colors = getColors(currentTheme);
+
+const [name, setName] = useState("");
   const [organizer, setOrganizer] = useState("");
   const [status, setStatus] = useState("");
   const [theme, setTheme] = useState("");
@@ -62,13 +83,14 @@ const SearchScreen = ({ navigation }: Props) => {
   const [intervalSearch, setIntervalSearch] = useState(false);
   const [cleanupHours, setCleanupHours] = useState("");
   const [cleanupMinutes, setCleanupMinutes] = useState("");
-  
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
 
-const handleDateChange = (_: any, selectedDate?: Date) => {
+
+
+  const handleDateChange = (_: any, selectedDate?: Date) => {
   setShowDatePicker(false);
   if (!selectedDate) return;
 
@@ -95,19 +117,8 @@ const showPicker = (type: "date" | "start" | "end") => {
   else if (type === "end") setShowEndTimePicker(true);
 };
 
-  const locationOptionsByFloor: Record<string, string[]> = {
-    "0": ["A definir", "Auditório", "Sala Maker", "Hall Principal", "Sala T01", "Sala T02", "Sala T03"],
-    "1": ["A definir", "Sala de Informática 001", "Sala de Informática 002", "Sala de Informática 003", "Sala de Informática 004",
-      "Sala 111", "Sala de Aula 001", "Sala de Aula 002", "Sala de Aula 003", "Sala de Aula 004",
-      "Sala de Aula 005", "Sala de Aula 006", "Sala de Aula 007", "Sala de Aula 008", "Sala de Aula 009"
-    ],
-    "2": ["A definir", "Sala de Informática 001", "Sala de Informática 002", "Sala de Informática 003", "Sala de Informática 004",
-      "Sala de Aula 001", "Sala de Aula 002", "Sala de Aula 003", "Sala de Aula 004",
-      "Sala de Aula 005", "Sala de Aula 006", "Sala de Aula 007", "Sala de Aula 008",
-      "Sala de Aula 009", "Sala de Aula 010"
-    ],
-    "3": ["A definir", "Sala de Aula 1", "Sala de Aula 2"],
-  };
+
+
   
   const handleSearch = async () => {
     setLoading(true);
@@ -156,13 +167,13 @@ const showPicker = (type: "date" | "start" | "end") => {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-    >
+      <KeyboardAvoidingView
+        style={[styles.container, { backgroundColor: colors.background }]}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+      >
       <ScrollView contentContainerStyle={{ padding: 16 }} keyboardShouldPersistTaps="handled">
         <View style={styles.header}>
-          <Text style={styles.title}>Buscar Eventos</Text>
+         <Text style={[styles.title, { color: colors.primary }]}>Buscar Eventos</Text>
           <TouchableOpacity onPress={() => setShowFilters(!showFilters)}>
             <RemoteSvgIcon
               uri="https://www.svgrepo.com/show/362103/funnel.svg"
@@ -173,20 +184,26 @@ const showPicker = (type: "date" | "start" | "end") => {
         </View>
 
         <TextInput
-          style={styles.input}
+           style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}
+  placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
           placeholder="Nome do evento"
+          
           value={name}
           onChangeText={setName}
         />
 
         {showFilters && (
           <>
-            <TextInput style={styles.input} placeholder="Organizador" value={organizer} onChangeText={setOrganizer} />
-            <Text style={styles.label}>Status</Text>
-            <View style={styles.input}>
+            <TextInput style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}
+  placeholderTextColor={theme === "dark" ? "#aaa" : "#666"} placeholder="Organizador" value={organizer} onChangeText={setOrganizer} />
+            <Text  style={[styles.label, { color: colors.text }]}>Status</Text>
+            <View style={[styles.input, { backgroundColor: colors.card, borderColor: colors.accent }]}>
               <Picker
                 selectedValue={status}
                 onValueChange={(itemValue) => setStatus(itemValue)}
+                 style={{ color: colors.text }} 
+    dropdownIconColor={colors.text} 
+    itemStyle={{ color: colors.text }} 
               >
                 <Picker.Item label="Selecione o status" value="" />
                 <Picker.Item label="Planejado" value="PLANEJADO" />
@@ -197,12 +214,16 @@ const showPicker = (type: "date" | "start" | "end") => {
                 <Picker.Item label="Aprovado" value="APROVADO" />
               </Picker>
             </View>
-            <TextInput style={styles.input} placeholder="Tema" value={theme} onChangeText={setTheme} />
-            <Text style={styles.label}>Modalidade</Text>
-            <View style={styles.input}>
+            <TextInput style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}
+  placeholderTextColor={theme === "dark" ? "#aaa" : "#666"} placeholder="Tema" value={theme} onChangeText={setTheme} />
+            <Text  style={[styles.label, { color: colors.text }]}>Modalidade</Text>
+            <View style={[styles.input, { backgroundColor: colors.card, borderColor: colors.accent }]}>
               <Picker
                 selectedValue={mode}
                 onValueChange={(itemValue) => setMode(itemValue)}
+                 style={{ color: colors.text }} 
+    dropdownIconColor={colors.text} 
+    itemStyle={{ color: colors.text }} 
               >
                 <Picker.Item label="Selecione a modalidade" value="" />
                 <Picker.Item label="Presencial" value="PRESENCIAL" />
@@ -210,11 +231,14 @@ const showPicker = (type: "date" | "start" | "end") => {
                 <Picker.Item label="Híbrido" value="HIBRIDO" />
               </Picker>
             </View>
-            <Text style={styles.label}>Prioridade</Text>
-            <View style={styles.input}>
+            <Text  style={[styles.label, { color: colors.text }]}>Prioridade</Text>
+            <View style={[styles.input, { backgroundColor: colors.card, borderColor: colors.accent }]}>
               <Picker
                 selectedValue={priority}
                 onValueChange={(itemValue) => setPriority(itemValue)}
+                                style={{ color: colors.text }} 
+    dropdownIconColor={colors.text} 
+    itemStyle={{ color: colors.text }} 
               >
                 <Picker.Item label="Selecione a prioridade" value="" />
                 <Picker.Item label="Muito Baixa" value="MUITO_BAIXA" />
@@ -224,16 +248,24 @@ const showPicker = (type: "date" | "start" | "end") => {
                 <Picker.Item label="Crítica" value="CRITICA" />
               </Picker>
             </View>
-            <TextInput style={styles.input} placeholder="Público-alvo" value={targetAudience} onChangeText={setTargetAudience} />
-            <TextInput style={styles.input} placeholder="Ambiente" value={environment} onChangeText={setEnvironment} />
-            <TextInput style={styles.input} placeholder="Método de divulgação" value={disclosureMethod} onChangeText={setDisclosureMethod} />
-            <TextInput style={styles.input} placeholder="Estratégia de ensino" value={teachingStrategy} onChangeText={setTeachingStrategy} />
-            <TextInput style={styles.input} placeholder="Vínculo disciplinar" value={disciplinaryLink} onChangeText={setDisciplinaryLink} />
-            <Text style={styles.label}>Status Administrativo</Text>
-            <View style={styles.input}>
+            <TextInput style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}
+  placeholderTextColor={theme === "dark" ? "#aaa" : "#666"} placeholder="Público-alvo" value={targetAudience} onChangeText={setTargetAudience} />
+            <TextInput style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}
+  placeholderTextColor={theme === "dark" ? "#aaa" : "#666"} placeholder="Ambiente" value={environment} onChangeText={setEnvironment} />
+            <TextInput style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}
+  placeholderTextColor={theme === "dark" ? "#aaa" : "#666"} placeholder="Método de divulgação" value={disclosureMethod} onChangeText={setDisclosureMethod} />
+            <TextInput style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}
+  placeholderTextColor={theme === "dark" ? "#aaa" : "#666"} placeholder="Estratégia de ensino" value={teachingStrategy} onChangeText={setTeachingStrategy} />
+            <TextInput style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}
+  placeholderTextColor={theme === "dark" ? "#aaa" : "#666"} placeholder="Vínculo disciplinar" value={disciplinaryLink} onChangeText={setDisciplinaryLink} />
+             <Text  style={[styles.label, { color: colors.text }]}>Status Administrativo</Text>
+            <View style={[styles.input, { backgroundColor: colors.card, borderColor: colors.accent }]}>
               <Picker
                 selectedValue={administrativeStatus}
                 onValueChange={(itemValue) => setAdministrativeStatus(itemValue)}
+                                style={{ color: colors.text }} 
+    dropdownIconColor={colors.text} 
+    itemStyle={{ color: colors.text }} 
               >
                 <Picker.Item label="Selecione o status administrativo" value="" />
                 <Picker.Item label="Normal" value="NORMAL" />
@@ -246,15 +278,19 @@ const showPicker = (type: "date" | "start" | "end") => {
                 <Picker.Item label="Indefinido" value="INDEFINIDO" />
               </Picker>
             </View>
-            <TextInput style={styles.input} placeholder="Observação" value={observation} onChangeText={setObservation} />
-            <Text style={styles.label}>Andar do Local</Text>
-            <View style={styles.input}>
+            <TextInput style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}
+          placeholderTextColor={theme === "dark" ? "#aaa" : "#666"} placeholder="Observação" value={observation} onChangeText={setObservation} />
+            <Text style={[styles.label, { color: colors.text }]}>Andar do Local</Text>
+            <View style={[styles.input, { backgroundColor: colors.card, borderColor: colors.accent }]}>
               <Picker
                 selectedValue={locationFloor}
                 onValueChange={(itemValue) => {
                   setLocationFloor(itemValue);
                   setLocationName(""); 
                 }}
+                                style={{ color: colors.text }} 
+    dropdownIconColor={colors.text} 
+    itemStyle={{ color: colors.text }} 
               >
                 <Picker.Item label="Selecione o andar" value="" />
                 <Picker.Item label="Térreo" value="0" />
@@ -264,12 +300,15 @@ const showPicker = (type: "date" | "start" | "end") => {
               </Picker>
             </View>
 
-            <Text style={styles.label}>Local do Evento</Text>
-            <View style={styles.input}>
+            <Text  style={[styles.label, { color: colors.text }]}>Local do Evento</Text>
+            <View style={[styles.input, { backgroundColor: colors.card, borderColor: colors.accent }]}>
               <Picker
                 selectedValue={locationName}
                 onValueChange={(itemValue) => setLocationName(itemValue)}
                 enabled={!!locationFloor && locationOptionsByFloor[locationFloor]?.length > 0}
+                    style={{ color: colors.text }} 
+                    dropdownIconColor={colors.text} 
+                    itemStyle={{ color: colors.text }}
               >
                 <Picker.Item label="Selecione o local" value="" />
                 {(locationOptionsByFloor[locationFloor] || []).map((location) => (
@@ -277,14 +316,14 @@ const showPicker = (type: "date" | "start" | "end") => {
                 ))}
               </Picker>
             </View>
-            <Text style={styles.label}>Data:</Text>
+            <Text  style={[styles.label, { color: colors.text }]}>Data:</Text>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <TouchableOpacity onPress={() => showPicker("date")} style={{ flex: 1 }}>
-                <Text style={styles.input}>{dayDisplay || "Selecionar data"}</Text>
+                <Text style={[styles.input, { color: colors.text }, { backgroundColor: colors.card, borderColor: colors.accent }]}>{dayDisplay || "Selecionar data"}</Text>
               </TouchableOpacity>
               {day !== "" && (
                 <TouchableOpacity onPress={() => { setDay(""); setDayDisplay(""); }} style={{ marginLeft: 8 }}>
-                  <Text style={{ color: "#6200ee" }}>Limpar</Text>
+                  <Text style={{ color: colors.primary }}>Limpar</Text>
                 </TouchableOpacity>
               )}
             </View>
@@ -296,14 +335,14 @@ const showPicker = (type: "date" | "start" | "end") => {
                   onChange={handleDateChange}
                 />
               )}
-              <Text style={styles.label}>Horário de Início:</Text>
+              <Text  style={[styles.label, { color: colors.text }]}>Horário de Início:</Text>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <TouchableOpacity onPress={() => showPicker("start")} style={{ flex: 1 }}>
-                  <Text style={styles.input}>{startTime || "Selecionar horário"}</Text>
+                  <Text style={[styles.input, { color: colors.text }, { backgroundColor: colors.card, borderColor: colors.accent }]}>{startTime || "Selecionar horário"}</Text>
                 </TouchableOpacity>
                 {startTime !== "" && (
                   <TouchableOpacity onPress={() => setStartTime("")} style={{ marginLeft: 8 }}>
-                    <Text style={{ color: "#6200ee" }}>Limpar</Text>
+                    <Text style={{ color: colors.primary }}>Limpar</Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -317,14 +356,14 @@ const showPicker = (type: "date" | "start" | "end") => {
                 />
               )}
 
-              <Text style={styles.label}>Horário de Término:</Text>
+              <Text  style={[styles.label, { color: colors.text }]}>Horário de Término:</Text>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <TouchableOpacity onPress={() => showPicker("end")} style={{ flex: 1 }}>
-                  <Text style={styles.input}>{endTime || "Selecionar horário"}</Text>
+                  <Text style={[styles.input, { color: colors.text }, { backgroundColor: colors.card, borderColor: colors.accent }]}>{endTime || "Selecionar horário"}</Text>
                 </TouchableOpacity>
                 {endTime !== "" && (
                   <TouchableOpacity onPress={() => setEndTime("")} style={{ marginLeft: 8 }}>
-                    <Text style={{ color: "#6200ee" }}>Limpar</Text>
+                    <Text style={{ color: colors.primary }}>Limpar</Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -338,25 +377,27 @@ const showPicker = (type: "date" | "start" | "end") => {
                 />
               )}
           <View style={{ flexDirection: "row", alignItems: "center", marginVertical: 10 }}>
-            <Text style={{ marginRight: 10 }}>Busca por intervalo?</Text>
-            <Switch
-              value={intervalSearch}
-              onValueChange={setIntervalSearch}
-            />
-
+            <Text  style={[styles.label, { color: colors.text }, { marginRight: 10 }]}       >Busca por intervalo?</Text>
+          
+  <Switch
+        value={intervalSearch}
+       onValueChange={setIntervalSearch}
+      />
           </View>
-          <Text style={styles.label}>Duração de Limpeza</Text>
+          <Text  style={[styles.label, { color: colors.text }]}>Duração de Limpeza</Text>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <TextInput
-                style={[styles.input, { flex: 1, marginRight: 8 }]}
+                style={[styles.input, { color: colors.text }, { backgroundColor: colors.card, borderColor: colors.accent }, { flex: 1, marginRight: 8 }]}
                 placeholder="Horas"
+                placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
                 value={cleanupHours}
                 onChangeText={setCleanupHours}
                 keyboardType="numeric"
               />
               <TextInput
-                style={[styles.input, { flex: 1 }]}
+                style={[styles.input, { color: colors.text }, { backgroundColor: colors.card, borderColor: colors.accent }, { flex: 1}]}
                 placeholder="Minutos"
+                placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
                 value={cleanupMinutes}
                 onChangeText={setCleanupMinutes}
                 keyboardType="numeric"
@@ -365,8 +406,9 @@ const showPicker = (type: "date" | "start" | "end") => {
           </>
         )}
 
-  <TouchableOpacity style={[styles.button, styles.primaryButton]} onPress={handleSearch}>
-          <Text style={styles.buttonText}>Buscar</Text>
+      <TouchableOpacity   style={[styles.button, { backgroundColor: colors.primary }]}
+  onPress={handleSearch}>
+          <Text style={[styles.buttonText, { color: colors.statusText }]}>Buscar</Text>
         </TouchableOpacity>
 
         {loading && <Text style={{ marginTop: 16 }}>Carregando...</Text>}
@@ -375,10 +417,10 @@ const showPicker = (type: "date" | "start" | "end") => {
           <TouchableOpacity
             key={item.id}
             onPress={() => navigation.navigate("EventDetails", { eventId: item.id })}
-            style={styles.eventItem}
+            style={[styles.eventItem, { backgroundColor: colors.card }]}
           >
-            <Text style={styles.eventTitle}>{item.name}</Text>
-            <Text>
+            <Text style={[styles.eventTitle, { color: colors.primary }]}>{item.name}</Text>
+            <Text style={{ color: colors.cardText }}>
               {item.day} - {item.startTime} às {item.endTime}
             </Text>
             <Text>Tema: {item.theme}</Text>
@@ -391,9 +433,3 @@ const showPicker = (type: "date" | "start" | "end") => {
 };
 
 export default SearchScreen;
-
-
-/**
-  <TextInput style={styles.input} placeholder="Início do intervalo (YYYY-MM-DD)" value={startDay} onChangeText={setStartDay} />
-  <TextInput style={styles.input} placeholder="Fim do intervalo (YYYY-MM-DD)" value={endDay} onChangeText={setEndDay} />
- */

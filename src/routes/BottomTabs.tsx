@@ -8,6 +8,8 @@ import RemoteSvgIcon from "../components/RemoteSvgIcon";
 import { AuthContext } from "../contexts/AuthContext";
 import AccountScreen from "../screens/account/AccountScreen";
 import SearchScreen from "../screens/search/SearchScreen";
+import { getColors } from "../styles/themeColors";
+import { ThemeContext } from "../contexts/ThemeContext";
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -24,23 +26,39 @@ const BottomTabs = () => {
   const auth = useContext(AuthContext);
   const role = auth?.user?.role;
 
-  return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ color, size }) => {
-          let uri = "";
+const { theme } = useContext(ThemeContext);
+const isDark = theme === "dark";
+const colors = getColors(theme);
 
-          if (route.name === "Home") uri = "https://www.svgrepo.com/show/362110/house.svg";
-          else if (route.name === "Events") uri = "https://www.svgrepo.com/show/362044/bullhorn.svg";
-          else if (route.name === "Calendar") uri = "https://www.svgrepo.com/show/362042/calendar-clock.svg";
-          else if (route.name === "PendingsEvents") uri = "https://www.svgrepo.com/show/434146/mailbox.svg";
-          else if (route.name === "Account") uri = "https://www.svgrepo.com/show/362140/profile-group.svg";
-          else if (route.name === "Search") uri = "https://www.svgrepo.com/show/362144/search.svg";
-          return <RemoteSvgIcon uri={uri} size={size} color={color} />;
-        },
-        headerShown: false,
-      })}
-    >
+
+  return (
+<Tab.Navigator
+  screenOptions={({ route }) => ({
+    tabBarIcon: ({ color, size }) => {
+      let uri = "";
+
+      if (route.name === "Home") uri = "https://www.svgrepo.com/show/362110/house.svg";
+      else if (route.name === "Events") uri = "https://www.svgrepo.com/show/362044/bullhorn.svg";
+      else if (route.name === "Calendar") uri = "https://www.svgrepo.com/show/362042/calendar-clock.svg";
+      else if (route.name === "PendingsEvents") uri = "https://www.svgrepo.com/show/434146/mailbox.svg";
+      else if (route.name === "Account") uri = "https://www.svgrepo.com/show/362140/profile-group.svg";
+      else if (route.name === "Search") uri = "https://www.svgrepo.com/show/362144/search.svg";
+
+      return <RemoteSvgIcon uri={uri} size={size} color={color} />;
+    },
+    headerShown: false,
+    tabBarActiveTintColor: colors.primary,
+    tabBarInactiveTintColor: isDark ? "#aaa" : "#555",
+    tabBarStyle: {
+      backgroundColor: colors.card,
+      borderTopColor: isDark ? "#333" : "#ddd",
+    },
+    tabBarLabelStyle: {
+      fontSize: 12,
+    },
+  })}
+>
+
       <Tab.Screen name="Home" component={HomeScreen} options={{ title: "Início" }} />
       <Tab.Screen name="Events" component={EventScreen} options={{ title: "Eventos" }} />
       <Tab.Screen name="Calendar" component={CalendarScreen} options={{ title: "Calendário" }} />

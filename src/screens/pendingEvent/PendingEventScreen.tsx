@@ -6,6 +6,9 @@ import styles from "../../styles/PendingEventScreenStyles";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../routes/Routes";
+import { ThemeContext } from "../../contexts/ThemeContext";
+import { getColors } from "../../styles/themeColors";
+
 
 type PendingEvent = {
   id: string;
@@ -116,6 +119,10 @@ const EventCard = ({
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
+       const { theme } = useContext(ThemeContext);
+ const colors = getColors(theme);
+
+
   const handleApprove = async () => {
     try {
       const result = await approvePendingEvent(user.token, event.id);
@@ -144,21 +151,21 @@ const EventCard = ({
   };
 
   return (
-    <View style={styles.eventCard}>
+    <View style={[styles.eventCard, { backgroundColor: colors.card }]}>
       <TouchableOpacity
         onPress={() =>
           navigation.navigate("PendingEventDetails", { eventId: event.id })
         }
       >
-        <Text style={styles.eventDate}>{event.day}</Text>
-        <Text style={styles.eventName}>{event.name}</Text>
+        <Text style={[styles.eventDate, { color: colors.accent }]}>{event.day}</Text>
+        <Text style={[styles.eventName, { color: colors.cardTitle }]}>{event.name}</Text>
         <View style={styles.eventInfoRow}>
-          <Text style={styles.eventTime}>
+          <Text style={[styles.eventTime, { color: colors.cardText }]}>
             {`${event.startTime} - ${event.endTime}`}
           </Text>
-          <Text style={styles.eventTheme}>Tema: {event.theme}</Text>
+          <Text style={[styles.eventTheme, { color: colors.noEventText }]}>Tema: {event.theme}</Text>
         </View>
-        <Text style={styles.eventOrganizer}>
+        <Text style={[styles.eventOrganizer, { color: colors.cardText }]}>
           Organizador: {event.organizer}
         </Text>
                              <View style={styles.locationRow}>
@@ -226,6 +233,7 @@ const EventCard = ({
 };
 
 const Loading = () => (
+  
   <View style={styles.loadingContainer}>
     <ActivityIndicator size="large" color="#1976d2" />
     <Text>Carregando eventos pendentes...</Text>
@@ -234,6 +242,10 @@ const Loading = () => (
 
 const PendingEventScreen = () => {
   const auth = useContext(AuthContext);
+         const { theme } = useContext(ThemeContext);
+ const colors = getColors(theme);
+
+
   const [myEvents, setMyEvents] = useState<PendingEvent[]>([]);
   const [allEvents, setAllEvents] = useState<PendingEvent[]>([]);
   const [loading, setLoading] = useState(true);
@@ -300,8 +312,8 @@ const PendingEventScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Eventos Pendentes</Text>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <Text style={[styles.title, { color: colors.primary }]}>Eventos Pendentes</Text>
 
       {isMaster && (
         <View style={styles.tabContainer}>
@@ -350,7 +362,7 @@ const PendingEventScreen = () => {
       )}
 
       {!isMaster && (
-        <View style={styles.myEventsHeader}>
+        <View style={[styles.myEventsHeader, { backgroundColor: colors.primary }]}>
           <Text style={styles.myEventsHeaderText}>Meus eventos pendentes</Text>
         </View>
       )}

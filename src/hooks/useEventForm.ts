@@ -141,7 +141,8 @@ export const useEventForm = () => {
     setEventData((prev) => ({ ...prev, [field]: value }));
   };
 
-   const validateFields = () => {
+  const validateFields = () => {
+
     const newErrors: Record<string, string> = {};
 
     if (!eventData.name.trim()) {
@@ -166,13 +167,13 @@ export const useEventForm = () => {
       newErrors.theme = "O tema deve conter letras.";
     }
     
-  if (!eventData.targetAudience.trim()) {
+    if (!eventData.targetAudience.trim()) {
       newErrors.targetAudience = "O público alvo é obrigatório.";
     } else if (!/[a-zA-Z]/.test(eventData.targetAudience)) {
       newErrors.targetAudience = "O público alvo deve conter letras.";
     }
 
-  if (!eventData.environment.trim()) {
+    if (!eventData.environment.trim()) {
       newErrors.environment = "O ambiente é obrigatório.";
     } else if (!/[a-zA-Z]/.test(eventData.environment)) {
       newErrors.environment = "O ambiente deve conter letras.";
@@ -184,13 +185,13 @@ export const useEventForm = () => {
       newErrors.organizer = "A organização deve conter letras.";
     }
 
-  if (!eventData.disciplinaryLink.trim()) {
+    if (!eventData.disciplinaryLink.trim()) {
       newErrors.disciplinaryLink = "O vinculo disciplinar é obrigatório.";
     } else if (!/[a-zA-Z]/.test(eventData.disciplinaryLink)) {
       newErrors.disciplinaryLink = "O vinculo disciplinar deve conter letras.";
     }
 
-     if (!eventData.disclosureMethod.trim()) {
+    if (!eventData.disclosureMethod.trim()) {
       newErrors.disclosureMethod = "A forma de divulgação é obrigatório.";
     } else if (!/[a-zA-Z]/.test(eventData.disclosureMethod)) {
       newErrors.disclosureMethod = "A forma de divulgação deve conter letras.";
@@ -202,76 +203,76 @@ export const useEventForm = () => {
       newErrors.teachingStrategy = "A estratégia de ensino deve conter letras.";
     }
 
-if (!eventData.mode) {
-  newErrors.mode = "A modalidade é obrigatória.";
-}
+    if (!eventData.mode) {
+      newErrors.mode = "A modalidade é obrigatória.";
+    }
 
-if (!eventData.status) {
-  newErrors.status = "O status do evento é obrigatório.";
-}
+    if (!eventData.status) {
+      newErrors.status = "O status do evento é obrigatório.";
+    }
 
-if (!eventData.administrativeStatus) {
-  newErrors.administrativeStatus = "O status administrativo é obrigatório.";
-}
+    if (!eventData.administrativeStatus) {
+      newErrors.administrativeStatus = "O status administrativo é obrigatório.";
+    }
 
-if (!eventData.priority) {
-  newErrors.priority = "A prioridade é obrigatório.";
-}
+    if (!eventData.priority) {
+      newErrors.priority = "A prioridade é obrigatório.";
+    }
 
-const nonEmptyResources = eventData.resourcesDescription.filter(resource => resource.trim() !== "");
+    const nonEmptyResources = eventData.resourcesDescription.filter(resource => resource.trim() !== "");
 
-if (nonEmptyResources.length === 0) {
-  newErrors.resourcesDescription = "Informe pelo menos um recurso.";
-} else if (nonEmptyResources.some(resource => !/[a-zA-Z]/.test(resource))) {
-  newErrors.resourcesDescription = "Cada recurso deve conter letras.";
-}
+    if (nonEmptyResources.length === 0) {
+      newErrors.resourcesDescription = "Informe pelo menos um recurso.";
+    } else if (nonEmptyResources.some(resource => !/[a-zA-Z]/.test(resource))) {
+      newErrors.resourcesDescription = "Cada recurso deve conter letras.";
+    }
 
-const nonEmptySubjects = eventData.relatedSubjects.filter(subject => subject.trim() !== "");
+    const nonEmptySubjects = eventData.relatedSubjects.filter(subject => subject.trim() !== "");
 
-if (nonEmptySubjects.length === 0) {
-  newErrors.relatedSubjects = "Informe pelo menos um disciplina.";
-} else if (nonEmptySubjects.some(subject => !/[a-zA-Z]/.test(subject))) {
-  newErrors.relatedSubjects = "Cada recurso deve conter letras.";
-}
+    if (nonEmptySubjects.length === 0) {
+      newErrors.relatedSubjects = "Informe pelo menos um disciplina.";
+    } else if (nonEmptySubjects.some(subject => !/[a-zA-Z]/.test(subject))) {
+      newErrors.relatedSubjects = "Cada recurso deve conter letras.";
+    }
 
-const nonEmptyAuthors = eventData.authors.filter(author => author.trim() !== "");
+    const nonEmptyAuthors = eventData.authors.filter(author => author.trim() !== "");
 
-if (nonEmptyAuthors.length === 0) {
-  newErrors.authors = "Informe pelo menos um autor.";
-} else if (nonEmptyAuthors.some(author => !/[a-zA-Z]/.test(author))) {
-  newErrors.authors = "Cada recurso deve conter letras.";
-}
+    if (nonEmptyAuthors.length === 0) {
+      newErrors.authors = "Informe pelo menos um autor.";
+    } else if (nonEmptyAuthors.some(author => !/[a-zA-Z]/.test(author))) {
+      newErrors.authors = "Cada recurso deve conter letras.";
+    }
 
-const nonEmptyCourses = eventData.courses.filter(course => course.trim() !== "");
+    const nonEmptyCourses = eventData.courses.filter(course => course.trim() !== "");
 
-if (nonEmptyCourses.length === 0) {
-  newErrors.courses = "Informe pelo menos um curso.";
-} else if (nonEmptyCourses.some(course => !/[a-zA-Z]/.test(course))) {
-  newErrors.courses = "Cada recurso deve conter letras.";
-}
+    if (nonEmptyCourses.length === 0) {
+      newErrors.courses = "Informe pelo menos um curso.";
+    } else if (nonEmptyCourses.some(course => !/[a-zA-Z]/.test(course))) {
+      newErrors.courses = "Cada recurso deve conter letras.";
+    }
 
-if (!eventData.locationName) {
-  newErrors.locationName = "O local é obrigatório.";
-}
+    if (!eventData.locationName) {
+      newErrors.locationName = "O local é obrigatório.";
+    }
 
-if (!eventData.locationFloor) {
-  newErrors.locationFloor = "O andar é obrigatório.";
-}
+    if (!eventData.locationFloor) {
+      newErrors.locationFloor = "O andar é obrigatório.";
+    }
 
-if (eventData.startTime && eventData.endTime) {
-  const [startHour, startMinute] = eventData.startTime.split(":").map(Number);
-  const [endHour, endMinute] = eventData.endTime.split(":").map(Number);
-  const start = new Date();
-  const end = new Date();
+    if (eventData.startTime && eventData.endTime) {
+      const [startHour, startMinute] = eventData.startTime.split(":").map(Number);
+      const [endHour, endMinute] = eventData.endTime.split(":").map(Number);
+      const start = new Date();
+      const end = new Date();
 
-  start.setHours(startHour, startMinute, 0);
-  end.setHours(endHour, endMinute, 0);
+      start.setHours(startHour, startMinute, 0);
+      end.setHours(endHour, endMinute, 0);
 
-  if (start >= end) {
-    newErrors.startTime = "O horário de início deve ser menor que o horário de término.";
-    newErrors.endTime = "O horário de término deve ser maior que o horário de início.";
-  }
-}
+      if (start >= end) {
+        newErrors.startTime = "O horário de início deve ser menor que o horário de término.";
+        newErrors.endTime = "O horário de término deve ser maior que o horário de início.";
+      }
+    }
 
     return newErrors;
   };

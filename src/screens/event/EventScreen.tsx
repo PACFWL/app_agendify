@@ -6,6 +6,10 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../routes/Routes";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import styles from "../../styles/EventScreenStyles";
+import { ThemeContext } from "../../contexts/ThemeContext";
+import { getColors } from "../../styles/themeColors";
+
+
 
 type Event = {
   id: string;
@@ -104,21 +108,24 @@ const EventCard = ({
 }) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+    
+    const { theme } = useContext(ThemeContext);
+    const colors = getColors(theme);
+
   const role = auth?.user?.role;
 
   return (
     <TouchableOpacity
       onPress={() => navigation.navigate("EventDetails", { eventId: event.id })}
-      style={styles.eventCard}
+      style={[styles.eventCard, { backgroundColor: colors.card }]}
     >
-      <Text style={styles.eventDate}>{event.day}</Text>
-
-      <Text style={styles.eventName}>{event.name}</Text>
+    <Text style={[styles.eventDate, { color: colors.accent }]}>{event.day}</Text>
+  <Text style={[styles.eventName, { color: colors.cardTitle }]}>{event.name}</Text>
 
       <View style={styles.tagsRow}>
-      <Text style={[styles.tag, { backgroundColor: "#37474f" }]}>
-        Início: {event.startTime}
-      </Text>
+      <Text style={[styles.tag, { backgroundColor: "#37474f", color: colors.statusText }]}>
+    Início: {event.startTime}
+  </Text>
 
       <Text style={[styles.tag, { backgroundColor: "#37474f" }]}>
         Término: {event.endTime}
@@ -193,6 +200,9 @@ const Loading = () => (
 
 const EventScreen = () => {
   const auth = useContext(AuthContext);
+  const { theme } = useContext(ThemeContext);
+const colors = getColors(theme);
+
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const navigation =
@@ -221,8 +231,8 @@ const EventScreen = () => {
   if (loading) return <Loading />;
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Agenda de Eventos</Text>
+  <View style={[styles.container, { backgroundColor: colors.background }]}>
+  <Text style={[styles.title, { color: colors.primary }]}>Agenda de Eventos</Text>
 
       <FlatList
         data={events}
@@ -232,12 +242,12 @@ const EventScreen = () => {
       />
 
       {auth?.user?.role === "MASTER" && (
-        <TouchableOpacity
-          style={styles.fab}
-          onPress={() => navigation.navigate("EventForm")}
-        >
-          <Text style={styles.fabIcon}>＋</Text>
-        </TouchableOpacity>
+       <TouchableOpacity
+  style={[styles.fab, { backgroundColor: colors.primary }]}
+  onPress={() => navigation.navigate("EventForm")}
+>
+  <Text style={[styles.fabIcon, { color: "#fff" }]}>＋</Text>
+</TouchableOpacity>
       )}
     </View>
   );

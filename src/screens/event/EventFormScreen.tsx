@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { Text, TextInput, Alert, ScrollView, TouchableOpacity, View } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { AuthContext } from "../../contexts/AuthContext";
@@ -250,18 +250,18 @@ const EventFormScreen = ({ navigation }: Props) => {
     </TouchableOpacity>
     {errors.resourcesDescription && <Text style={{ color: "red", marginBottom: 5 }}>{errors.resourcesDescription}</Text>}
 
-          <Text style={styles.label}>Forma de Divulgação:</Text>
-            <TextInput 
-              style={styles.input} 
-              placeholder="Forma de Divulgação" 
-              onChangeText={(text) =>  {
+      <Text style={styles.label}>Forma de Divulgação:</Text>
+        <TextInput 
+          style={styles.input} 
+          placeholder="Forma de Divulgação" 
+          onChangeText={(text) =>  {
           handleChange("disclosureMethod", text);
           setErrors((prev) => ({ ...prev, disclosureMethod: "" }));
         }}
       />
       {errors.disclosureMethod && <Text style={{ color: "red", marginBottom: 5 }}>{errors.disclosureMethod}</Text>}
 
-          <Text style={styles.label}>Disciplinas Relacionadas:</Text>
+    <Text style={styles.label}>Disciplinas Relacionadas:</Text>
     {eventData.relatedSubjects.map((relatedSubject, index) => (
       <React.Fragment key={index}>
         <TextInput

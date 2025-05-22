@@ -1,11 +1,12 @@
 import React, { useState, useContext, useCallback } from "react";
-import { View, Text, Alert, ScrollView, TouchableOpacity } from "react-native";
+import { View, Text, Alert, ScrollView, TouchableOpacity, Switch } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { AuthContext } from "../contexts/AuthContext";
 import { RootStackParamList } from "../routes/Routes";
-import styles from "../styles/HomeScreenStyles";
+import getHomeScreenStyles from "../styles/HomeScreenStyles";
 import { getAllEvents } from "../api/event";
+import { ThemeContext } from "../contexts/ThemeContext";
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamList, "Home">;
 
@@ -90,6 +91,11 @@ const ordenarEventos = (eventos: Event[]): Event[] => {
 
 const HomeScreen = () => {
   const auth = useContext(AuthContext);
+  
+  const { theme, toggleTheme } = useContext(ThemeContext);
+  const styles = getHomeScreenStyles(theme);
+  const isDark = theme === "dark";
+
   const navigation = useNavigation<NavigationProps>();
   const [events, setEvents] = useState<Event[]>([]);
 
@@ -146,7 +152,19 @@ const HomeScreen = () => {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 30 }}>
-      <Text style={styles.welcome}>Bem-vindo, {auth?.user?.name}!</Text>
+      <View  style={{ flexDirection: "row", justifyContent: "flex-end", alignItems: "center", marginBottom: 10 }}>
+        <Text style={{ fontSize: 24, marginRight: 8 }}>
+          {isDark ? "🌙" : "☀"}
+        </Text>
+      <Switch
+        value={isDark}
+        onValueChange={toggleTheme}
+        thumbColor={isDark ? "#f5dd4b" : "#f4f3f4"}
+        trackColor={{ false: "#767577", true: "#81b0ff"}}
+      />
+      </View>
+
+    <Text style={styles.welcome}>Bem-vindo, {auth?.user?.name}!</Text>
 
       <Text style={styles.sectionTitle}>📅 Eventos de Hoje</Text>
       {eventosDoDia.length === 0 ? (

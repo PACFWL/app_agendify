@@ -6,6 +6,9 @@ import { getEventById, deleteEvent } from "../../api/event";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../routes/Routes";
 import styles from "../../styles/EventDetailsScreenStyles";
+import { ThemeContext } from "../../contexts/ThemeContext";
+import { getColors } from "../../styles/themeColors";
+
 
 type Props = NativeStackScreenProps<RootStackParamList, "EventDetails">;
 
@@ -104,6 +107,9 @@ const formatDuration = (isoDuration: string): string => {
 const EventDetailsScreen = ({ route, navigation }: Props) => {
   const { eventId } = route.params;
   const auth = useContext(AuthContext);
+  const { theme } = useContext(ThemeContext);
+const themeColors = getColors(theme);
+
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -154,31 +160,31 @@ const EventDetailsScreen = ({ route, navigation }: Props) => {
   }
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.title}>{event.name}</Text>
-      <View style={styles.detailCard}>
-        <Text style={styles.detail}><Text style={styles.label}>Data:</Text> {new Date(event.day).toLocaleDateString("pt-BR")}</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Horário:</Text> {event.startTime} - {event.endTime}</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Tema:</Text> {event.theme}</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Público-alvo:</Text> {event.targetAudience}</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Modalidade:</Text> {formatMode(event.mode)}</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Ambiente:</Text> {event.environment}</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Organizador:</Text> {event.organizer}</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Recursos:</Text> {event.resourcesDescription.join(", ")}</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Divulgação:</Text> {event.disclosureMethod}</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Assuntos Relacionados:</Text> {event.relatedSubjects.join(", ")}</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Estratégia de Ensino:</Text> {event.teachingStrategy}</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Autores:</Text> {event.authors.join(", ")}</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Cursos:</Text> {event.courses.join(", ")}</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Vínculo Disciplinar:</Text> {event.disciplinaryLink}</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Localização:</Text> {event.location.name} - {event.location.floor}</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Observação:</Text> {event.observation}</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Status:</Text> {formatStatus(event.status)}</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Status Administrativo:</Text> {formatAdministrativeStatus(event.administrativeStatus)}</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Prioridade:</Text> {formatPriority(event.priority)}</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Duração da Limpeza:</Text> {formatDuration(event.cleanupDuration)}</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Criado em:</Text> {new Date(event.createdAt).toLocaleString("pt-BR")}</Text>
-        <Text style={styles.detail}><Text style={styles.label}>Última Modificação:</Text> {new Date(event.lastModifiedAt).toLocaleString("pt-BR")}</Text>
+    <ScrollView style={[styles.container, { backgroundColor: themeColors.background }]}>
+      <Text style={[styles.title, { color: themeColors.primary }]}>{event.name}</Text>
+      <View style={[styles.detailCard, { backgroundColor: themeColors.card }]}>
+        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Data:</Text> {new Date(event.day).toLocaleDateString("pt-BR")}</Text>
+        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Horário:</Text> {event.startTime} - {event.endTime}</Text>
+        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Tema:</Text> {event.theme}</Text>
+        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Público-alvo:</Text> {event.targetAudience}</Text>
+        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Modalidade:</Text> {formatMode(event.mode)}</Text>
+        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Ambiente:</Text> {event.environment}</Text>
+        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Organizador:</Text> {event.organizer}</Text>
+        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Recursos:</Text> {event.resourcesDescription.join(", ")}</Text>
+        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Divulgação:</Text> {event.disclosureMethod}</Text>
+        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Assuntos Relacionados:</Text> {event.relatedSubjects.join(", ")}</Text>
+        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Estratégia de Ensino:</Text> {event.teachingStrategy}</Text>
+        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Autores:</Text> {event.authors.join(", ")}</Text>
+        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Cursos:</Text> {event.courses.join(", ")}</Text>
+        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Vínculo Disciplinar:</Text> {event.disciplinaryLink}</Text>
+        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Localização:</Text> {event.location.name} - {event.location.floor}</Text>
+        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Observação:</Text> {event.observation}</Text>
+        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Status:</Text> {formatStatus(event.status)}</Text>
+        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Status Administrativo:</Text> {formatAdministrativeStatus(event.administrativeStatus)}</Text>
+        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Prioridade:</Text> {formatPriority(event.priority)}</Text>
+        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Duração da Limpeza:</Text> {formatDuration(event.cleanupDuration)}</Text>
+        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Criado em:</Text> {new Date(event.createdAt).toLocaleString("pt-BR")}</Text>
+        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Última Modificação:</Text> {new Date(event.lastModifiedAt).toLocaleString("pt-BR")}</Text>
       </View>
       
       <View style={styles.buttonContainer}>
