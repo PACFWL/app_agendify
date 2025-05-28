@@ -118,9 +118,7 @@ const EventFormScreen = ({ navigation }: Props) => {
 
   return (
     <ScrollView style={[styles.container, { backgroundColor: colors.background }]} contentContainerStyle={{ paddingBottom: 30 }}>
-
       <Text style={[styles.title, { color: colors.primary }]}>Criar Novo Evento</Text>
-
       <Text style={[styles.label, { color: colors.text }]}>Nome:</Text>
       <TextInput 
         style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]} value={eventData.name} 
@@ -245,9 +243,9 @@ const EventFormScreen = ({ navigation }: Props) => {
         {eventData.resourcesDescription.map((resource, index) => (
           <React.Fragment key={index}>
             <TextInput
-               style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}
+              style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}
               placeholder={`Recurso ${index + 1}`}
-               placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
+              placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
               value={resource}
               onChangeText={(text) => handleResourcesDescriptionChange(index, text)}
             />
@@ -417,7 +415,7 @@ const EventFormScreen = ({ navigation }: Props) => {
       selectedValue={eventData.status}
       onValueChange={(itemValue) => handleChange("status", itemValue)}
       style={[styles.picker, { color: colors.text }]}
-        dropdownIconColor={colors.text}
+      dropdownIconColor={colors.text}
     >
       <Picker.Item label="Selecione o status" value="" />
       <Picker.Item label="Planejado" value="PLANEJADO" />

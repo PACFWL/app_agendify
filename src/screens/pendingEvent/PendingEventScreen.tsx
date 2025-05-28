@@ -18,9 +18,9 @@ type PendingEvent = {
   theme: string;
   mode: string;
   organizer: string;
-   location: { name: string; floor: string };
+  location: { name: string; floor: string };
   priority: string;
-    status: string;
+  status: string;
 };
 
 type UserType = {

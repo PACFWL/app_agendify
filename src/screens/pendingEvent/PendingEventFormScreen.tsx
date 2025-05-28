@@ -127,7 +127,7 @@ const { theme } = useContext(ThemeContext);
           display="default"
           value={new Date()}
           onChange={handleStartTimeChange}
-          is24Hour
+          is24Hour={true}
         />
       )}
 
@@ -141,7 +141,7 @@ const { theme } = useContext(ThemeContext);
           display="default"
           value={new Date()}
           onChange={handleEndTimeChange}
-          is24Hour
+         is24Hour={true}
         />
       )}
 
@@ -175,17 +175,27 @@ const { theme } = useContext(ThemeContext);
       </Picker>
 </View>
       <Text style={[styles.label, { color: colors.text }]}>Ambiente:</Text>
-      <TextInput style={styles.input} placeholder="Ambiente" onChangeText={(text) => handleChange("environment", text)} />
+      <TextInput
+      style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}  
+      placeholder="Ambiente" 
+      placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
+      onChangeText={(text) => 
+      handleChange("environment", text)} />
 
-      <Text style={styles.label}>Organizador:</Text>
-      <TextInput style={styles.input} placeholder="Organizador" onChangeText={(text) => handleChange("organizer", text)} />
+      <Text style={[styles.label, { color: colors.text }]}>Organizador:</Text>
+      <TextInput 
+      style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}   
+      placeholder="Organizador" 
+      placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
+      onChangeText={(text) => handleChange("organizer", text)} />
 
-      <Text style={styles.label}>Recursos:</Text>
+      <Text style={[styles.label, { color: colors.text }]}>Recursos:</Text>
       {eventData.resourcesDescription.map((resource, index) => (
         <React.Fragment key={index}>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}
             placeholder={`Recurso ${index + 1}`}
+            placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
             value={resource}
             onChangeText={(text) => handleResourcesDescriptionChange(index, text)}
           />
@@ -201,15 +211,19 @@ const { theme } = useContext(ThemeContext);
         <Text style={styles.addButtonText}>Adicionar Recurso</Text>
       </TouchableOpacity>
 
-      <Text style={styles.label}>Forma de Divulgação:</Text>
-      <TextInput style={styles.input} placeholder="Forma de Divulgação" onChangeText={(text) => handleChange("disclosureMethod", text)} />
+      <Text style={[styles.label, { color: colors.text }]}>Forma de Divulgação:</Text>
+      <TextInput style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}
+       placeholder="Forma de Divulgação" 
+       placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
+       onChangeText={(text) => handleChange("disclosureMethod", text)} />
 
-      <Text style={styles.label}>Disciplinas Relacionadas:</Text>
+      <Text style={[styles.label, { color: colors.text }]}>Disciplinas Relacionadas:</Text>
       {eventData.relatedSubjects.map((relatedSubject, index) => (
         <React.Fragment key={index}>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}
             placeholder={`Disciplina ${index + 1}`}
+            placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
             value={relatedSubject}
             onChangeText={(text) => handleRelatedSubjectChange(index, text)}
           />
@@ -226,15 +240,21 @@ const { theme } = useContext(ThemeContext);
         <Text style={styles.addButtonText}>Adicionar Disciplina</Text>
       </TouchableOpacity>
 
-      <Text style={styles.label}>Estratégia de Ensino:</Text>
-      <TextInput style={styles.input} placeholder="Estratégia de Ensino" onChangeText={(text) => handleChange("teachingStrategy", text)} />
+      <Text style={[styles.label, { color: colors.text }]}>Estratégia de Ensino:</Text>
+      <TextInput 
+      style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]} 
+      placeholder="Estratégia de Ensino" 
+      placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
+      onChangeText={(text) => 
+      handleChange("teachingStrategy", text)} />
 
-      <Text style={styles.label}>Autores:</Text>
+      <Text style={[styles.label, { color: colors.text }]}>Autores:</Text>
         {eventData.authors.map((author, index) => (
           <React.Fragment key={index}>
             <TextInput
-              style={styles.input}
+              style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}
               placeholder={`Autor ${index + 1}`}
+              placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
               value={author}
               onChangeText={(text) => handleAuthorChange(index, text)}
             />
@@ -251,12 +271,13 @@ const { theme } = useContext(ThemeContext);
           <Text style={styles.addButtonText}>Adicionar Autor</Text>
         </TouchableOpacity>
 
-        <Text style={styles.label}>Cursos:</Text>
+        <Text style={[styles.label, { color: colors.text }]}>Cursos:</Text>
         {eventData.courses.map((course, index) => (
           <React.Fragment key={index}>
             <TextInput
-              style={styles.input}
+              style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}
               placeholder={`Curso ${index + 1}`}
+              placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
               value={course}
               onChangeText={(text) => handleCourseChange(index, text)}
             />
@@ -273,14 +294,21 @@ const { theme } = useContext(ThemeContext);
           <Text style={styles.addButtonText}>Adicionar Curso</Text>
         </TouchableOpacity>
 
-    <Text style={styles.label}>Vínculo Disciplinar:</Text>
-      <TextInput style={styles.input} placeholder="Vínculo Disciplinar" onChangeText={(text) => handleChange("disciplinaryLink", text)} />
+    <Text style={[styles.label, { color: colors.text }]}>Vínculo Disciplinar:</Text>
+      <TextInput 
+      style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}    
+      placeholder="Vínculo Disciplinar" 
+      placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
+      onChangeText={(text) => 
+      handleChange("disciplinaryLink", text)} />
   
-      <Text style={styles.label}>Andar do Local:</Text>
+      <Text style={[styles.label, { color: colors.text }]}>Andar do Local:</Text>
+        <View style={[styles.pickerContainer, { backgroundColor: colors.card, borderColor: colors.accent }]}>
       <Picker
         selectedValue={eventData.locationFloor}
         onValueChange={(itemValue) => handleChange("locationFloor", itemValue)}
-        style={styles.input}
+        style={[styles.picker, { color: colors.text }]}
+        dropdownIconColor={colors.text}
       >
         <Picker.Item label="Selecione o andar" value="" />
         <Picker.Item label="Térreo" value="0" />
@@ -288,12 +316,14 @@ const { theme } = useContext(ThemeContext);
         <Picker.Item label="2º Andar" value="2" />
         <Picker.Item label="Bloco C" value="3" />
       </Picker>
-
-      <Text style={styles.label}>Local do Evento:</Text>
+</View>
+      <Text style={[styles.label, { color: colors.text }]}>Local do Evento:</Text>
+      <View style={[styles.pickerContainer, { backgroundColor: colors.card, borderColor: colors.accent }]}>
       <Picker
       selectedValue={eventData.locationName}
       onValueChange={(itemValue) => handleChange("locationName", itemValue)}
-      style={styles.input}
+       style={[styles.picker, { color: colors.text }]}
+        dropdownIconColor={colors.text}
       enabled={!!eventData.locationFloor && locationOptionsByFloor[eventData.locationFloor]?.length > 0}
     >
       <Picker.Item label="Selecione o local" value="" />
@@ -301,59 +331,74 @@ const { theme } = useContext(ThemeContext);
         <Picker.Item key={location} label={location} value={location} />
       ))}
     </Picker>
+</View>
+    <Text style={[styles.label, { color: colors.text }]}>Status do Evento:</Text>
+    <View style={[styles.pickerContainer, { backgroundColor: colors.card, borderColor: colors.accent }]}>
 
-    <Text style={styles.label}>Status do Evento:</Text>
     <Picker
       selectedValue={eventData.status}
-      style={styles.input}
+      style={[styles.picker, { color: colors.text }]}
+      dropdownIconColor={colors.text}
       onValueChange={(itemValue) => handleChange("status", itemValue)}
     >
       <Picker.Item label="Selecione o status" value="" />
         <Picker.Item label="Em Análise" value="EM_ANALISE" />
         <Picker.Item label="Indeterminado" value="INDETERMINADO" />
     </Picker>
-
-    <Text style={styles.label}>Status Administrativo:</Text>
+</View>
+    <Text style={[styles.label, { color: colors.text }]}>Status Administrativo:</Text>
+    <View style={[styles.pickerContainer, { backgroundColor: colors.card, borderColor: colors.accent }]}>
     <Picker
       selectedValue={eventData.administrativeStatus}
       onValueChange={(itemValue) => handleChange("administrativeStatus", itemValue)}
-      style={styles.input}
+     style={[styles.picker, { color: colors.text }]}
+        dropdownIconColor={colors.text}
     >
       <Picker.Item label="Selecione o status administrativo" value="" />
       <Picker.Item label="Aguardando" value="AGUARDANDO" />
     </Picker>
+</View>
 
-
-    <Text style={styles.label}>Prioridade:</Text>
+    <Text style={[styles.label, { color: colors.text }]}>Prioridade:</Text>
+     <View style={[styles.pickerContainer, { backgroundColor: colors.card, borderColor: colors.accent }]}>
     <Picker
       selectedValue={eventData.priority}
-      style={styles.input}
+       style={[styles.picker, { color: colors.text }]}
+        dropdownIconColor={colors.text}
       onValueChange={(itemValue) => handleChange("priority", itemValue)}
     >
       <Picker.Item label="Selecione a prioridade" value="" />
       <Picker.Item label="Indefinido" value="INDEFINIDO" />
     </Picker>
-
-      <Text style={styles.label}>Duração de Limpeza</Text>
+</View>
+      <Text 
+      style={[styles.label, { color: colors.text }]}>Duração de Limpeza</Text>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <TextInput
-            style={[styles.input, { flex: 1, marginRight: 8 }]}
+            style={[styles.input, { color: colors.text }, { backgroundColor: colors.card, borderColor: colors.accent }, { flex: 1, marginRight: 8 }]}
             placeholder="Horas"
+             placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
             keyboardType="numeric"
             value={cleanupHours}
             onChangeText={setCleanupHours}
           />
           <TextInput
-            style={[styles.input, { flex: 1 }]}
+            style={[styles.input, { color: colors.text }, { backgroundColor: colors.card, borderColor: colors.accent }, { flex: 1}]}
             placeholder="Minutos"
+            placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
             keyboardType="numeric"
             value={cleanupMinutes}
             onChangeText={setCleanupMinutes}
           />
         </View> 
         
-      <Text style={styles.label}>Observação:</Text>
-      <TextInput style={styles.input} placeholder="Observação" onChangeText={(text) => handleChange("observation", text)} />
+      <Text style={[styles.label, { color: colors.text }]}>Observação:</Text>
+      <TextInput
+      style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}  
+      placeholder="Observação" 
+      placeholderTextColor={theme === "dark" ? "#aaa" : "#666"} 
+      onChangeText={(text) => 
+      handleChange("observation", text)} />
         <TouchableOpacity style={styles.addButton} onPress={handleSubmit}>
           <Text style={styles.addButtonText}>Criar Evento Pendente</Text>
         </TouchableOpacity>
