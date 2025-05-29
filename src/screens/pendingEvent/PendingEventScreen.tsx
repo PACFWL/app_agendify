@@ -295,6 +295,14 @@ const PendingEventScreen = () => {
   );
 
   const renderList = () => {
+
+  const Loading = () => (
+    <View style={[styles.loadingContainer, { backgroundColor: colors.background }]}>
+      <ActivityIndicator size="large" color={colors.primary} />
+      <Text style={{ color: colors.text, marginTop: 10 }}>Carregando eventos...</Text>
+    </View>
+  );
+
     if (loading) return <Loading />;
     const data = activeTab === "my" ? myEvents : allEvents;
 
