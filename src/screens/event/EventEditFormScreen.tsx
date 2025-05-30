@@ -282,7 +282,8 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
 
       <Text style={[styles.label, { color: colors.text }]}>Forma de Divulgação:</Text>
       <TextInput 
-      style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]} value={eventData.disclosureMethod} 
+      style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]} 
+      value={eventData.disclosureMethod} 
       placeholder="Forma de Divulgação" 
       placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
       onChangeText={(text) => handleChange("disclosureMethod", text)} />
@@ -474,6 +475,7 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
       placeholder="Observação" 
       placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
       onChangeText={(text) => handleChange("observation", text)} />
+      
       <TouchableOpacity style={styles.addButton} onPress={handleSubmit}>
         <Text style={styles.addButtonText}>Salvar Alterações</Text>
       </TouchableOpacity>

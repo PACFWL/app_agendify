@@ -83,4 +83,22 @@ export default StyleSheet.create({
     fontWeight: "bold",
     fontSize: 14,
   },
+  labelPicker: {
+    marginBottom: 5,
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+    pickerContainer: {
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    marginBottom: 10,
+    overflow: 'hidden', 
+  },
+  picker: {
+    color: '#000',
+    paddingHorizontal: 10,
+    height: 50,
+  },
 });

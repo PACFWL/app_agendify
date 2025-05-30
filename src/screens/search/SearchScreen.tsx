@@ -437,8 +437,8 @@ const showPicker = (type: "date" | "start" | "end") => {
             <Text style={{ color: colors.cardText }}>
               {item.day} - {item.startTime} às {item.endTime}
             </Text>
-            <Text>Tema: {item.theme}</Text>
-            <Text>Organizador: {item.organizer}</Text>
+            <Text style={{ color: colors.cardText }}>Tema: {item.theme}</Text>
+            <Text style={{ color: colors.cardText }}>Organizador: {item.organizer}</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
