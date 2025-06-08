@@ -90,8 +90,8 @@ const styles = StyleSheet.create({
     height: 50,
   },
 filledInput: {
-  borderColor: "#4caf50", // verde de confirmação
-  backgroundColor: "#e8f5e9", // fundo verde claro
+  borderColor: "#4caf50", 
+  backgroundColor: "#e8f5e9", 
 },
 
 

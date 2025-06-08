@@ -12,8 +12,9 @@ export const colors = {
     text: "#000000", 
     accent: "#0288d1",
     error: "#d32f2f",
-    success: "#4caf50",
-    filled: "#4caf50", 
+    success: "#4caf00",
+    filled: "#7cc57e", 
+    inputFilledBackground: "#e6f4ea",
   },
   dark: {
     background: "#121212",
@@ -27,8 +28,11 @@ export const colors = {
     accent: "#4dd0e1", 
     error: "#ef5350",
     success: "#81c784",
-    filled: "#81c784",
+    filled: "#7cc57e",
+    inputFilledBackground: "#1a3324",
   },
 };
 
 export const getColors = (theme: ThemeType) => colors[theme];
+
+

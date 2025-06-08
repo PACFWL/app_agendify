@@ -116,14 +116,23 @@ const EventFormScreen = ({ navigation }: Props) => {
     }
   };
 
-  
-
   return (
     <ScrollView style={[styles.container, { backgroundColor: colors.background }]} contentContainerStyle={{ paddingBottom: 30 }}>
       <Text style={[styles.title, { color: colors.primary }]}>Criar Novo Evento</Text>
       <Text style={[styles.label, { color: colors.text }]}>Nome:</Text>
       <TextInput 
-        style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]} 
+        style={[styles.input, {
+      backgroundColor: 
+      eventData.name.trim()
+        ? colors.inputFilledBackground
+        : colors.card,
+      color: colors.text,
+      borderColor: errors.name
+        ? colors.error
+        : eventData.name.trim()
+          ? colors.success
+          : colors.accent,
+    },]} 
         value={eventData.name} 
         placeholder="Nome"
         placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
@@ -132,13 +141,18 @@ const EventFormScreen = ({ navigation }: Props) => {
           setErrors((prev) => ({ ...prev, name: "" }));
         }}
       />
-      {errors.name && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.name}</Text>}
+       {errors.name && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.name}</Text>}
+     {!errors.name && eventData.name.trim() !== "" && (
+  <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Nome válido</Text>
+)}
 
       <Text style={[styles.label, { color: colors.text }]}>Data:</Text>
       <TouchableOpacity onPress={() => showPicker("date")}>
-        <Text style={[styles.input, { color: colors.text }, { backgroundColor: colors.card, borderColor: colors.accent }]}>{eventData.day || "Selecionar data"}</Text>
-      </TouchableOpacity>
-      {errors.day && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.day}</Text>}
+       <Text style={[styles.input, { color: colors.text }, { backgroundColor: colors.card, borderColor: colors.accent }]}>
+        {eventData.day || "Selecionar data"}</Text>
+</TouchableOpacity>
+
+ {errors.day && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.day}</Text>}
       {showDatePicker && (
         <DateTimePicker
           mode="date"
@@ -180,7 +194,17 @@ const EventFormScreen = ({ navigation }: Props) => {
 
       <Text style={[styles.label, { color: colors.text }]}>Tema:</Text>
       <TextInput
-        style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]} 
+          style={[styles.input, { 
+        backgroundColor: 
+        eventData.theme.trim()
+        ? colors.inputFilledBackground
+        : colors.card, 
+        color: colors.text, 
+        borderColor: errors.theme
+        ? colors.error
+        : eventData.theme.trim()
+          ? colors.success
+          : colors.accent },]} 
         placeholder="Tema"
         placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
         onChangeText={(text) => {
@@ -189,10 +213,23 @@ const EventFormScreen = ({ navigation }: Props) => {
         }}
       />
       {errors.theme && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.theme}</Text>}
+          {!errors.theme && eventData.theme.trim() !== "" && (
+  <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Tema válido</Text>
+)}
 
       <Text style={[styles.label, { color: colors.text }]}>Público-alvo:</Text>
       <TextInput 
-      style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}
+      style={[styles.input, { 
+        backgroundColor: 
+        eventData.targetAudience.trim()
+        ? colors.inputFilledBackground
+        : colors.card, 
+        color: colors.text, 
+        borderColor: errors.targetAudience
+        ? colors.error
+        : eventData.targetAudience.trim()
+          ? colors.success
+          : colors.accent },]} 
       placeholder="Público-alvo" 
       placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
       onChangeText={(text) => {
@@ -201,6 +238,10 @@ const EventFormScreen = ({ navigation }: Props) => {
         }}
       />
     {errors.targetAudience && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.targetAudience}</Text>}
+
+  {!errors.targetAudience && eventData.targetAudience.trim() !== "" && (
+  <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Público-alvo válido</Text>
+)}
 
       <Text style={[styles.label, { color: colors.text }]}>Modalidade:</Text>
        <View style={[styles.pickerContainer, { backgroundColor: colors.card, borderColor: colors.accent }]}>
@@ -220,7 +261,17 @@ const EventFormScreen = ({ navigation }: Props) => {
        <Text style={[styles.label, { color: colors.text }]}>Ambiente:</Text>
         
         <TextInput 
-          style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}   
+           style={[styles.input, { 
+        backgroundColor: 
+        eventData.environment.trim()
+        ? colors.inputFilledBackground
+        : colors.card, 
+        color: colors.text, 
+        borderColor: errors.environment
+        ? colors.error
+        : eventData.environment.trim()
+          ? colors.success
+          : colors.accent },]} 
           placeholder="Ambiente" 
           placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
           onChangeText={(text) =>  {
@@ -229,10 +280,23 @@ const EventFormScreen = ({ navigation }: Props) => {
         }}
       />
       {errors.environment && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.environment}</Text>}
+  {!errors.environment && eventData.environment.trim() !== "" && (
+  <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Ambiente válido</Text>
+)}
 
        <Text style={[styles.label, { color: colors.text }]}>Organizador:</Text>
         <TextInput 
-          style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}   
+          style={[styles.input, { 
+        backgroundColor: 
+        eventData.organizer.trim()
+        ? colors.inputFilledBackground
+        : colors.card, 
+        color: colors.text, 
+        borderColor: errors.organizer
+        ? colors.error
+        : eventData.organizer.trim()
+          ? colors.success
+          : colors.accent },]} 
           placeholder="Organizador" 
           placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
           onChangeText={(text) =>  {
@@ -241,6 +305,9 @@ const EventFormScreen = ({ navigation }: Props) => {
         }}
       />
       {errors.organizer && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.organizer}</Text>}
+  {!errors.organizer && eventData.organizer.trim() !== "" && (
+  <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Organizador válido</Text>
+)}
 
        <Text style={[styles.label, { color: colors.text }]}>Recursos:</Text>
         {eventData.resourcesDescription.map((resource, index) => (
@@ -266,7 +333,17 @@ const EventFormScreen = ({ navigation }: Props) => {
 
        <Text style={[styles.label, { color: colors.text }]}>Forma de Divulgação:</Text>
         <TextInput 
-          style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}   
+           style={[styles.input, { 
+        backgroundColor: 
+        eventData.disclosureMethod.trim()
+        ? colors.inputFilledBackground
+        : colors.card, 
+        color: colors.text, 
+        borderColor: errors.disclosureMethod
+        ? colors.error
+        : eventData.disclosureMethod.trim()
+          ? colors.success
+          : colors.accent },]}   
           placeholder="Forma de Divulgação" 
           placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
           onChangeText={(text) =>  {
@@ -275,6 +352,9 @@ const EventFormScreen = ({ navigation }: Props) => {
         }}
       />
       {errors.disclosureMethod && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.disclosureMethod}</Text>}
+  {!errors.disclosureMethod && eventData.disclosureMethod.trim() !== "" && (
+  <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Forma de Divulgação válido</Text>
+)}
 
      <Text style={[styles.label, { color: colors.text }]}>Disciplinas Relacionadas:</Text>
     {eventData.relatedSubjects.map((relatedSubject, index) => (
@@ -300,7 +380,17 @@ const EventFormScreen = ({ navigation }: Props) => {
 
        <Text style={[styles.label, { color: colors.text }]}>Estratégia de Ensino:</Text>
         <TextInput 
-          style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}   
+         style={[styles.input, { 
+        backgroundColor: 
+        eventData.teachingStrategy.trim()
+        ? colors.inputFilledBackground
+        : colors.card, 
+        color: colors.text, 
+        borderColor: errors.teachingStrategy
+        ? colors.error
+        : eventData.teachingStrategy.trim()
+          ? colors.success
+          : colors.accent },]} 
           placeholder="Estratégia de Ensino" 
           placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
           onChangeText={(text) =>  {
@@ -309,7 +399,9 @@ const EventFormScreen = ({ navigation }: Props) => {
         }}
       />
       {errors.teachingStrategy && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.teachingStrategy}</Text>}
-
+  {!errors.teachingStrategy && eventData.teachingStrategy.trim() !== "" && (
+  <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Estratégia de Ensino válido</Text>
+)}
        <Text style={[styles.label, { color: colors.text }]}>Autores:</Text>
 
         {eventData.authors.map((author, index) => (
@@ -361,7 +453,17 @@ const EventFormScreen = ({ navigation }: Props) => {
 
        <Text style={[styles.label, { color: colors.text }]}>Vínculo Disciplinar:</Text>
         <TextInput 
-          style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}   
+          style={[styles.input, { 
+        backgroundColor: 
+        eventData.disciplinaryLink.trim()
+        ? colors.inputFilledBackground
+        : colors.card, 
+        color: colors.text, 
+        borderColor: errors.disciplinaryLink
+        ? colors.error
+        : eventData.disciplinaryLink.trim()
+          ? colors.success
+          : colors.accent },]} 
           placeholder="Vínculo Disciplinar" 
           placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
           onChangeText={(text) => {
@@ -370,6 +472,9 @@ const EventFormScreen = ({ navigation }: Props) => {
         }}
       />
       {errors.disciplinaryLink && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.disciplinaryLink}</Text>}
+  {!errors.disciplinaryLink && eventData.disciplinaryLink.trim() !== "" && (
+  <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Vínculo Disciplinar válido</Text>
+)}
 
        <Text style={[styles.label, { color: colors.text }]}>Andar:</Text>
         <View style={[styles.pickerContainer, { backgroundColor: colors.card, borderColor: colors.accent }]}>
