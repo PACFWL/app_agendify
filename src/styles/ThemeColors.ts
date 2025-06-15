@@ -15,6 +15,7 @@ export const colors = {
     success: "#4caf00",
     filled: "#7cc57e", 
     inputFilledBackground: "#e6f4ea",
+    inputErrorBackground: "#fdeaea",
   },
   dark: {
     background: "#121212",
@@ -30,6 +31,7 @@ export const colors = {
     success: "#81c784",
     filled: "#7cc57e",
     inputFilledBackground: "#1a3324",
+    inputErrorBackground: "#3b1e1e",
   },
 };
 
