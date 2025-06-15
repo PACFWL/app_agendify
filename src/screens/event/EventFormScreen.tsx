@@ -816,21 +816,22 @@ const EventFormScreen = ({ navigation }: Props) => {
        <Text style={[styles.label, { color: colors.text }]}>Duração de Limpeza</Text>
         <View style={{ flexDirection: "row", gap: 12, marginBottom: 8 }}>
           <View style={{ flex: 1 }}>
-            <TextInput
-              style={{
-                backgroundColor: 
-                errors.cleanupHours 
-                ? colors.inputErrorBackground 
-                : (cleanupHours 
-                  ? colors.inputFilledBackground 
-                  : colors.card),
-                borderColor: errors.cleanupHours ? colors.error : (cleanupHours ? colors.success : colors.accent),
-                borderWidth: 1,
-                borderRadius: 8,
-                paddingVertical: 10,
-                paddingHorizontal: 12,
-                color: colors.text,
-              }}
+       <TextInput
+            style={{
+              backgroundColor:
+                errors.cleanupHours || errors.cleanupDuration
+                  ? colors.inputErrorBackground
+                  : (cleanupHours ? colors.inputFilledBackground : colors.card),
+              borderColor:
+                errors.cleanupHours || errors.cleanupDuration
+                  ? colors.error
+                  : (cleanupHours ? colors.success : colors.accent),
+              borderWidth: 1,
+              borderRadius: 8,
+              paddingVertical: 10,
+              paddingHorizontal: 12,
+              color: colors.text,
+            }}
               placeholder="Horas"
               placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
               keyboardType="numeric"
@@ -844,16 +845,22 @@ const EventFormScreen = ({ navigation }: Props) => {
           </View>
          
          <View style={{ flex: 1 }}>
-            <TextInput
-              style={{
-                backgroundColor: errors.cleanupMinutes ? colors.inputErrorBackground : (cleanupMinutes ? colors.inputFilledBackground : colors.card),
-                borderColor: errors.cleanupMinutes ? colors.error : (cleanupMinutes ? colors.success : colors.accent),
-                borderWidth: 1,
-                borderRadius: 8,
-                paddingVertical: 10,
-                paddingHorizontal: 12,
-                color: colors.text,
-              }}
+           <TextInput
+            style={{
+              backgroundColor:
+                errors.cleanupMinutes || errors.cleanupDuration
+                  ? colors.inputErrorBackground
+                  : (cleanupMinutes ? colors.inputFilledBackground : colors.card),
+              borderColor:
+                errors.cleanupMinutes || errors.cleanupDuration
+                  ? colors.error
+                  : (cleanupMinutes ? colors.success : colors.accent),
+              borderWidth: 1,
+              borderRadius: 8,
+              paddingVertical: 10,
+              paddingHorizontal: 12,
+              color: colors.text,
+            }}
               placeholder="Minutos"
               placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
               keyboardType="numeric"
