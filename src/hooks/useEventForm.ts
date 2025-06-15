@@ -276,31 +276,52 @@ export const useEventForm = () => {
     else if (type === "end") setShowEndTimePicker(true);
   };
 
-  const handleCleanupHoursChange = (value: string) => {
-    if (!/^\d*$/.test(value)) {
-      setErrors(prev => ({ ...prev, cleanupHours: "Apenas números são permitidos para horas." }));
-    } else {
-      setErrors(prev => {
-        const newErrors = { ...prev };
-        delete newErrors.cleanupHours;
-        return newErrors;
-      });
-    }
-    setCleanupHours(value);
-  };
+const handleCleanupHoursChange = (value: string) => {
+  const isValidNumber = /^\d*$/.test(value);
 
-  const handleCleanupMinutesChange = (value: string) => {
-    if (!/^\d*$/.test(value)) {
-      setErrors(prev => ({ ...prev, cleanupMinutes: "Apenas números são permitidos para minutos." }));
+  setCleanupHours(value);
+
+  setErrors(prev => {
+    const newErrors = { ...prev };
+
+    if (!isValidNumber) {
+      newErrors.cleanupHours = "Apenas números são permitidos para horas.";
     } else {
-      setErrors(prev => {
-        const newErrors = { ...prev };
-        delete newErrors.cleanupMinutes;
-        return newErrors;
-      });
+      delete newErrors.cleanupHours;
     }
-    setCleanupMinutes(value);
-  };
+
+    if (!value.trim() && !cleanupMinutes.trim()) {
+      newErrors.cleanupDuration = "Informe pelo menos horas ou minutos.";
+    } else {
+      delete newErrors.cleanupDuration;
+    }
+    return newErrors;
+  });
+};
+
+const handleCleanupMinutesChange = (value: string) => {
+  const isValidNumber = /^\d*$/.test(value);
+
+  setCleanupMinutes(value);
+
+  setErrors(prev => {
+    const newErrors = { ...prev };
+
+    if (!isValidNumber) {
+      newErrors.cleanupMinutes = "Apenas números são permitidos para minutos.";
+    } else {
+      delete newErrors.cleanupMinutes;
+    }
+
+    if (!cleanupHours.trim() && !value.trim()) {
+      newErrors.cleanupDuration = "Informe pelo menos horas ou minutos.";
+    } else {
+      delete newErrors.cleanupDuration;
+    }
+
+    return newErrors;
+  });
+};
 
   const handleChange = (field: string, value: string) => {
     setEventData((prev) => ({ ...prev, [field]: value }));
@@ -312,7 +333,7 @@ export const useEventForm = () => {
             if (!value.trim()) {
               newErrors.name = "O nome é obrigatório.";
             } else if (!/[a-zA-Z]/.test(value)) {
-              newErrors.name = "O nome deve conter letras..";
+              newErrors.name = "O nome deve conter letras.";
             } else {
               delete newErrors.name;
             }
@@ -380,7 +401,7 @@ export const useEventForm = () => {
         if (!value.trim()) {
           newErrors.theme = "O tema é obrigatório.";
         } else if (!/[a-zA-Z]/.test(value)) {
-          newErrors.theme = "O tema deve conter letras..";
+          newErrors.theme = "O tema deve conter letras.";
         } else {
           delete newErrors.theme;
         }
@@ -513,10 +534,9 @@ export const useEventForm = () => {
       newErrors.teachingStrategy = "A estratégia de ensino deve conter letras.";
     }
 
-
-
-
-    
+    if (!cleanupHours.trim() && !cleanupMinutes.trim()) {
+      newErrors.cleanupDuration = "Informe pelo menos horas ou minutos de limpeza.";
+    }
 
     if (!eventData.mode) {
       newErrors.mode = "A modalidade é obrigatória.";

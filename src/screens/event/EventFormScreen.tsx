@@ -153,7 +153,12 @@ const EventFormScreen = ({ navigation }: Props) => {
       <TouchableOpacity onPress={() => showPicker("date")}>
        <Text 
        style={[styles.input, { color: colors.text }, {
-      backgroundColor: eventData.day ? colors.inputFilledBackground : colors.card,
+      backgroundColor: 
+       errors.day
+      ? colors.inputErrorBackground
+      : eventData.day 
+      ? colors.inputFilledBackground 
+      : colors.card,
       borderColor: errors.day
         ? colors.error
         : eventData.day
@@ -184,7 +189,10 @@ const EventFormScreen = ({ navigation }: Props) => {
        style={[
   styles.input,
   {
-    backgroundColor: eventData.startTime
+    backgroundColor: 
+       errors.startTime
+      ? colors.inputErrorBackground
+      : eventData.startTime
       ? colors.inputFilledBackground
       : colors.card,
     color: colors.text,
@@ -216,7 +224,10 @@ const EventFormScreen = ({ navigation }: Props) => {
         <Text style={[
   styles.input,
   {
-    backgroundColor: eventData.endTime
+    backgroundColor: 
+      errors.endTime
+      ? colors.inputErrorBackground
+      : eventData.endTime
       ? colors.inputFilledBackground
       : colors.card,
     color: colors.text,
@@ -718,42 +729,42 @@ const EventFormScreen = ({ navigation }: Props) => {
   <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Status válido</Text>
 )}
 
-  <Text style={[styles.label, { color: colors.text }]}>Status Administrativo:</Text>
- <View
-  style={[
-    styles.pickerContainer,
-    {
-      backgroundColor: 
-        errors.administrativeStatus
-        ? colors.inputErrorBackground
-        : eventData.administrativeStatus
-        ? colors.inputFilledBackground
-        : colors.card,
-      borderColor: errors.administrativeStatus
-        ? colors.error
-        : eventData.administrativeStatus
-        ? colors.success
-        : colors.accent,
-    }
-  ]}
->
-  <Picker
-    selectedValue={eventData.administrativeStatus}
-    onValueChange={(itemValue) => handleChange("administrativeStatus", itemValue)}
-    style={[styles.picker, { color: colors.text }]}
-    dropdownIconColor={colors.text}
-  >
-    <Picker.Item label="Selecione o status administrativo" value="" />
-    <Picker.Item label="Normal" value="NORMAL" />
-    <Picker.Item label="Aprovado" value="APROVADO" />
-    <Picker.Item label="Pendente" value="PENDENTE" />
-    <Picker.Item label="Cancelado" value="CANCELADO" />
-    <Picker.Item label="Urgente" value="URGENTE" />
-    <Picker.Item label="Adiado" value="ADIADO" />
-    <Picker.Item label="Atrasado" value="ATRASADO" />
-    <Picker.Item label="Indefinido" value="INDEFINIDO" />
-  </Picker>
-</View>
+      <Text style={[styles.label, { color: colors.text }]}>Status Administrativo:</Text>
+    <View
+      style={[
+        styles.pickerContainer,
+        {
+          backgroundColor: 
+            errors.administrativeStatus
+            ? colors.inputErrorBackground
+            : eventData.administrativeStatus
+            ? colors.inputFilledBackground
+            : colors.card,
+          borderColor: errors.administrativeStatus
+            ? colors.error
+            : eventData.administrativeStatus
+            ? colors.success
+            : colors.accent,
+        }
+      ]}
+    >
+        <Picker
+          selectedValue={eventData.administrativeStatus}
+          onValueChange={(itemValue) => handleChange("administrativeStatus", itemValue)}
+          style={[styles.picker, { color: colors.text }]}
+          dropdownIconColor={colors.text}
+        >
+          <Picker.Item label="Selecione o status administrativo" value="" />
+          <Picker.Item label="Normal" value="NORMAL" />
+          <Picker.Item label="Aprovado" value="APROVADO" />
+          <Picker.Item label="Pendente" value="PENDENTE" />
+          <Picker.Item label="Cancelado" value="CANCELADO" />
+          <Picker.Item label="Urgente" value="URGENTE" />
+          <Picker.Item label="Adiado" value="ADIADO" />
+          <Picker.Item label="Atrasado" value="ATRASADO" />
+          <Picker.Item label="Indefinido" value="INDEFINIDO" />
+        </Picker>
+      </View>
           {errors.administrativeStatus && (
             <Text style={{ color: colors.error, marginBottom: 5 }}>
               {errors.administrativeStatus}
@@ -807,7 +818,12 @@ const EventFormScreen = ({ navigation }: Props) => {
           <View style={{ flex: 1 }}>
             <TextInput
               style={{
-                backgroundColor: errors.cleanupHours ? colors.inputErrorBackground : (cleanupHours ? colors.inputFilledBackground : colors.card),
+                backgroundColor: 
+                errors.cleanupHours 
+                ? colors.inputErrorBackground 
+                : (cleanupHours 
+                  ? colors.inputFilledBackground 
+                  : colors.card),
                 borderColor: errors.cleanupHours ? colors.error : (cleanupHours ? colors.success : colors.accent),
                 borderWidth: 1,
                 borderRadius: 8,
@@ -850,7 +866,9 @@ const EventFormScreen = ({ navigation }: Props) => {
             )}
           </View>
         </View>
-
+      {errors.cleanupDuration && (
+        <Text style={{ color: colors.error, marginBottom: 8 }}>{errors.cleanupDuration}</Text>
+      )}
       <Text style={[styles.label, { color: colors.text }]}>Observação:</Text>
       <TextInput 
       style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]} 
