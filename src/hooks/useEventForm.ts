@@ -87,10 +87,8 @@ export const useEventForm = () => {
     } else {
       delete newErrors.courses;
     }
-
     return newErrors;
   });
-
   };
   
   const addCourseField = () => {
@@ -213,11 +211,11 @@ export const useEventForm = () => {
     const [startHour, startMinute] = newStartTime.split(":").map(Number);
     const [endHour, endMinute] = eventData.endTime ? eventData.endTime.split(":").map(Number) : [null, null];
 
-    if (eventData.endTime) {
-      const start = new Date();
-      const end = new Date();
-      start.setHours(startHour, startMinute, 0);
-      end.setHours(endHour!, endMinute!, 0);
+      if (eventData.endTime) {
+        const start = new Date();
+        const end = new Date();
+        start.setHours(startHour, startMinute, 0);
+        end.setHours(endHour!, endMinute!, 0);
 
       if (start >= end) {
         newErrors.startTime = "O horário de início deve ser menor que o de término.";
@@ -234,17 +232,16 @@ export const useEventForm = () => {
   });
 };
 
- 
-const handleEndTimeChange = (_: any, selectedDate?: Date) => {
-  setShowEndTimePicker(false);
-  if (!selectedDate) return;
+  const handleEndTimeChange = (_: any, selectedDate?: Date) => {
+    setShowEndTimePicker(false);
+    if (!selectedDate) return;
 
-  const newEndTime = format(selectedDate, "HH:mm");
+    const newEndTime = format(selectedDate, "HH:mm");
 
-  setEventData((prev) => ({
-    ...prev,
-    endTime: newEndTime,
-  }));
+    setEventData((prev) => ({
+      ...prev,
+      endTime: newEndTime,
+    }));
 
   setErrors((prev) => {
     const newErrors = { ...prev };
@@ -252,11 +249,11 @@ const handleEndTimeChange = (_: any, selectedDate?: Date) => {
     const [endHour, endMinute] = newEndTime.split(":").map(Number);
     const [startHour, startMinute] = eventData.startTime ? eventData.startTime.split(":").map(Number) : [null, null];
 
-    if (eventData.startTime) {
-      const start = new Date();
-      const end = new Date();
-      start.setHours(startHour!, startMinute!, 0);
-      end.setHours(endHour, endMinute, 0);
+      if (eventData.startTime) {
+        const start = new Date();
+        const end = new Date();
+        start.setHours(startHour!, startMinute!, 0);
+        end.setHours(endHour, endMinute, 0);
 
       if (start >= end) {
         newErrors.startTime = "O horário de início deve ser menor que o de término.";
@@ -279,21 +276,37 @@ const handleEndTimeChange = (_: any, selectedDate?: Date) => {
     else if (type === "end") setShowEndTimePicker(true);
   };
 
+  const handleCleanupHoursChange = (value: string) => {
+    if (!/^\d*$/.test(value)) {
+      setErrors(prev => ({ ...prev, cleanupHours: "Apenas números são permitidos para horas." }));
+    } else {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors.cleanupHours;
+        return newErrors;
+      });
+    }
+    setCleanupHours(value);
+  };
+
+  const handleCleanupMinutesChange = (value: string) => {
+    if (!/^\d*$/.test(value)) {
+      setErrors(prev => ({ ...prev, cleanupMinutes: "Apenas números são permitidos para minutos." }));
+    } else {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors.cleanupMinutes;
+        return newErrors;
+      });
+    }
+    setCleanupMinutes(value);
+  };
+
   const handleChange = (field: string, value: string) => {
     setEventData((prev) => ({ ...prev, [field]: value }));
 
  setErrors((prev) => {
     const newErrors = { ...prev };
-
-    if (field === "targetAudience") {
-        if (!value.trim()) {
-          newErrors.targetAudience = "O público alvo é obrigatório.";
-        } else if (!/[a-zA-Z]/.test(value)) {
-          newErrors.targetAudience = "O público alvo deve conter letras.";
-        } else {
-          delete newErrors.targetAudience;
-        }
-      }
 
     if (field === "name") {
             if (!value.trim()) {
@@ -305,6 +318,16 @@ const handleEndTimeChange = (_: any, selectedDate?: Date) => {
             }
           }
 
+    if (field === "targetAudience") {
+          if (!value.trim()) {
+            newErrors.targetAudience = "O público alvo é obrigatório.";
+          } else if (!/[a-zA-Z]/.test(value)) {
+            newErrors.targetAudience = "O público alvo deve conter letras.";
+          } else {
+            delete newErrors.targetAudience;
+          }
+        }
+
     if (field === "administrativeStatus") {
         if (!value) {
           newErrors.administrativeStatus = "O status administrativo é obrigatório.";
@@ -313,14 +336,13 @@ const handleEndTimeChange = (_: any, selectedDate?: Date) => {
         }
     }
 
-
-  if (field === "mode") {
-        if (!value) {
-          newErrors.mode = "O modo é obrigatório.";
-        } else {
-          delete newErrors.mode;
-        }
-    }
+    if (field === "mode") {
+          if (!value) {
+            newErrors.mode = "O modo é obrigatório.";
+          } else {
+            delete newErrors.mode;
+          }
+      }
 
     if (field === "priority") {
         if (!value) {
@@ -338,13 +360,13 @@ const handleEndTimeChange = (_: any, selectedDate?: Date) => {
         }
     }
 
-      if (field === "locationName") {
-          if (!value) {
-            newErrors.locationName = "O local é obrigatório.";
-          } else {
-            delete newErrors.locationName;
-          }
-      }
+    if (field === "locationName") {
+        if (!value) {
+          newErrors.locationName = "O local é obrigatório.";
+        } else {
+          delete newErrors.locationName;
+        }
+    }
 
     if (field === "locationFloor") {
           if (!value) {
@@ -491,6 +513,11 @@ const handleEndTimeChange = (_: any, selectedDate?: Date) => {
       newErrors.teachingStrategy = "A estratégia de ensino deve conter letras.";
     }
 
+
+
+
+    
+
     if (!eventData.mode) {
       newErrors.mode = "A modalidade é obrigatória.";
     }
@@ -579,6 +606,8 @@ const handleEndTimeChange = (_: any, selectedDate?: Date) => {
     addRelatedSubjectField,
     removeRelatedSubjectField,
     showPicker,
+    handleCleanupHoursChange,
+    handleCleanupMinutesChange,
     eventData,
     setEventData,
     selectedDay,

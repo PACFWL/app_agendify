@@ -119,7 +119,11 @@ const { theme } = useContext(ThemeContext);
 
       <Text style={[styles.label, { color: colors.text }]}>Horário de Início:</Text>
       <TouchableOpacity onPress={() => showPicker("start")}>
-        <Text style={[styles.input, { color: colors.text }, { backgroundColor: colors.card, borderColor: colors.accent }]}>{eventData.startTime || "Selecionar horário"}</Text>
+        <Text 
+        style={[styles.input,
+         { color: colors.text }, { 
+          backgroundColor: colors.card, 
+          borderColor: colors.accent }]}>{eventData.startTime || "Selecionar horário"}</Text>
       </TouchableOpacity>
       {showStartTimePicker && (
         <DateTimePicker
