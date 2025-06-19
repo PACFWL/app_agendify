@@ -202,6 +202,7 @@ const colors = getColors(theme);
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const fetchEvents = async () => {
+    
     if (!auth?.user) return;
 
     try {

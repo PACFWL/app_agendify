@@ -21,6 +21,33 @@ const locationOptionsByFloor: Record<string, string[]> = {
   "1": ["Sala de Informática 001", "Sala de Informática 002", "Sala de Informática 003", "Sala de Informática 004", "Sala 111", "Sala de Informática 001", "Sala de Aula 001", "Sala de Aula 002", "Sala de Aula 003", "Sala de Aula 004", "Sala de Aula 005", "Sala de Aula 006", "Sala de Aula 007", "Sala de Aula 008", "Sala de Aula 009"],
   "2": ["Sala de Informática 001", "Sala de Informática 002", "Sala de Informática 003", "Sala de Informática 004", "Sala de Aula 001", "Sala de Aula 002", "Sala de Aula 003", "Sala de Aula 004", "Sala de Aula 005", "Sala de Aula 006", "Sala de Aula 007", "Sala de Aula 008", "Sala de Aula 009", "Sala de Aula 010" ],
   "3": ["Sala de Aula 1", "Sala de Aula 2"],
+  "4": ["Online"]
+};
+
+const floorOptionsByMode: Record<string, { label: string; value: string }[]> = {
+  PRESENCIAL: [
+    { label: "Térreo", value: "0" },
+    { label: "1º Andar", value: "1" },
+    { label: "2º Andar", value: "2" },
+    { label: "3º Andar", value: "3" },
+  ],
+  ONLINE: [
+    { label: "Inexistente", value: "4" },
+  ],
+  HIBRIDO: [
+    { label: "Térreo", value: "0" },
+    { label: "1º Andar", value: "1" },
+    { label: "2º Andar", value: "2" },
+    { label: "3º Andar", value: "3" },
+    { label: "Inexistente", value: "4" },
+  ],
+  DEFAULT: [
+    { label: "Térreo", value: "0" },
+    { label: "1º Andar", value: "1" },
+    { label: "2º Andar", value: "2" },
+    { label: "3º Andar", value: "3" },
+    { label: "Inexistente", value: "4" },
+  ],
 };
 
 const EventEditFormScreen = ({ route, navigation }: Props) => {

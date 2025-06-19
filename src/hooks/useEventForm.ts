@@ -42,7 +42,6 @@ export const useEventForm = () => {
   updatedAuthors[index] = value;
   setEventData(prev => ({ ...prev, authors: updatedAuthors }));
 
-
   setErrors(prev => {
     const newErrors = { ...prev };
 
@@ -153,7 +152,6 @@ export const useEventForm = () => {
 
     return newErrors;
   });
-  
   };
   
   const addRelatedSubjectField = () => {

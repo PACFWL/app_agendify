@@ -10,6 +10,9 @@ import { useNavigation } from "@react-navigation/native";
 import { LocaleConfig } from "react-native-calendars";
 import getCalendarScreenStyles from "../../styles/CalendarScreenStyles";
 import { getColors } from "../../styles/ThemeColors";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback } from "react";
+
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamList>;
 
@@ -106,7 +109,8 @@ const CalendarScreen = () => {
     setCurrentMonthText(formatted);
   }, []);
 
-  useEffect(() => {
+useFocusEffect(
+  useCallback(() => {
     const fetchEvents = async () => {
       if (!auth?.user) return;
       try {
@@ -117,8 +121,10 @@ const CalendarScreen = () => {
         console.error("Erro ao carregar eventos", error);
       }
     };
+
     fetchEvents();
-  }, [auth]);
+  }, [auth])
+);
 
   useEffect(() => {
     const updateTime = () => {

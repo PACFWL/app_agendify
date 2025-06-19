@@ -3,7 +3,6 @@ import { Text, TextInput, Alert, ScrollView, TouchableOpacity, View } from "reac
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Picker } from '@react-native-picker/picker';
-
 import { AuthContext } from "../../contexts/AuthContext";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { createEvent } from "../../api/event";
@@ -19,6 +18,33 @@ const locationOptionsByFloor: Record<string, string[]> = {
   "1": ["Sala de Informática 001", "Sala de Informática 002", "Sala de Informática 003", "Sala de Informática 004", "Sala 111", "Sala de Informática 001", "Sala de Aula 001", "Sala de Aula 002", "Sala de Aula 003", "Sala de Aula 004", "Sala de Aula 005", "Sala de Aula 006", "Sala de Aula 007", "Sala de Aula 008", "Sala de Aula 009"],
   "2": ["Sala de Informática 001", "Sala de Informática 002", "Sala de Informática 003", "Sala de Informática 004", "Sala de Aula 001", "Sala de Aula 002", "Sala de Aula 003", "Sala de Aula 004", "Sala de Aula 005", "Sala de Aula 006", "Sala de Aula 007", "Sala de Aula 008", "Sala de Aula 009", "Sala de Aula 010"],
   "3": ["Sala de Aula 1", "Sala de Aula 2"],
+  "4": ["Online"]
+};
+
+const floorOptionsByMode: Record<string, { label: string; value: string }[]> = {
+  PRESENCIAL: [
+    { label: "Térreo", value: "0" },
+    { label: "1º Andar", value: "1" },
+    { label: "2º Andar", value: "2" },
+    { label: "3º Andar", value: "3" },
+  ],
+  ONLINE: [
+    { label: "Inexistente", value: "4" },
+  ],
+  HIBRIDO: [
+    { label: "Térreo", value: "0" },
+    { label: "1º Andar", value: "1" },
+    { label: "2º Andar", value: "2" },
+    { label: "3º Andar", value: "3" },
+    { label: "Inexistente", value: "4" },
+  ],
+  DEFAULT: [
+    { label: "Térreo", value: "0" },
+    { label: "1º Andar", value: "1" },
+    { label: "2º Andar", value: "2" },
+    { label: "3º Andar", value: "3" },
+    { label: "Inexistente", value: "4" },
+  ],
 };
 
 const EventFormScreen = ({ navigation }: Props) => {
@@ -120,6 +146,7 @@ const EventFormScreen = ({ navigation }: Props) => {
 
   return (
     <ScrollView style={[styles.container, { backgroundColor: colors.background }]} contentContainerStyle={{ paddingBottom: 30 }}>
+      
       <Text style={[styles.title, { color: colors.primary }]}>Criar Novo Evento</Text>
       <Text style={[styles.label, { color: colors.text }]}>Nome:</Text>
       <TextInput 
@@ -136,7 +163,7 @@ const EventFormScreen = ({ navigation }: Props) => {
         : eventData.name.trim()
         ? colors.success
         : colors.accent,
-    }]} 
+        }]} 
         value={eventData.name} 
         placeholder="Nome"
         placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
@@ -154,11 +181,11 @@ const EventFormScreen = ({ navigation }: Props) => {
        <Text 
        style={[styles.input, { color: colors.text }, {
       backgroundColor: 
-       errors.day
-      ? colors.inputErrorBackground
-      : eventData.day 
-      ? colors.inputFilledBackground 
-      : colors.card,
+        errors.day
+        ? colors.inputErrorBackground
+        : eventData.day 
+        ? colors.inputFilledBackground 
+        : colors.card,
       borderColor: errors.day
         ? colors.error
         : eventData.day
@@ -205,10 +232,9 @@ const EventFormScreen = ({ navigation }: Props) => {
 ]}>{eventData.startTime || "Selecionar horário"}</Text>
       </TouchableOpacity>
       {errors.startTime && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.startTime}</Text>}
-{!errors.startTime && eventData.startTime && (
-  <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Horário de início válido</Text>
-)}
-
+      {!errors.startTime && eventData.startTime && (
+        <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Horário de início válido</Text>
+      )}
       {showStartTimePicker && (
         <DateTimePicker
           mode="time"
@@ -225,13 +251,14 @@ const EventFormScreen = ({ navigation }: Props) => {
   styles.input,
   {
     backgroundColor: 
-      errors.endTime
+        errors.endTime
       ? colors.inputErrorBackground
       : eventData.endTime
       ? colors.inputFilledBackground
       : colors.card,
     color: colors.text,
-    borderColor: errors.endTime
+    borderColor: 
+        errors.endTime
       ? colors.error
       : eventData.endTime
       ? colors.success
@@ -241,9 +268,8 @@ const EventFormScreen = ({ navigation }: Props) => {
       </TouchableOpacity>
       {errors.endTime && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.endTime}</Text>}
       {!errors.endTime && eventData.endTime && (
-  <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Horário de término válido</Text>
-)}
-
+        <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Horário de término válido</Text>
+      )}
       {showEndTimePicker && (
         <DateTimePicker
           mode="time"
@@ -269,7 +295,8 @@ const EventFormScreen = ({ navigation }: Props) => {
         ? colors.error
         : eventData.theme.trim()
         ? colors.success
-        : colors.accent }]} 
+        : colors.accent 
+      }]} 
         placeholder="Tema"
         placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
         onChangeText={(text) => {
@@ -291,11 +318,13 @@ const EventFormScreen = ({ navigation }: Props) => {
             ? colors.inputFilledBackground
             : colors.card, 
         color: colors.text, 
-        borderColor: errors.targetAudience
+        borderColor: 
+              errors.targetAudience
             ? colors.error
             : eventData.targetAudience.trim()
             ? colors.success
-            : colors.accent }]} 
+            : colors.accent 
+          }]} 
           placeholder="Público-alvo" 
           placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
           onChangeText={(text) => {
@@ -323,11 +352,20 @@ const EventFormScreen = ({ navigation }: Props) => {
         ? colors.success
         : colors.accent 
           }]}>
-      <Picker
-        selectedValue={eventData.mode}
-        onValueChange={(itemValue) => handleChange("mode", itemValue)}
-         style={[styles.picker, { color: colors.text }]}
-      >
+    <Picker
+  selectedValue={eventData.mode}
+  onValueChange={(itemValue) => {
+    handleChange("mode", itemValue);
+
+    if (itemValue === "ONLINE") {
+      handleChange("locationFloor", "4");
+      handleChange("locationName", "Online");
+    } else {
+      handleChange("locationFloor", "");
+      handleChange("locationName", "");
+    }
+  }}
+  style={[styles.picker, { color: colors.text }]}>
       <Picker.Item label="Selecione a modalidade" value="" />
         <Picker.Item label="Presencial" value="PRESENCIAL" />
         <Picker.Item label="Online" value="ONLINE" />
@@ -335,9 +373,9 @@ const EventFormScreen = ({ navigation }: Props) => {
       </Picker>
       </View>
       {errors.mode && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.mode}</Text>}
-  {!errors.mode && eventData.mode.trim() !== "" && (
-            <Text style={{ color: colors.success, marginBottom: 5 }}>✓ O modo válido</Text>
-          )}
+      {!errors.mode && eventData.mode.trim() !== "" && (
+                <Text style={{ color: colors.success, marginBottom: 5 }}>✓ O modo válido</Text>
+              )}
 
        <Text style={[styles.label, { color: colors.text }]}>Ambiente:</Text>
         
@@ -350,11 +388,13 @@ const EventFormScreen = ({ navigation }: Props) => {
         ? colors.inputFilledBackground
         : colors.card, 
         color: colors.text, 
-        borderColor: errors.environment
+        borderColor: 
+          errors.environment
         ? colors.error
         : eventData.environment.trim()
         ? colors.success
-        : colors.accent },]} 
+        : colors.accent 
+      }]} 
           placeholder="Ambiente" 
           placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
           onChangeText={(text) =>  {
@@ -376,11 +416,13 @@ const EventFormScreen = ({ navigation }: Props) => {
         ? colors.inputFilledBackground
         : colors.card, 
         color: colors.text, 
-        borderColor: errors.organizer
+        borderColor: 
+          errors.organizer
         ? colors.error
         : eventData.organizer.trim()
         ? colors.success
-        : colors.accent },]} 
+        : colors.accent
+       }]} 
           placeholder="Organizador" 
           placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
           onChangeText={(text) =>  {
@@ -404,7 +446,8 @@ const EventFormScreen = ({ navigation }: Props) => {
           ? colors.inputFilledBackground
           : colors.card,
         color: colors.text,
-        borderColor: errors.resourcesDescription
+        borderColor: 
+            errors.resourcesDescription
           ? colors.error
           : resource.trim()
           ? colors.success
@@ -415,9 +458,9 @@ const EventFormScreen = ({ navigation }: Props) => {
               value={resource}
               onChangeText={(text) => handleResourcesDescriptionChange(index, text)}
             />
-{!errors.resourcesDescription && resource.trim() !== "" && /[a-zA-Z]/.test(resource) && (
-      <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Recurso válido</Text>
-    )}
+      {!errors.resourcesDescription && resource.trim() !== "" && /[a-zA-Z]/.test(resource) && (
+            <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Recurso válido</Text>
+          )}
             {index > 0 && (
        <TouchableOpacity style={styles.removeButton}  onPress={() => removeResourcesDescriptionField(index)}>
           <Text style={styles.addButtonText}>Remover</Text>
@@ -440,11 +483,13 @@ const EventFormScreen = ({ navigation }: Props) => {
         ? colors.inputFilledBackground
         : colors.card, 
         color: colors.text, 
-        borderColor: errors.disclosureMethod
+        borderColor: 
+          errors.disclosureMethod
         ? colors.error
         : eventData.disclosureMethod.trim()
         ? colors.success
-        : colors.accent },]}   
+        : colors.accent 
+      }]}   
           placeholder="Forma de Divulgação" 
           placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
           onChangeText={(text) =>  {
@@ -455,7 +500,6 @@ const EventFormScreen = ({ navigation }: Props) => {
       {!errors.disclosureMethod && eventData.disclosureMethod.trim() !== "" && (
           <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Forma de Divulgação Preenchido</Text>
       )}
-
      <Text style={[styles.label, { color: colors.text }]}>Disciplinas Relacionadas:</Text>
     {eventData.relatedSubjects.map((relatedSubject, index) => (
       <React.Fragment key={index}>
@@ -468,7 +512,8 @@ const EventFormScreen = ({ navigation }: Props) => {
           ? colors.inputFilledBackground
           : colors.card,
         color: colors.text,
-        borderColor: errors.relatedSubjects
+        borderColor: 
+            errors.relatedSubjects
           ? colors.error
           : relatedSubject.trim()
           ? colors.success
@@ -479,9 +524,9 @@ const EventFormScreen = ({ navigation }: Props) => {
           value={relatedSubject}
           onChangeText={(text) => handleRelatedSubjectChange(index, text)}
         />
- {!errors.relatedSubjects && relatedSubject.trim() !== "" && /[a-zA-Z]/.test(relatedSubject) && (
-      <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Disciplina válido</Text>
-    )}
+    {!errors.relatedSubjects && relatedSubject.trim() !== "" && /[a-zA-Z]/.test(relatedSubject) && (
+          <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Disciplina válido</Text>
+        )}
         {index > 0 && (
           <TouchableOpacity style={styles.removeButton}  onPress={() => removeRelatedSubjectField(index)}>
               <Text style={styles.addButtonText}>Remover</Text>
@@ -504,11 +549,13 @@ const EventFormScreen = ({ navigation }: Props) => {
         ? colors.inputFilledBackground
         : colors.card, 
         color: colors.text, 
-        borderColor: errors.teachingStrategy
+        borderColor: 
+          errors.teachingStrategy
         ? colors.error
         : eventData.teachingStrategy.trim()
         ? colors.success
-        : colors.accent },]} 
+        : colors.accent
+       }]} 
           placeholder="Estratégia de Ensino" 
           placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
           onChangeText={(text) =>  {
@@ -532,7 +579,8 @@ const EventFormScreen = ({ navigation }: Props) => {
           ? colors.inputFilledBackground
           : colors.card,
         color: colors.text,
-        borderColor: errors.authors
+        borderColor: 
+        errors.authors
           ? colors.error
           : author.trim()
           ? colors.success
@@ -543,9 +591,9 @@ const EventFormScreen = ({ navigation }: Props) => {
               value={author}
               onChangeText={(text) => handleAuthorChange(index, text)}
             />
-  {!errors.authors && author.trim() !== "" && /[a-zA-Z]/.test(author) && (
-      <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Autor válido</Text>
-    )}
+          {!errors.authors && author.trim() !== "" && /[a-zA-Z]/.test(author) && (
+              <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Autor válido</Text>
+            )}
             {index > 0 && (
               <TouchableOpacity style={styles.removeButton}   onPress={() => removeAuthorField(index)}>
                   <Text style={styles.addButtonText}>Remover</Text>
@@ -559,13 +607,12 @@ const EventFormScreen = ({ navigation }: Props) => {
           </TouchableOpacity> 
       {errors.authors && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.authors}</Text>}
 
-
        <Text style={[styles.label, { color: colors.text }]}>Cursos:</Text>
 
       {eventData.courses.map((course, index) => (
         <React.Fragment key={index}>
           <TextInput
-                         style={[styles.input, {
+      style={[styles.input, {
         backgroundColor: 
           errors.courses
           ? colors.inputErrorBackground
@@ -573,7 +620,8 @@ const EventFormScreen = ({ navigation }: Props) => {
           ? colors.inputFilledBackground
           : colors.card,
         color: colors.text,
-        borderColor: errors.courses
+        borderColor: 
+          errors.courses
           ? colors.error
           : course.trim()
           ? colors.success
@@ -584,9 +632,9 @@ const EventFormScreen = ({ navigation }: Props) => {
             value={course}
             onChangeText={(text) => handleCourseChange(index, text)}
           />
- {!errors.courses && course.trim() !== "" && /[a-zA-Z]/.test(course) && (
-      <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Curso válido</Text>
-    )}
+        {!errors.courses && course.trim() !== "" && /[a-zA-Z]/.test(course) && (
+              <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Curso válido</Text>
+            )}
           {index > 0 && (
           <TouchableOpacity style={styles.removeButton}   onPress={() => removeCourseField(index)}>
                 <Text style={styles.addButtonText}>Remover</Text>
@@ -609,11 +657,13 @@ const EventFormScreen = ({ navigation }: Props) => {
         ? colors.inputFilledBackground
         : colors.card, 
         color: colors.text, 
-        borderColor: errors.disciplinaryLink
+        borderColor: 
+          errors.disciplinaryLink
         ? colors.error
         : eventData.disciplinaryLink.trim()
         ? colors.success
-        : colors.accent },]} 
+        : colors.accent 
+      }]} 
           placeholder="Vínculo Disciplinar" 
           placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
           onChangeText={(text) => {
@@ -621,11 +671,11 @@ const EventFormScreen = ({ navigation }: Props) => {
         }}
       />
       {errors.disciplinaryLink && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.disciplinaryLink}</Text>}
-      {!errors.disciplinaryLink && eventData.disciplinaryLink.trim() !== "" && (
-      <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Vínculo Disciplinar válido</Text>
-    )}
+        {!errors.disciplinaryLink && eventData.disciplinaryLink.trim() !== "" && (
+        <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Vínculo Disciplinar válido</Text>
+      )}
 
-       <Text style={[styles.label, { color: colors.text }]}>Andar:</Text>
+       <Text style={[styles.label, { color: colors.text }]}>Andar do local:</Text>
         <View 
         style={[styles.pickerContainer, { 
           backgroundColor:   
@@ -645,16 +695,14 @@ const EventFormScreen = ({ navigation }: Props) => {
         selectedValue={eventData.locationFloor}
         onValueChange={(itemValue) => {
           handleChange("locationFloor", itemValue);
-          
         }}
         style={[styles.picker, { color: colors.text }]}
         dropdownIconColor={colors.text}
       >
-        <Picker.Item label="Selecione o andar" value="" />
-        <Picker.Item label="Térreo" value="0" />
-        <Picker.Item label="1º Andar" value="1" />
-        <Picker.Item label="2º Andar" value="2" />
-        <Picker.Item label="3º Andar" value="3" />
+   <Picker.Item label="Selecione o andar" value="" />
+{(floorOptionsByMode[eventData.mode] || floorOptionsByMode.DEFAULT).map((option, index) => (
+  <Picker.Item key={index} label={option.label} value={option.value} />
+))}
       </Picker>
       </View>
       {errors.locationFloor && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.locationFloor}</Text>}
@@ -662,7 +710,7 @@ const EventFormScreen = ({ navigation }: Props) => {
         <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Andar válido</Text>
       )}
 
-       <Text style={[styles.label, { color: colors.text }]}>Local:</Text>
+       <Text style={[styles.label, { color: colors.text }]}>Local do Evento:</Text>
       <View style={[styles.pickerContainer, 
         { 
           backgroundColor: 
@@ -693,11 +741,10 @@ const EventFormScreen = ({ navigation }: Props) => {
         ))}
       </Picker>
       </View>
-      {errors.locationName && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.locationName}</Text>}
-  {!errors.locationName && eventData.locationName !== "" && (
-            <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Local válido</Text>
-          )}
-
+          {errors.locationName && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.locationName}</Text>}
+      {!errors.locationName && eventData.locationName !== "" && (
+                <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Local válido</Text>
+              )}
 
     <Text style={[styles.label, { color: colors.text }]}>Status do Evento:</Text>
     <View style={[styles.pickerContainer, 
@@ -724,10 +771,10 @@ const EventFormScreen = ({ navigation }: Props) => {
       <Picker.Item label="Planejado" value="PLANEJADO" />
     </Picker>
     </View>
-   {errors.status && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.status}</Text>}
-       {!errors.status && eventData.status !== "" && (
-  <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Status válido</Text>
-)}
+      {errors.status && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.status}</Text>}
+          {!errors.status && eventData.status !== "" && (
+      <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Status válido</Text>
+    )}
 
       <Text style={[styles.label, { color: colors.text }]}>Status Administrativo:</Text>
     <View
@@ -813,7 +860,8 @@ const EventFormScreen = ({ navigation }: Props) => {
         {!errors.priority && eventData.priority !== "" && (
           <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Prioridade válido</Text>
         )}
-       <Text style={[styles.label, { color: colors.text }]}>Duração de Limpeza</Text>
+       <Text 
+       style={[styles.label, { color: colors.text }]}>Duração de Limpeza</Text>
         <View style={{ flexDirection: "row", gap: 12, marginBottom: 8 }}>
           <View style={{ flex: 1 }}>
        <TextInput
