@@ -263,7 +263,7 @@ return (
             <Text style={styles.eventName}>{item.name}</Text>
             <Text style={{ color: getColors(theme).text }}>{`${item.startTime} - ${item.endTime}`}</Text>
             <Text style={{ color: getColors(theme).text }}>Status: {item.status}</Text>
-            <Text style={{ color: getColors(theme).text }}>{`${item.location.name} - ${item.location.floor}`}</Text>
+            <Text style={{ color: getColors(theme).text }}>Local: {`${item.location.name} - Andar: ${item.location.floor}`}</Text>
           </TouchableOpacity>
         )}
         contentContainerStyle={{ paddingBottom: 80 }}

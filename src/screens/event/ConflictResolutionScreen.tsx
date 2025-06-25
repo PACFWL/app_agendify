@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { View, Text, ScrollView, Button, StyleSheet, Alert, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, Alert, TouchableOpacity } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../routes/Routes";
 import { resolveEventConflict } from "../../api/event";

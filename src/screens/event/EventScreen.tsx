@@ -97,6 +97,12 @@ const formatPriority = (priority: string) => {
   return map[priority] || priority;
 };
 
+const formatDateToBR = (isoDate: string) => {
+  const [year, month, day] = isoDate.split("-");
+  return `${day}/${month}/${year}`;
+};
+
+
 const EventCard = ({
   event,
   auth,
@@ -117,7 +123,11 @@ const EventCard = ({
       onPress={() => navigation.navigate("EventDetails", { eventId: event.id })}
       style={[styles.eventCard, { backgroundColor: colors.card }]}
     >
-    <Text style={[styles.eventDate, { color: colors.accent }]}>{event.day}</Text>
+   
+   <Text style={[styles.eventDate, { color: colors.accent }]}>
+  {formatDateToBR(event.day)}
+</Text>
+
   <Text style={[styles.eventName, { color: colors.cardTitle }]}>{event.name}</Text>
 
       <View style={styles.tagsRow}>

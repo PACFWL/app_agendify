@@ -191,16 +191,15 @@ const EventFormScreen = ({ navigation }: Props) => {
         : eventData.day
         ? colors.success
         : colors.accent,
-    }]}>
+    }]}
+    >
         {eventData.day || "Selecionar data"}</Text>
 </TouchableOpacity>
-
  {errors.day && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.day}</Text>}
       
       {!errors.day && eventData.day && (
   <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Data válida</Text>
 )}
-
       {showDatePicker && (
         <DateTimePicker
           mode="date"
@@ -365,7 +364,8 @@ const EventFormScreen = ({ navigation }: Props) => {
       handleChange("locationName", "");
     }
   }}
-  style={[styles.picker, { color: colors.text }]}>
+  style={[styles.picker, { color: colors.text }]}
+  >
       <Picker.Item label="Selecione a modalidade" value="" />
         <Picker.Item label="Presencial" value="PRESENCIAL" />
         <Picker.Item label="Online" value="ONLINE" />
@@ -498,7 +498,7 @@ const EventFormScreen = ({ navigation }: Props) => {
       />
       {errors.disclosureMethod && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.disclosureMethod}</Text>}
       {!errors.disclosureMethod && eventData.disclosureMethod.trim() !== "" && (
-          <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Forma de Divulgação Preenchido</Text>
+          <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Forma de Divulgação válido</Text>
       )}
      <Text style={[styles.label, { color: colors.text }]}>Disciplinas Relacionadas:</Text>
     {eventData.relatedSubjects.map((relatedSubject, index) => (
@@ -698,11 +698,12 @@ const EventFormScreen = ({ navigation }: Props) => {
         }}
         style={[styles.picker, { color: colors.text }]}
         dropdownIconColor={colors.text}
+      
       >
    <Picker.Item label="Selecione o andar" value="" />
-{(floorOptionsByMode[eventData.mode] || floorOptionsByMode.DEFAULT).map((option, index) => (
-  <Picker.Item key={index} label={option.label} value={option.value} />
-))}
+    {(floorOptionsByMode[eventData.mode] || floorOptionsByMode.DEFAULT).map((option, index) => (
+      <Picker.Item key={index} label={option.label} value={option.value} />
+    ))}
       </Picker>
       </View>
       {errors.locationFloor && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.locationFloor}</Text>}
@@ -749,7 +750,7 @@ const EventFormScreen = ({ navigation }: Props) => {
     <Text style={[styles.label, { color: colors.text }]}>Status do Evento:</Text>
     <View style={[styles.pickerContainer, 
       { backgroundColor: 
-      errors.status
+         errors.status
         ? colors.inputErrorBackground
         : eventData.status
         ? colors.inputFilledBackground
@@ -787,7 +788,8 @@ const EventFormScreen = ({ navigation }: Props) => {
             : eventData.administrativeStatus
             ? colors.inputFilledBackground
             : colors.card,
-          borderColor: errors.administrativeStatus
+          borderColor: 
+            errors.administrativeStatus
             ? colors.error
             : eventData.administrativeStatus
             ? colors.success
@@ -860,8 +862,9 @@ const EventFormScreen = ({ navigation }: Props) => {
         {!errors.priority && eventData.priority !== "" && (
           <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Prioridade válido</Text>
         )}
+        
        <Text 
-       style={[styles.label, { color: colors.text }]}>Duração de Limpeza</Text>
+       style={[styles.label, { color: colors.text }]}>Duração da Limpeza</Text>
         <View style={{ flexDirection: "row", gap: 12, marginBottom: 8 }}>
           <View style={{ flex: 1 }}>
        <TextInput
@@ -891,7 +894,6 @@ const EventFormScreen = ({ navigation }: Props) => {
               <Text style={{ color: colors.success, marginTop: 4 }}>✓ Horas válidas</Text>
             )}
           </View>
-         
          <View style={{ flex: 1 }}>
            <TextInput
             style={{

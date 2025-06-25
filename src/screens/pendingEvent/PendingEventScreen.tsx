@@ -104,6 +104,10 @@ const formatPriority = (priority: string) => {
   return map[priority] || priority;
 };
 
+const formatDateToBR = (isoDate: string) => {
+  const [year, month, day] = isoDate.split("-");
+  return `${day}/${month}/${year}`;
+};
 
 
 const EventCard = ({
@@ -118,8 +122,8 @@ const EventCard = ({
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-       const { theme } = useContext(ThemeContext);
- const colors = getColors(theme);
+    const { theme } = useContext(ThemeContext);
+    const colors = getColors(theme);
 
 
   const handleApprove = async () => {
@@ -152,22 +156,35 @@ const EventCard = ({
   return (
     <View style={[styles.eventCard, { backgroundColor: colors.card }]}>
       <TouchableOpacity
-        onPress={() =>
-          navigation.navigate("PendingEventDetails", { eventId: event.id })
-        }
+        onPress={() => navigation.navigate("PendingEventDetails", { eventId: event.id })}
+         style={[styles.eventCard, { backgroundColor: colors.card }]}
       >
-        <Text style={[styles.eventDate, { color: colors.accent }]}>{event.day}</Text>
+         <Text style={[styles.eventDate, { color: colors.accent }]}>
+  {formatDateToBR(event.day)}
+</Text>
         <Text style={[styles.eventName, { color: colors.cardTitle }]}>{event.name}</Text>
-        <View style={styles.eventInfoRow}>
-          <Text style={[styles.eventTime, { color: colors.cardText }]}>
-            {`${event.startTime} - ${event.endTime}`}
-          </Text>
-          <Text style={[styles.eventTheme, { color: colors.noEventText }]}>Tema: {event.theme}</Text>
-        </View>
-        <Text style={[styles.eventOrganizer, { color: colors.cardText }]}>
-          Organizador: {event.organizer}
-        </Text>
-                             <View style={styles.locationRow}>
+        
+      <View style={styles.tagsRow}>
+      <Text style={[styles.tag, { backgroundColor: "#37474f", color: colors.statusText }]}>
+    Início: {event.startTime}
+  </Text>
+
+      <Text style={[styles.tag, { backgroundColor: "#37474f" }]}>
+        Término: {event.endTime}
+      </Text>
+
+      <Text style={[styles.tag, { backgroundColor: "#6a1b9a" }]}>
+        Tema: {event.theme}
+      </Text>
+
+      <Text style={[styles.tag, { backgroundColor: "#00796b" }]}>
+        Organizador: {event.organizer}
+      </Text>
+
+    </View>
+
+
+            <View style={styles.locationRow}>
               <Text
                 style={[
                   styles.tag,

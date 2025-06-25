@@ -131,13 +131,15 @@ const { theme } = useContext(ThemeContext);
       <Text style={[styles.label, { color: colors.text }]}>Nome:</Text>
       <TextInput 
       style={[styles.input, { 
-          backgroundColor: errors.name
+          backgroundColor:
+           errors.name
         ? colors.inputErrorBackground
         : eventData.name.trim()
         ? colors.inputFilledBackground
         : colors.card,
           color: colors.text, 
-          borderColor: errors.name
+          borderColor: 
+          errors.name
         ? colors.error
         : eventData.name.trim()
         ? colors.success
@@ -341,6 +343,7 @@ const { theme } = useContext(ThemeContext);
       {!errors.mode && eventData.mode.trim() !== "" && (
                 <Text style={{ color: colors.success, marginBottom: 5 }}>✓ O modo válido</Text>
               )}
+
       <Text style={[styles.label, { color: colors.text }]}>Ambiente:</Text>
       <TextInput
       style={[styles.input, { 
@@ -362,10 +365,10 @@ const { theme } = useContext(ThemeContext);
       placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
       onChangeText={(text) => 
       handleChange("environment", text)} />
-            {errors.environment && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.environment}</Text>}
-            {!errors.environment && eventData.environment.trim() !== "" && (
-                <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Ambiente válido</Text>
-            )}
+        {errors.environment && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.environment}</Text>}
+        {!errors.environment && eventData.environment.trim() !== "" && (
+            <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Ambiente válido</Text>
+        )}
 
       <Text style={[styles.label, { color: colors.text }]}>Organizador:</Text>
       <TextInput 
@@ -456,6 +459,7 @@ const { theme } = useContext(ThemeContext);
           {!errors.disclosureMethod && eventData.disclosureMethod.trim() !== "" && (
               <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Forma de Divulgação Preenchido</Text>
           )}
+
       <Text style={[styles.label, { color: colors.text }]}>Disciplinas Relacionadas:</Text>
       {eventData.relatedSubjects.map((relatedSubject, index) => (
         <React.Fragment key={index}>
@@ -606,6 +610,7 @@ const { theme } = useContext(ThemeContext);
           <Text style={styles.addButtonText}>Adicionar Curso</Text>
         </TouchableOpacity>
    {errors.courses && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.courses}</Text>}
+    
     <Text style={[styles.label, { color: colors.text }]}>Vínculo Disciplinar:</Text>
       <TextInput 
       style={[styles.input, { 
@@ -680,7 +685,7 @@ const { theme } = useContext(ThemeContext);
         ? colors.success
         : colors.accent,
         }]}>
-  <Picker
+      <Picker
         selectedValue={eventData.locationName}
         onValueChange={(itemValue) => {
           handleChange("locationName", itemValue);
@@ -789,7 +794,15 @@ const { theme } = useContext(ThemeContext);
       <Picker.Item label="Selecione a prioridade" value="" />
       <Picker.Item label="Indefinido" value="INDEFINIDO" />
     </Picker>
-</View>
+    </View>
+        {errors.priority && (
+          <Text style={{ color: colors.error, marginBottom: 5 }}>
+            {errors.priority}
+          </Text>
+        )}
+        {!errors.priority && eventData.priority !== "" && (
+          <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Prioridade válido</Text>
+        )}
 
     <Text 
        style={[styles.label, { color: colors.text }]}>Duração de Limpeza</Text>

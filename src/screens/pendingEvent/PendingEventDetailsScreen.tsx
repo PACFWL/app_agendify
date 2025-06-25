@@ -224,10 +224,10 @@ const PendingEventDetailsScreen = () => {
       {auth?.user?.role && ["MASTER", "REQUESTER"].includes(auth.user.role) && (
           <>
             <TouchableOpacity style={[styles.button, styles.warningButton]} onPress={() => navigation.navigate("PendingEventEditForm", { eventId })}>
-              <Text style={styles.buttonText}>Editar Evento</Text>
+              <Text style={styles.buttonText}>Editar Evento Pendente</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.button, styles.dangerButton]} onPress={handleDelete}>
-              <Text style={styles.buttonText}>Deletar Evento</Text>
+              <Text style={styles.buttonText}>Deletar Evento Pendente</Text>
             </TouchableOpacity>  
           </>
       )}
