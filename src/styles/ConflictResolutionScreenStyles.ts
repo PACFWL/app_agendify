@@ -58,6 +58,36 @@ const styles = StyleSheet.create({
     color: "#333",
     marginBottom: 8,
   },
+detailTitle: {
+  fontSize: 16,
+  fontWeight: "bold",
+  color: "#1E88E5",
+  marginBottom: 8,
+},
+
+buttonContainer: {
+  flexDirection: "row",
+  justifyContent: "space-between",
+  marginTop: 20,
+},
+
+replaceButton: {
+  backgroundColor: "#4CAF50",
+  padding: 12,
+  borderRadius: 8,
+  flex: 1,
+  alignItems: "center",
+  marginRight: 8,
+},
+
+cancelButton: {
+  backgroundColor: "#E53935",
+  padding: 12,
+  borderRadius: 8,
+  flex: 1,
+  alignItems: "center",
+  marginLeft: 8,
+},
   });
 
   export default styles;

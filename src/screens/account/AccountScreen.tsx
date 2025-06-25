@@ -36,34 +36,6 @@ const AccountScreen = () => {
         textAlign: "center"
       }}>Função: {auth?.user?.role}</Text>
 
-      <TouchableOpacity style={{
-          backgroundColor: colors.primary,
-          borderRadius: 12,
-          marginVertical: 8,
-          paddingVertical: 12,
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.1,
-          shadowRadius: 4,
-          elevation: 2,
-        }} onPress={() => Alert.alert("Perfil", "Funcionalidade em construção.")}>
-        <Text style={{ color: "#ffffff", fontSize: 16, fontWeight: "600", textAlign: "center" }}>Perfil</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={{
-          backgroundColor: colors.primary,
-          borderRadius: 12,
-          marginVertical: 8,
-          paddingVertical: 12,
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.1,
-          shadowRadius: 4,
-          elevation: 2,
-        }} onPress={() => Alert.alert("Configurações", "Funcionalidade em construção.")}>
-        <Text style={{ color: "#ffffff", fontSize: 16, fontWeight: "600", textAlign: "center" }}>Configurações</Text>
-      </TouchableOpacity>
-
       <TouchableOpacity   style={{
           backgroundColor: "#e53935", 
           borderRadius: 12,
