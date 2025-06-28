@@ -87,8 +87,6 @@ const [name, setName] = useState("");
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
 
-
-
   const handleDateChange = (_: any, selectedDate?: Date) => {
   setShowDatePicker(false);
   if (!selectedDate) return;
@@ -116,9 +114,6 @@ const showPicker = (type: "date" | "start" | "end") => {
   else if (type === "end") setShowEndTimePicker(true);
 };
 
-
-
-  
   const handleSearch = async () => {
     setLoading(true);
     try {
@@ -435,7 +430,7 @@ const showPicker = (type: "date" | "start" | "end") => {
           >
             <Text style={[styles.eventTitle, { color: colors.primary }]}>{item.name}</Text>
             <Text style={{ color: colors.cardText }}>
-              {item.day} - {item.startTime} às {item.endTime}
+             {new Date(item.day).toLocaleDateString("pt-BR")} - {item.startTime} às {item.endTime}
             </Text>
             <Text style={{ color: colors.cardText }}>Tema: {item.theme}</Text>
             <Text style={{ color: colors.cardText }}>Organizador: {item.organizer}</Text>

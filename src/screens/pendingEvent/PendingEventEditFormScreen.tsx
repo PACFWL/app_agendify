@@ -341,7 +341,7 @@ const PendingEventEditFormScreen = ({ navigation, route }: Props) => {
       <TextInput 
       style={[styles.input, { 
         backgroundColor: 
-   errors.targetAudience
+              errors.targetAudience
             ? colors.inputErrorBackground
             : eventData.targetAudience.trim()
             ? colors.inputFilledBackground
@@ -367,17 +367,17 @@ const PendingEventEditFormScreen = ({ navigation, route }: Props) => {
       <Text style={[styles.label, { color: colors.text }]}>Modalidade:</Text>
       <View style={[styles.pickerContainer, { 
         backgroundColor: 
-          errors.mode
-        ? colors.inputErrorBackground
-        : eventData.mode.trim()
-        ? colors.inputFilledBackground
-        : colors.card, 
+            errors.mode
+          ? colors.inputErrorBackground
+          : eventData.mode.trim()
+          ? colors.inputFilledBackground
+          : colors.card, 
         borderColor: 
            errors.mode
-        ? colors.error
-        : eventData.mode.trim()
-        ? colors.success
-        : colors.accent 
+          ? colors.error
+          : eventData.mode.trim()
+          ? colors.success
+          : colors.accent 
         }]}>
       <Picker
         selectedValue={eventData.mode}
@@ -399,18 +399,18 @@ const PendingEventEditFormScreen = ({ navigation, route }: Props) => {
       <TextInput 
       style={[styles.input, { 
         backgroundColor: 
-          errors.environment
-        ? colors.inputErrorBackground
-        : eventData.environment.trim()
-        ? colors.inputFilledBackground
-        : colors.card,  
+            errors.environment
+          ? colors.inputErrorBackground
+          : eventData.environment.trim()
+          ? colors.inputFilledBackground
+          : colors.card,  
         color: colors.text, 
         borderColor: 
-          errors.environment
-        ? colors.error
-        : eventData.environment.trim()
-        ? colors.success
-        : colors.accent
+            errors.environment
+          ? colors.error
+          : eventData.environment.trim()
+          ? colors.success
+          : colors.accent
       }]} 
       value={eventData.environment} 
       placeholder="Ambiente" 
@@ -558,14 +558,31 @@ const PendingEventEditFormScreen = ({ navigation, route }: Props) => {
 
       <Text style={[styles.label, { color: colors.text }]}>Estratégia de Ensino:</Text>
       <TextInput 
-      style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent 
-
+      style={[styles.input, 
+        { 
+        backgroundColor: 
+          errors.teachingStrategy
+        ? colors.inputErrorBackground
+        : eventData.teachingStrategy.trim()
+        ? colors.inputFilledBackground
+        : colors.card,
+        color: colors.text, 
+        borderColor: 
+          errors.teachingStrategy
+        ? colors.error
+        : eventData.teachingStrategy.trim()
+        ? colors.success
+        : colors.accent 
       }]} 
       value={eventData.teachingStrategy} 
       placeholder="Estratégia de Ensino" 
       placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
       onChangeText={(text) => 
       handleChange("teachingStrategy", text)} />
+          {errors.teachingStrategy && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.teachingStrategy}</Text>}
+                  {!errors.teachingStrategy && eventData.teachingStrategy.trim() !== "" && (
+                      <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Estratégia de Ensino válido</Text>
+                  )}
 
       <Text style={[styles.label, { color: colors.text }]}>Autores:</Text>
         {eventData.authors.map((author, index) => (
