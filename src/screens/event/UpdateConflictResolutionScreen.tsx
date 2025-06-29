@@ -11,6 +11,81 @@ import { getColors } from "../../styles/ThemeColors";
 
 type Props = NativeStackScreenProps<RootStackParamList, "UpdateConflictResolution">;
 
+const formatMode = (mode: string) => {
+  switch (mode) {
+    case "PRESENCIAL": return "Presencial";
+    case "ONLINE": return "Online";
+    case "HIBRIDO": return "Híbrido";
+    default: return mode;
+  }
+};
+
+const formatStatus = (status: string) => {
+  const map: { [key: string]: string } = {
+    INDETERMINADO: "Indeterminado",
+    PLANEJADO: "Planejado",
+    EM_BREVE: "Em Breve",
+    EM_ANDAMENTO: "Em Andamento",
+    EM_PAUSA: "Em Pausa",
+    FINALIZADO: "Finalizado",
+    EM_ANALISE: "Em Análise"
+  };
+  return map[status] || status;
+};
+
+const formatPriority = (priority: string) => {
+  const map: { [key: string]: string } = {
+    INDEFINIDO: "Indefinido",
+    MUITO_BAIXA: "Muito Baixa",
+    BAIXA: "Baixa",
+    MEDIA: "Média",
+    ALTA: "Alta",
+    CRITICA: "Crítica"
+  };
+  return map[priority] || priority;
+};
+
+const formatAdministrativeStatus = (status: string) => {
+  const map: { [key: string]: string } = {
+    NORMAL: "Normal",
+    CANCELADO: "Cancelado",
+    URGENTE: "Urgente",
+    ADIADO: "Adiado",
+    ATRASADO: "Atrasado",
+    INDEFINIDO: "Indefinido",
+    APROVADO: "Aprovado",
+    PENDENTE: "Pendente",
+    AGUARDANDO: "Aguardando",
+    RECUSADO: "Recusado",
+  };
+  return map[status] || status;
+};
+
+const formatDuration = (isoDuration: string): string => {
+  const match = isoDuration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+  if (!match) return isoDuration;
+
+  const [, hours, minutes, seconds] = match.map((v) => v ? parseInt(v) : 0);
+
+  const parts = [];
+  if (hours) parts.push(`${hours} hora${hours > 1 ? 's' : ''}`);
+  if (minutes) parts.push(`${minutes} minuto${minutes > 1 ? 's' : ''}`);
+  if (seconds) parts.push(`${seconds} segundo${seconds > 1 ? 's' : ''}`);
+
+  return parts.length ? parts.join(" e ") : "0 minuto";
+};
+
+const formatLocationFloor = (locationFloor: string) => {
+  const map: { [key: string]: string } = {
+    0: "Térreo",
+    1: "1º Andar",
+    2: "2º Andar",
+    3: "3º Andar",
+    4: "Online"
+  };
+  return map[locationFloor] || locationFloor;
+};
+
 const UpdateConflictResolutionScreen = ({ route }: Props) => {
   const { updatedEvent, conflictingEvent } = route.params;
   const navigation = useNavigation();
@@ -42,7 +117,7 @@ const UpdateConflictResolutionScreen = ({ route }: Props) => {
       <Text style={[styles.detail, { color: themeColors.cardText }]}>Horário: {event.startTime} - {event.endTime}</Text>
       <Text style={[styles.detail, { color: themeColors.cardText }]}>Tema: {event.theme}</Text>
       <Text style={[styles.detail, { color: themeColors.cardText }]}>Público-alvo: {event.targetAudience}</Text>
-      <Text style={[styles.detail, { color: themeColors.cardText }]}>Modalidade: {event.mode}</Text>
+      <Text style={[styles.detail, { color: themeColors.cardText }]}>Modalidade: {formatMode(event.mode)}</Text>
       <Text style={[styles.detail, { color: themeColors.cardText }]}>Ambiente: {event.environment}</Text>
       <Text style={[styles.detail, { color: themeColors.cardText }]}>Organizador: {event.organizer}</Text>
       <Text style={[styles.detail, { color: themeColors.cardText }]}>Recursos: {event.resourcesDescription?.join(", ")}</Text>
@@ -52,11 +127,11 @@ const UpdateConflictResolutionScreen = ({ route }: Props) => {
       <Text style={[styles.detail, { color: themeColors.cardText }]}>Autores: {event.authors?.join(", ")}</Text>
       <Text style={[styles.detail, { color: themeColors.cardText }]}>Cursos: {event.courses?.join(", ")}</Text>
       <Text style={[styles.detail, { color: themeColors.cardText }]}>Vínculo Disciplinar: {event.disciplinaryLink}</Text>
-      <Text style={[styles.detail, { color: themeColors.cardText }]}>Local: {event.location?.name} ({event.location?.floor})</Text>
-      <Text style={[styles.detail, { color: themeColors.cardText }]}>Status: {event.status}</Text>
-      <Text style={[styles.detail, { color: themeColors.cardText }]}>Status Administrativo: {event.administrativeStatus}</Text>
-      <Text style={[styles.detail, { color: themeColors.cardText }]}>Prioridade: {event.priority}</Text>
-      <Text style={[styles.detail, { color: themeColors.cardText }]}>Duração da Limpeza: {event.cleanupDuration} minutos</Text>
+      <Text style={[styles.detail, { color: themeColors.cardText }]}>Local: {event.location?.name} - Andar: {formatLocationFloor(event.location?.floor)}</Text>
+      <Text style={[styles.detail, { color: themeColors.cardText }]}>Status: {formatStatus(event.status)}</Text>
+      <Text style={[styles.detail, { color: themeColors.cardText }]}>Status Administrativo: {formatAdministrativeStatus(event.administrativeStatus)}</Text>
+      <Text style={[styles.detail, { color: themeColors.cardText }]}>Prioridade: {formatPriority(event.priority)}</Text>
+      <Text style={[styles.detail, { color: themeColors.cardText }]}>Duração da Limpeza: {formatDuration(event.cleanupDuration)}</Text>
       <Text style={[styles.detail, { color: themeColors.cardText }]}>Observação: {event.observation}</Text>
     </View>
   );

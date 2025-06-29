@@ -743,7 +743,6 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
         }}
         style={[styles.picker, { color: colors.text }]}
         dropdownIconColor={colors.text}
-        
       >
    <Picker.Item label="Selecione o andar" value="" />
     {(floorOptionsByMode[eventData.mode] || floorOptionsByMode.DEFAULT).map((option, index) => (
