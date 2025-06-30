@@ -177,6 +177,35 @@ const showPicker = (type: "date" | "start" | "end") => {
     }
   };
 
+     const resetFields = () => {
+        setName("");
+        setOrganizer("");
+        setStatus("");
+        setTheme("");
+        setMode("");
+        setPriority("");
+        setTargetAudience("");
+        setEnvironment("");
+        setDisclosureMethod("");
+        setTeachingStrategy("");
+        setDisciplinaryLink("");
+        setAdministrativeStatus("");
+        setObservation("");
+        setLocationName("");
+        setLocationFloor("");
+        setDay("");
+        setDayDisplay("");
+        setStartDay("");
+        setEndDay("");
+        setStartTime("");
+        setEndTime("");
+        setIntervalSearch(false);
+        setCleanupHours("");
+        setCleanupMinutes("");
+        setSelectedDay(null);
+        setResults([]);
+      };
+
   return (
       <KeyboardAvoidingView
         style={[styles.container, { backgroundColor: colors.background }]}
@@ -185,6 +214,7 @@ const showPicker = (type: "date" | "start" | "end") => {
       <ScrollView contentContainerStyle={{ padding: 16 }} keyboardShouldPersistTaps="handled">
         <View style={styles.header}>
          <Text style={[styles.title, { color: colors.primary }]}>Buscar Eventos</Text>
+          
           <TouchableOpacity onPress={() => setShowFilters(!showFilters)}>
             <RemoteSvgIcon
               uri="https://www.svgrepo.com/show/362103/funnel.svg"
@@ -443,6 +473,10 @@ const showPicker = (type: "date" | "start" | "end") => {
   onPress={handleSearch}>
           <Text style={[styles.buttonText, { color: colors.statusText }]}>Buscar</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity style={[styles.button, { backgroundColor: "#ccc", marginTop: 8 }]} onPress={resetFields}>
+  <Text style={[styles.buttonText, { color: "#000" }]}>Limpar Campos</Text>
+</TouchableOpacity>
 
         {loading && <Text style={{ marginTop: 16 }}>Carregando...</Text>}
 
