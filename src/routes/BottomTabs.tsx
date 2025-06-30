@@ -58,7 +58,6 @@ const colors = getColors(theme);
     },
   })}
 >
-
       <Tab.Screen name="Home" component={HomeScreen} options={{ title: "Início" }} />
       <Tab.Screen name="Events" component={EventScreen} options={{ title: "Eventos" }} />
       <Tab.Screen name="Calendar" component={CalendarScreen} options={{ title: "Calendário" }} />

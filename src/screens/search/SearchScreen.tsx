@@ -469,14 +469,29 @@ const showPicker = (type: "date" | "start" | "end") => {
           </>
         )}
 
-      <TouchableOpacity   style={[styles.button, { backgroundColor: colors.primary }]}
-  onPress={handleSearch}>
-          <Text style={[styles.buttonText, { color: colors.statusText }]}>Buscar</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.button,
+              { backgroundColor: colors.buttonPrimaryBackground }
+            ]}
+            onPress={handleSearch}
+          >
+            <Text style={[styles.buttonText, { color: colors.buttonPrimaryText }]}>
+              Buscar
+            </Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.button, { backgroundColor: "#ccc", marginTop: 8 }]} onPress={resetFields}>
-  <Text style={[styles.buttonText, { color: "#000" }]}>Limpar Campos</Text>
-</TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.button,
+              { backgroundColor: colors.buttonSecondaryBackground, marginTop: 8 }
+            ]}
+            onPress={resetFields}
+          >
+            <Text style={[styles.buttonText, { color: colors.buttonSecondaryText }]}>
+              Limpar Campos
+            </Text>
+          </TouchableOpacity>
 
         {loading && <Text style={{ marginTop: 16 }}>Carregando...</Text>}
 

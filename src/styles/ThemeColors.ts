@@ -16,6 +16,10 @@ export const colors = {
     filled: "#7cc57e", 
     inputFilledBackground: "#e6f4ea",
     inputErrorBackground: "#fdeaea",
+    buttonPrimaryBackground: "#1976d2",
+    buttonPrimaryText: "#ffffff",
+    buttonSecondaryBackground: "#e0e0e0",
+    buttonSecondaryText: "#000000",
   },
   dark: {
     background: "#121212",
@@ -32,6 +36,10 @@ export const colors = {
     filled: "#7cc57e",
     inputFilledBackground: "#1a3324",
     inputErrorBackground: "#3b1e1e",
+    buttonPrimaryBackground: "#90caf9",
+    buttonPrimaryText: "#000000",
+    buttonSecondaryBackground: "#2c2c2c",
+    buttonSecondaryText: "#ffffff",
   },
 };
 
