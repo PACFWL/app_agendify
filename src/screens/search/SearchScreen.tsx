@@ -50,7 +50,24 @@ const SearchScreen = ({ navigation }: Props) => {
       "Sala de Aula 009", "Sala de Aula 010"
     ],
     "3": ["A definir", "Sala de Aula 1", "Sala de Aula 2"],
+    "4": ["Online"]
   };
+
+    const handleModeChange = (selectedMode: string) => {
+      setMode(selectedMode);
+
+      if (selectedMode === "ONLINE") {
+        setLocationFloor("4");
+        setLocationName("Online");
+      } else if (selectedMode === "PRESENCIAL") {
+        if (locationFloor === "4") {
+          setLocationFloor(""); 
+        }
+        if (locationName === "Online") {
+          setLocationName(""); 
+        }
+      }
+    };
 
   const {  theme: currentTheme } = useContext(ThemeContext);
   const colors = getColors(currentTheme);
@@ -209,15 +226,16 @@ const showPicker = (type: "date" | "start" | "end") => {
               </Picker>
             </View>
             <TextInput style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}
-  placeholderTextColor={theme === "dark" ? "#aaa" : "#666"} placeholder="Tema" value={theme} onChangeText={setTheme} />
+            placeholderTextColor={theme === "dark" ? "#aaa" : "#666"} placeholder="Tema" value={theme} onChangeText={setTheme} />
+
             <Text  style={[styles.label, { color: colors.text }]}>Modalidade</Text>
             <View style={[styles.input, { backgroundColor: colors.card, borderColor: colors.accent }]}>
-              <Picker
+            <Picker
                 selectedValue={mode}
-                onValueChange={(itemValue) => setMode(itemValue)}
-                 style={{ color: colors.text }} 
-    dropdownIconColor={colors.text} 
-    itemStyle={{ color: colors.text }} 
+                onValueChange={handleModeChange}
+                style={{ color: colors.text }}
+                dropdownIconColor={colors.text}
+                itemStyle={{ color: colors.text }}
               >
                 <Picker.Item label="Selecione a modalidade" value="" />
                 <Picker.Item label="Presencial" value="PRESENCIAL" />
@@ -230,9 +248,9 @@ const showPicker = (type: "date" | "start" | "end") => {
               <Picker
                 selectedValue={priority}
                 onValueChange={(itemValue) => setPriority(itemValue)}
-                                style={{ color: colors.text }} 
-    dropdownIconColor={colors.text} 
-    itemStyle={{ color: colors.text }} 
+                style={{ color: colors.text }} 
+                dropdownIconColor={colors.text} 
+                itemStyle={{ color: colors.text }} 
               >
                 <Picker.Item label="Selecione a prioridade" value="" />
                 <Picker.Item label="Muito Baixa" value="MUITO_BAIXA" />
@@ -289,41 +307,47 @@ const showPicker = (type: "date" | "start" | "end") => {
             </View>
             <TextInput style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}
           placeholderTextColor={theme === "dark" ? "#aaa" : "#666"} placeholder="Observação" value={observation} onChangeText={setObservation} />
+           
             <Text style={[styles.label, { color: colors.text }]}>Andar do Local</Text>
             <View style={[styles.input, { backgroundColor: colors.card, borderColor: colors.accent }]}>
-              <Picker
-                selectedValue={locationFloor}
-                onValueChange={(itemValue) => {
-                  setLocationFloor(itemValue);
-                  setLocationName(""); 
-                }}
-                                style={{ color: colors.text }} 
-    dropdownIconColor={colors.text} 
-    itemStyle={{ color: colors.text }} 
-              >
-                <Picker.Item label="Selecione o andar" value="" />
-                <Picker.Item label="Térreo" value="0" />
-                <Picker.Item label="1º Andar" value="1" />
-                <Picker.Item label="2º Andar" value="2" />
-                <Picker.Item label="Bloco C" value="3" />
-              </Picker>
+     <Picker
+        selectedValue={locationFloor}
+        onValueChange={(itemValue) => {
+          setLocationFloor(itemValue);
+          setLocationName("");
+        }}
+        enabled={mode !== "ONLINE"}
+        style={{ color: colors.text }}
+        dropdownIconColor={colors.text}
+        itemStyle={{ color: colors.text }}
+      >
+        <Picker.Item label="Selecione o andar" value="" />
+        <Picker.Item label="Térreo" value="0" />
+        <Picker.Item label="1º Andar" value="1" />
+        <Picker.Item label="2º Andar" value="2" />
+        <Picker.Item label="Bloco C" value="3" />
+        {mode !== "PRESENCIAL" && <Picker.Item label="Inexistente" value="4" />}
+      </Picker>
             </View>
-
             <Text  style={[styles.label, { color: colors.text }]}>Local do Evento</Text>
             <View style={[styles.input, { backgroundColor: colors.card, borderColor: colors.accent }]}>
-              <Picker
-                selectedValue={locationName}
-                onValueChange={(itemValue) => setLocationName(itemValue)}
-                enabled={!!locationFloor && locationOptionsByFloor[locationFloor]?.length > 0}
-                    style={{ color: colors.text }} 
-                    dropdownIconColor={colors.text} 
-                    itemStyle={{ color: colors.text }}
-              >
-                <Picker.Item label="Selecione o local" value="" />
-                {(locationOptionsByFloor[locationFloor] || []).map((location) => (
-                  <Picker.Item key={location} label={location} value={location} />
-                ))}
-              </Picker>
+             <Picker
+              selectedValue={locationName}
+              onValueChange={(itemValue) => setLocationName(itemValue)}
+              enabled={
+                !!locationFloor &&
+                locationOptionsByFloor[locationFloor]?.length > 0 &&
+                !(mode === "ONLINE") 
+              }
+              style={{ color: colors.text }}
+              dropdownIconColor={colors.text}
+              itemStyle={{ color: colors.text }}
+            >
+              <Picker.Item label="Selecione o local" value="" />
+              {(locationOptionsByFloor[locationFloor] || []).map((location) => (
+                <Picker.Item key={location} label={location} value={location} />
+              ))}
+            </Picker>
             </View>
             <Text  style={[styles.label, { color: colors.text }]}>Data:</Text>
             <View style={{ flexDirection: "row", alignItems: "center" }}>

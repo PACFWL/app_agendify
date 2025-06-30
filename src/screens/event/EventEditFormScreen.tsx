@@ -17,10 +17,10 @@ import { getColors } from "../../styles/ThemeColors";
 type Props = NativeStackScreenProps<RootStackParamList, "EventEditForm">;
 
 const locationOptionsByFloor: Record<string, string[]> = {
-  "0": ["Auditório", "Sala Maker", "Hall Principal", "Sala T01", "Sala T02", "Sala T03"],
-  "1": ["Sala de Informática 001", "Sala de Informática 002", "Sala de Informática 003", "Sala de Informática 004", "Sala 111", "Sala de Informática 001", "Sala de Aula 001", "Sala de Aula 002", "Sala de Aula 003", "Sala de Aula 004", "Sala de Aula 005", "Sala de Aula 006", "Sala de Aula 007", "Sala de Aula 008", "Sala de Aula 009"],
-  "2": ["Sala de Informática 001", "Sala de Informática 002", "Sala de Informática 003", "Sala de Informática 004", "Sala de Aula 001", "Sala de Aula 002", "Sala de Aula 003", "Sala de Aula 004", "Sala de Aula 005", "Sala de Aula 006", "Sala de Aula 007", "Sala de Aula 008", "Sala de Aula 009", "Sala de Aula 010" ],
-  "3": ["Sala de Aula 1", "Sala de Aula 2"],
+  "0": ["A definir", "Auditório", "Sala Maker", "Hall Principal", "Sala T01", "Sala T02", "Sala T03"],
+  "1": ["A definir", "Sala de Informática 001", "Sala de Informática 002", "Sala de Informática 003", "Sala de Informática 004", "Sala 111", "Sala de Informática 001", "Sala de Aula 001", "Sala de Aula 002", "Sala de Aula 003", "Sala de Aula 004", "Sala de Aula 005", "Sala de Aula 006", "Sala de Aula 007", "Sala de Aula 008", "Sala de Aula 009"],
+  "2": ["A definir", "Sala de Informática 001", "Sala de Informática 002", "Sala de Informática 003", "Sala de Informática 004", "Sala de Aula 001", "Sala de Aula 002", "Sala de Aula 003", "Sala de Aula 004", "Sala de Aula 005", "Sala de Aula 006", "Sala de Aula 007", "Sala de Aula 008", "Sala de Aula 009", "Sala de Aula 010" ],
+  "3": ["A definir", "Sala de Aula 1", "Sala de Aula 2"],
   "4": ["Online"]
 };
 
@@ -29,7 +29,7 @@ const floorOptionsByMode: Record<string, { label: string; value: string }[]> = {
     { label: "Térreo", value: "0" },
     { label: "1º Andar", value: "1" },
     { label: "2º Andar", value: "2" },
-    { label: "3º Andar", value: "3" },
+    { label: "Bloco C", value: "3" },
   ],
   ONLINE: [
     { label: "Inexistente", value: "4" },
@@ -38,16 +38,24 @@ const floorOptionsByMode: Record<string, { label: string; value: string }[]> = {
     { label: "Térreo", value: "0" },
     { label: "1º Andar", value: "1" },
     { label: "2º Andar", value: "2" },
-    { label: "3º Andar", value: "3" },
+    { label: "Bloco C", value: "3" },
     { label: "Inexistente", value: "4" },
   ],
   DEFAULT: [
     { label: "Térreo", value: "0" },
     { label: "1º Andar", value: "1" },
     { label: "2º Andar", value: "2" },
-    { label: "3º Andar", value: "3" },
+    { label: "Bloco C", value: "3" },
     { label: "Inexistente", value: "4" },
   ],
+};
+
+const floorValueByDescription: Record<string, string> = {
+  "Térreo": "0",
+  "1º Andar": "1",
+  "2º Andar": "2",
+  "Bloco C": "3",
+  "Inexistente": "4"
 };
 
 const EventEditFormScreen = ({ route, navigation }: Props) => {
@@ -125,7 +133,7 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
           courses: event.courses,
           disciplinaryLink: event.disciplinaryLink,
           locationName: event.location.name,
-          locationFloor: event.location.floor,
+          locationFloor: floorValueByDescription[event.location.floor] || "",
           status: event.status,
           administrativeStatus: event.administrativeStatus,
           priority: event.priority,
@@ -143,6 +151,22 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
         setStartTimeDate(new Date(`${event.day}T${event.startTime}`));
         setEndTimeDate(new Date(`${event.day}T${event.endTime}`));
 
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const eventDate = new Date(event.day);
+        eventDate.setHours(0, 0, 0, 0);
+
+        setErrors((prev) => {
+          const newErrors = { ...prev };
+          if (eventDate < today) {
+            newErrors.day = "A data do evento está no passado. Para atualizar o evento, é necessário alterar a data.";
+          } else {
+            delete newErrors.day;
+          }
+          return newErrors;
+        });
+            
       } catch (error) {
         Alert.alert("Erro", "Erro ao carregar evento.");
       }

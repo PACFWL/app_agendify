@@ -85,7 +85,6 @@ export const resolveUpdateConflict = async (
   return response.json();
 };
 
-
 export const getEventById = async (token: string, eventId: string) => {
   const response = await fetch(`${API_URL}/api/events/${eventId}`, {
     method: "GET",
