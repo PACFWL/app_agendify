@@ -11,7 +11,7 @@ const LoginScreen = ({ navigation }: Props) => {
   const auth = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [showPassword, setShowPassword] = useState(false);
   useEffect(() => {
     if (auth?.user) {
       navigation.reset({ index: 0, routes: [{ name: "Home" }] });
@@ -41,13 +41,21 @@ const LoginScreen = ({ navigation }: Props) => {
       />
 
       <Text style={styles.label}>Senha:</Text>
-      <TextInput
-        style={styles.input}
-        secureTextEntry={true}
-        value={password}
-        onChangeText={setPassword}
-        placeholder="Digite sua senha"
-      />
+      <View style={styles.passwordContainer}>
+        <TextInput
+          style={styles.passwordInput}
+          secureTextEntry={!showPassword}
+          value={password}
+          onChangeText={setPassword}
+          placeholder="Digite sua senha"
+        />
+        <Text
+          style={styles.toggle}
+          onPress={() => setShowPassword(!showPassword)}
+        >
+          {showPassword ? "Ocultar" : "Mostrar"}
+        </Text>
+      </View>
 
       <View style={styles.button}>
         <Button title="Login" onPress={handleLogin} color="#007BFF" />

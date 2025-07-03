@@ -37,6 +37,26 @@ const LoginScreenStyles = StyleSheet.create({
     textAlign: "center",
     color: "#007BFF",
   },
+  passwordContainer: {
+  flexDirection: "row",
+  alignItems: "center",
+  borderColor: "#CCC",
+  borderWidth: 1,
+  borderRadius: 8,
+  backgroundColor: "#FFF",
+  marginBottom: 16,
+  paddingHorizontal: 12,
+},
+passwordInput: {
+  flex: 1,
+  height: 48,
+  color: "#000",
+},
+toggle: {
+  marginLeft: 12,
+  color: "#007BFF",
+  fontWeight: "500",
+},
 });
 
 export default LoginScreenStyles;

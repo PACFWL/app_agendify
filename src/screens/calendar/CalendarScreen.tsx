@@ -27,6 +27,19 @@ type EventType = {
   location: { name: string; floor: string };
 };
 
+const formatStatus = (status: string) => {
+  const map: { [key: string]: string } = {
+    INDETERMINADO: "Indeterminado",
+    PLANEJADO: "Planejado",
+    EM_BREVE: "Em Breve",
+    EM_ANDAMENTO: "Em Andamento",
+    EM_PAUSA: "Em Pausa",
+    FINALIZADO: "Finalizado",
+    EM_ANALISE: "Em Análise"
+  };
+  return map[status] || status;
+};
+
 const getStatusColor = (status: string): string => {
   switch (status) {
     case "PLANEJADO":
@@ -86,6 +99,8 @@ const formatMonthYear = (dateString: string): string => {
     month: "long",
   });
 };
+
+
 
 const CalendarScreen = () => {
   const auth = useContext(AuthContext);
@@ -261,8 +276,8 @@ return (
             }
           >
             <Text style={styles.eventName}>{item.name}</Text>
-            <Text style={{ color: getColors(theme).text }}>{`${item.startTime} - ${item.endTime}`}</Text>
-            <Text style={{ color: getColors(theme).text }}>Status: {item.status}</Text>
+            <Text style={{ color: getColors(theme).text }}>Inicio: {`${item.startTime} - Término: ${item.endTime}`}</Text>
+            <Text style={{ color: getColors(theme).text }}>Status: {formatStatus(item.status)}</Text>
             <Text style={{ color: getColors(theme).text }}>Local: {`${item.location.name} - Andar: ${item.location.floor}`}</Text>
           </TouchableOpacity>
         )}
