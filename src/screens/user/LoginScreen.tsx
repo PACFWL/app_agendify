@@ -1,17 +1,24 @@
 import React, { useState, useContext, useEffect } from "react";
-import { View, TextInput, Button, Text, Alert } from "react-native";
+import {View,TextInput,Button,Text,Alert,TouchableOpacity} from "react-native";
 import { AuthContext } from "../../contexts/AuthContext";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../routes/Routes";
-import styles from "../../styles/LoginScreenStyles";
+import { ThemeContext } from "../../contexts/ThemeContext";
+import { getColors } from "../../styles/ThemeColors";
+import createStyles from "../../styles/LoginScreenStyles";
 
-type Props = NativeStackScreenProps<RootStackParamList, "Login">;    
+type Props = NativeStackScreenProps<RootStackParamList, "Login">;
 
 const LoginScreen = ({ navigation }: Props) => {
   const auth = useContext(AuthContext);
+  const { theme } = useContext(ThemeContext);
+  const colors = getColors(theme);
+  const styles = createStyles(theme);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
   useEffect(() => {
     if (auth?.user) {
       navigation.reset({ index: 0, routes: [{ name: "Home" }] });
@@ -38,6 +45,8 @@ const LoginScreen = ({ navigation }: Props) => {
         value={email}
         onChangeText={setEmail}
         placeholder="Digite seu email"
+        placeholderTextColor={colors.noEventText}
+        autoCapitalize="none"
       />
 
       <Text style={styles.label}>Senha:</Text>
@@ -48,21 +57,24 @@ const LoginScreen = ({ navigation }: Props) => {
           value={password}
           onChangeText={setPassword}
           placeholder="Digite sua senha"
+          placeholderTextColor={colors.noEventText}
         />
-        <Text
-          style={styles.toggle}
-          onPress={() => setShowPassword(!showPassword)}
-        >
+        <Text style={styles.toggle} onPress={() => setShowPassword(!showPassword)}>
           {showPassword ? "Ocultar" : "Mostrar"}
         </Text>
       </View>
 
       <View style={styles.button}>
-        <Button title="Login" onPress={handleLogin} color="#007BFF" />
+        <Button
+          title="Login"
+          onPress={handleLogin}
+          color={colors.primary}
+        />
       </View>
-      <Text style={styles.link} onPress={() => navigation.navigate("RegisterPending")}>
-        Solicitar Cadastro
-      </Text>
+
+      <TouchableOpacity onPress={() => navigation.navigate("RegisterPending")}>
+        <Text style={styles.link}>Solicitar Cadastro</Text>
+      </TouchableOpacity>
     </View>
   );
 };

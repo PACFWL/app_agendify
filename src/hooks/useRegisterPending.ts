@@ -12,7 +12,6 @@ export const useRegisterPending = (navigation: any) => {
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   
   const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -115,8 +114,6 @@ return {
   errors,
   loading,
   handleChange,
-  handleRegister,
-  showPassword,
-  setShowPassword,
+  handleRegister
 };
 };
