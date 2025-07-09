@@ -60,9 +60,8 @@ const LoginScreen = ({ navigation }: Props) => {
       <View style={styles.button}>
         <Button title="Login" onPress={handleLogin} color="#007BFF" />
       </View>
-
-      <Text style={styles.link} onPress={() => navigation.navigate("Register")}>
-        Criar conta
+      <Text style={styles.link} onPress={() => navigation.navigate("RegisterPending")}>
+        Solicitar Cadastro
       </Text>
     </View>
   );

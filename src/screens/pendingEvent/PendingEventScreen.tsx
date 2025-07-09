@@ -182,8 +182,6 @@ const EventCard = ({
       </Text>
 
     </View>
-
-
             <View style={styles.locationRow}>
               <Text
                 style={[
@@ -248,13 +246,17 @@ const EventCard = ({
   );
 };
 
-const Loading = () => (
-  
-  <View style={styles.loadingContainer}>
-    <ActivityIndicator size="large" color="#1976d2" />
-    <Text>Carregando eventos pendentes...</Text>
-  </View>
-);
+const Loading = () => {
+  const { theme } = useContext(ThemeContext);
+  const colors = getColors(theme);
+
+  return (
+    <View style={[styles.loadingContainer, { backgroundColor: colors.background }]}>
+      <ActivityIndicator size="large" color={colors.primary} />
+      <Text style={{ color: colors.text, marginTop: 10 }}>Carregando eventos pendentes...</Text>
+    </View>
+  );
+};
 
 const PendingEventScreen = () => {
   const auth = useContext(AuthContext);
@@ -312,13 +314,6 @@ const PendingEventScreen = () => {
   );
 
   const renderList = () => {
-
-  const Loading = () => (
-    <View style={[styles.loadingContainer, { backgroundColor: colors.background }]}>
-      <ActivityIndicator size="large" color={colors.primary} />
-      <Text style={{ color: colors.text, marginTop: 10 }}>Carregando eventos...</Text>
-    </View>
-  );
 
     if (loading) return <Loading />;
     const data = activeTab === "my" ? myEvents : allEvents;

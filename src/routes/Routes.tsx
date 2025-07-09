@@ -15,10 +15,14 @@ import PendingEventEditFormScreen from "../screens/pendingEvent/PendingEventEdit
 import ConflictResolutionScreen from "../screens/event/ConflictResolutionScreen";
 import UpdateConflictResolutionScreen from "../screens/event/UpdateConflictResolutionScreen";
 import PendingConflictResolutionScreen from "../screens/pendingEvent/PendingConflictResolutionScreen";
+import RegisterPendingScreen from "../screens/user/RegisterPendingScreen"
+import PendingUserDetailsScreen from "../screens/pendingUser/PendingUserDetailsScreen"
+import PendingUserEditFormScreen from "../screens/pendingUser/PendingUserEditFormScreen"
 
 export type RootStackParamList = {
   Login: undefined;
   Register: undefined;
+  RegisterPending: undefined;
   Home: undefined;
   Events: undefined;
   PendingsEvents: undefined;
@@ -43,6 +47,9 @@ export type RootStackParamList = {
   Search: undefined;
   Calendar: undefined;
   Tabs: undefined;
+  PendingUsers: undefined;
+  PendingUserDetails: { userId: string };
+  PendingUserEditForm: { userId: string };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -78,11 +85,14 @@ const Routes = () => {
     <Stack.Screen name="PendingEventEditForm" component={PendingEventEditFormScreen} />
     <Stack.Screen name="PendingConflictResolution" component={PendingConflictResolutionScreen} />
     <Stack.Screen name="UserDetails" component={UserDetailsScreen} />
+    <Stack.Screen name="PendingUserDetails" component={PendingUserDetailsScreen} />
+    <Stack.Screen name="PendingUserEditForm" component={PendingUserEditFormScreen} />
   </>
 ) : (
   <>
     <Stack.Screen name="Login" component={LoginScreen} />
     <Stack.Screen name="Register" component={RegisterScreen} />
+    <Stack.Screen name="RegisterPending" component={RegisterPendingScreen} />
   </>
 )}
     </Stack.Navigator>

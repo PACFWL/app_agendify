@@ -1,4 +1,3 @@
-// src/components/RemoteSvgIcon.tsx
 import React, { useEffect, useState } from "react";
 import { SvgXml } from "react-native-svg";
 import { ActivityIndicator } from "react-native";

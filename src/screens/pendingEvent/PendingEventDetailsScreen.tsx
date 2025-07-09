@@ -136,7 +136,6 @@ const PendingEventDetailsScreen = () => {
     }, [eventId])
   );
 
-
   useFocusEffect(
     useCallback(() => {
       const fetchRequester = async () => {
@@ -170,8 +169,6 @@ const PendingEventDetailsScreen = () => {
       Alert.alert("Erro", "Erro ao deletar evento.");
     }
   };
-  
-  
 
   if (loading) {
     return (
