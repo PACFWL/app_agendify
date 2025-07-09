@@ -36,6 +36,25 @@ const RegisterScreenStyles = StyleSheet.create({
     textAlign: "center",
     color: "#007BFF",
   },
+  passwordContainer: {
+  flexDirection: "row",
+  alignItems: "center",
+  borderColor: "#CCC",
+  borderWidth: 1,
+  borderRadius: 8,
+  paddingHorizontal: 12,
+  backgroundColor: "#FFF",
+  marginBottom: 16,
+  height: 48,
+  justifyContent: "space-between",
+},
+passwordInput: {
+  flex: 1,
+},
+toggle: {
+  color: "#007BFF",
+  marginLeft: 12,
+},
 });
 
 export default RegisterScreenStyles;

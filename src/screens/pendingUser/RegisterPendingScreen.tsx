@@ -9,13 +9,16 @@ import { useRegisterPending } from "../../hooks/useRegisterPending";
 type Props = NativeStackScreenProps<RootStackParamList, "RegisterPending">;
 
 const RegisterPendingScreen = ({ navigation }: Props) => {
-  const {
-    formData,
-    errors,
-    loading,
-    handleChange,
-    handleRegister
-  } = useRegisterPending(navigation);
+
+const {
+  formData,
+  errors,
+  loading,
+  handleChange,
+  handleRegister,
+  showPassword,
+  setShowPassword
+} = useRegisterPending(navigation);
 
   return (
     <View style={styles.container}>
@@ -41,13 +44,21 @@ const RegisterPendingScreen = ({ navigation }: Props) => {
       {errors.email && <Text style={{ color: "red" }}>{errors.email}</Text>}
 
       <Text style={styles.label}>Senha:</Text>
-      <TextInput
-        style={styles.input}
-        secureTextEntry
-        value={formData.password}
-        onChangeText={(text) => handleChange("password", text)}
-        placeholder="Digite sua senha"
-      />
+      <View style={styles.passwordContainer}>
+        <TextInput
+          style={styles.passwordInput}
+          secureTextEntry={!showPassword}
+          value={formData.password}
+          onChangeText={(text) => handleChange("password", text)}
+          placeholder="Digite sua senha"
+        />
+        <Text
+          style={styles.toggle}
+          onPress={() => setShowPassword(!showPassword)}
+        >
+          {showPassword ? "Ocultar" : "Mostrar"}
+        </Text>
+      </View>
       {errors.password && <Text style={{ color: "red" }}>{errors.password}</Text>}
 
       <Text style={styles.label}>Cargo:</Text>

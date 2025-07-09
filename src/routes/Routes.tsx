@@ -15,7 +15,7 @@ import PendingEventEditFormScreen from "../screens/pendingEvent/PendingEventEdit
 import ConflictResolutionScreen from "../screens/event/ConflictResolutionScreen";
 import UpdateConflictResolutionScreen from "../screens/event/UpdateConflictResolutionScreen";
 import PendingConflictResolutionScreen from "../screens/pendingEvent/PendingConflictResolutionScreen";
-import RegisterPendingScreen from "../screens/user/RegisterPendingScreen"
+import RegisterPendingScreen from "../screens/pendingUser/RegisterPendingScreen"
 import PendingUserDetailsScreen from "../screens/pendingUser/PendingUserDetailsScreen"
 import PendingUserEditFormScreen from "../screens/pendingUser/PendingUserEditFormScreen"
 
