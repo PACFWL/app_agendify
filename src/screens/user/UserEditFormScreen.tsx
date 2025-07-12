@@ -1,16 +1,16 @@
 import React, { useContext } from "react";
-import {View,Text,TextInput,ScrollView,TouchableOpacity } from "react-native";
+import { View, Text, TextInput, ScrollView, TouchableOpacity } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../routes/Routes";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { getColors } from "../../styles/ThemeColors";
-import styles from "../../styles/PendingUserFormScreenStyles";
-import { usePendingUserEditForm } from "../../hooks/usePendingUserEditForm";
+import styles from "../../styles/UserEditFormScreenStyles";
+import { useUserEditForm } from "../../hooks/useUserEditForm";
 
-type Props = NativeStackScreenProps<RootStackParamList, "PendingUserEditForm">;
+type Props = NativeStackScreenProps<RootStackParamList, "UserEditForm">;
 
-const PendingUserEditFormScreen = ({ route, navigation }: Props) => {
+const UserEditFormScreen = ({ route, navigation }: Props) => {
   const { userId } = route.params;
   const { theme } = useContext(ThemeContext);
   const colors = getColors(theme);
@@ -22,7 +22,7 @@ const PendingUserEditFormScreen = ({ route, navigation }: Props) => {
     loading,
     handleUpdate,
     handleChange,
-  } = usePendingUserEditForm(userId, navigation);
+  } = useUserEditForm(userId, navigation);
 
   if (loading) {
     return (
@@ -37,9 +37,7 @@ const PendingUserEditFormScreen = ({ route, navigation }: Props) => {
       style={[styles.container, { backgroundColor: colors.background }]}
       contentContainerStyle={{ paddingBottom: 40 }}
     >
-      <Text style={[styles.title, { color: colors.primary }]}>
-        Editar Usuário Pendente
-      </Text>
+      <Text style={[styles.title, { color: colors.primary }]}>Editar Usuário</Text>
 
       <Text style={[styles.label, { color: colors.text }]}>Nome:</Text>
       <TextInput
@@ -69,7 +67,6 @@ const PendingUserEditFormScreen = ({ route, navigation }: Props) => {
         <Text style={{ color: colors.success, marginBottom: 12 }}>✓ Nome válido</Text>
       )}
 
-
       <Text style={[styles.label, { color: colors.text }]}>Email:</Text>
       <TextInput
         style={[
@@ -95,9 +92,7 @@ const PendingUserEditFormScreen = ({ route, navigation }: Props) => {
         value={formData.email}
         onChangeText={(text) => handleChange("email", text)}
       />
-      {errors.email && (
-        <Text style={{ color: colors.error, marginBottom: 12 }}>{errors.email}</Text>
-      )}
+      {errors.email && <Text style={{ color: colors.error, marginBottom: 12 }}>{errors.email}</Text>}
       {!errors.email && formData.email.trim() !== "" && (
         <Text style={{ color: colors.success, marginBottom: 12 }}>✓ Email válido</Text>
       )}
@@ -131,9 +126,7 @@ const PendingUserEditFormScreen = ({ route, navigation }: Props) => {
         }}
         onChangeText={(text) => handleChange("password", text)}
       />
-      {errors.password && (
-        <Text style={{ color: colors.error, marginBottom: 12 }}>{errors.password}</Text>
-      )}
+      {errors.password && <Text style={{ color: colors.error, marginBottom: 12 }}>{errors.password}</Text>}
       {!errors.password && formData.password.trim() !== "" && (
         <Text style={{ color: colors.success, marginBottom: 12 }}>✓ Senha válida</Text>
       )}
@@ -170,14 +163,10 @@ const PendingUserEditFormScreen = ({ route, navigation }: Props) => {
           <Picker.Item label="Usuário" value="USER" />
         </Picker>
       </View>
-   {formData.role && (
-      <Text style={{ color: colors.success, marginBottom: 12 }}>
-        ✓ Cargo selecionado
-      </Text>
-    )}
-    {errors.role && (
-      <Text style={{ color: colors.error, marginBottom: 12 }}>{errors.role}</Text>
-    )}
+      {formData.role && (
+        <Text style={{ color: colors.success, marginBottom: 12 }}>✓ Cargo selecionado</Text>
+      )}
+      {errors.role && <Text style={{ color: colors.error, marginBottom: 12 }}>{errors.role}</Text>}
 
       <TouchableOpacity style={styles.addButton} onPress={handleUpdate}>
         <Text style={styles.addButtonText}>Salvar Alterações</Text>
@@ -186,10 +175,4 @@ const PendingUserEditFormScreen = ({ route, navigation }: Props) => {
   );
 };
 
-export default PendingUserEditFormScreen;
-
-/*
-<Text style={{ color: colors.text, fontSize: 12, marginBottom: 5 }}>
-  Deixe em branco para manter a senha atual.
-</Text>
-*/
+export default UserEditFormScreen;

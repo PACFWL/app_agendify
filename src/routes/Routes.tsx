@@ -15,9 +15,10 @@ import PendingEventEditFormScreen from "../screens/pendingEvent/PendingEventEdit
 import ConflictResolutionScreen from "../screens/event/ConflictResolutionScreen";
 import UpdateConflictResolutionScreen from "../screens/event/UpdateConflictResolutionScreen";
 import PendingConflictResolutionScreen from "../screens/pendingEvent/PendingConflictResolutionScreen";
-import RegisterPendingScreen from "../screens/pendingUser/RegisterPendingScreen"
-import PendingUserDetailsScreen from "../screens/pendingUser/PendingUserDetailsScreen"
-import PendingUserEditFormScreen from "../screens/pendingUser/PendingUserEditFormScreen"
+import RegisterPendingScreen from "../screens/pendingUser/RegisterPendingScreen";
+import PendingUserDetailsScreen from "../screens/pendingUser/PendingUserDetailsScreen";
+import PendingUserEditFormScreen from "../screens/pendingUser/PendingUserEditFormScreen";
+import UserEditFormScreen from "../screens/user/UserEditFormScreen";
 
 export type RootStackParamList = {
   Login: undefined;
@@ -43,13 +44,15 @@ export type RootStackParamList = {
   PendingConflictResolution: { 
     existingEvent: any; 
     pendingEvent: any };
-  UserDetails: { userId: string };
   Search: undefined;
   Calendar: undefined;
+  Users: undefined;
   Tabs: undefined;
   PendingUsers: undefined;
   PendingUserDetails: { userId: string };
   PendingUserEditForm: { userId: string };
+  UserDetails: { userId: string };
+  UserEditForm: {userId: string};
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -85,6 +88,7 @@ const Routes = () => {
     <Stack.Screen name="PendingEventEditForm" component={PendingEventEditFormScreen} />
     <Stack.Screen name="PendingConflictResolution" component={PendingConflictResolutionScreen} />
     <Stack.Screen name="UserDetails" component={UserDetailsScreen} />
+    <Stack.Screen name="UserEditForm" component={UserEditFormScreen} />
     <Stack.Screen name="PendingUserDetails" component={PendingUserDetailsScreen} />
     <Stack.Screen name="PendingUserEditForm" component={PendingUserEditFormScreen} />
   </>

@@ -38,7 +38,7 @@ export const getPendingUserById = async (token: string, id: string) => {
 export const updatePendingUser = async (
   token: string,
   id: string,
-  updatedData: { name: string; email: string; password: string; role: string }
+  updatedData: { name?: string; email?: string; password?: string; role?: string }
 ) => {
   const response = await fetch(`${API_URL}/pendingUser/pending/${id}`, {
     method: "PUT",

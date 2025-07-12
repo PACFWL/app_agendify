@@ -1,9 +1,9 @@
 import { useState, useEffect, useContext } from "react";
 import { Alert } from "react-native";
-import { getPendingUserById, updatePendingUser } from "../api/pendingUser";
+import { getUserById, updateUser } from "../api/user";
 import { AuthContext } from "../contexts/AuthContext";
 
-export const usePendingUserEditForm = (userId: string, navigation: any) => {
+export const useUserEditForm = (userId: string, navigation: any) => {
   const auth = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
@@ -20,7 +20,7 @@ export const usePendingUserEditForm = (userId: string, navigation: any) => {
     const fetchUser = async () => {
       try {
         if (auth?.user) {
-          const data = await getPendingUserById(auth.user.token, userId);
+          const data = await getUserById(auth.user.token, userId);
           setFormData({
             name: data.name || "",
             email: data.email || "",
@@ -29,7 +29,7 @@ export const usePendingUserEditForm = (userId: string, navigation: any) => {
           });
         }
       } catch (error) {
-        Alert.alert("Erro", "Erro ao carregar usuário pendente.");
+        Alert.alert("Erro", "Erro ao carregar usuário.");
       } finally {
         setLoading(false);
       }
@@ -65,7 +65,7 @@ export const usePendingUserEditForm = (userId: string, navigation: any) => {
       }
 
       if (field === "password") {
-         if (value && value.trim().length < 6) {
+        if (value && value.trim().length < 6) {
           newErrors.password = "A senha deve ter pelo menos 6 caracteres.";
         } else {
           delete newErrors.password;
@@ -78,7 +78,7 @@ export const usePendingUserEditForm = (userId: string, navigation: any) => {
         } else {
           delete newErrors.role;
         }
-      }    
+      }
 
       return newErrors;
     });
@@ -117,7 +117,6 @@ export const usePendingUserEditForm = (userId: string, navigation: any) => {
     try {
       if (auth?.user) {
 
-
         const passwordIsFake = formData.password === "●●●●●●●●●";
 
         const dataToSend = {
@@ -127,12 +126,12 @@ export const usePendingUserEditForm = (userId: string, navigation: any) => {
           ...(formData.password.trim() !== "" && !passwordIsFake && { password: formData.password }),
         };
 
-        await updatePendingUser(auth.user.token, userId, dataToSend);
-        Alert.alert("Sucesso", "Usuário pendente atualizado!");
+        await updateUser(auth.user.token, userId, dataToSend);
+        Alert.alert("Sucesso", "Usuário atualizado com sucesso!");
         navigation.goBack();
       }
     } catch (error) {
-      Alert.alert("Erro", "Erro ao atualizar usuário pendente.");
+      Alert.alert("Erro", "Erro ao atualizar o usuário.");
     }
   };
 

@@ -1,20 +1,29 @@
-import React, { useEffect, useState, useContext } from "react";
-import { View, Text, ActivityIndicator, Alert, StyleSheet } from "react-native";
-import { RouteProp, useRoute } from "@react-navigation/native";
+import React, { useEffect, useState, useContext, useCallback } from "react";
+import { View, Text, ActivityIndicator, Alert, TouchableOpacity } from "react-native";
+import { RouteProp, useRoute, useNavigation, useFocusEffect } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthContext } from "../../contexts/AuthContext";
-import { getUserById } from "../../api/user";
+import { ThemeContext } from "../../contexts/ThemeContext";
+import { getColors } from "../../styles/ThemeColors";
+import { getUserById, deleteUser } from "../../api/user";
 import { RootStackParamList } from "../../routes/Routes";
+import styles from "../../styles/UserDetailsScreenStyles";
 
 type UserDetailsRouteProp = RouteProp<RootStackParamList, "UserDetails">;
+type NavigationProp = NativeStackNavigationProp<RootStackParamList, "UserDetails">;
 
 const UserDetailsScreen = () => {
   const route = useRoute<UserDetailsRouteProp>();
+  const navigation = useNavigation<NavigationProp>();
   const { userId } = route.params;
   const auth = useContext(AuthContext);
+  const { theme } = useContext(ThemeContext);
+  const themeColors = getColors(theme);
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+   useFocusEffect(
+     useCallback(() => {
     const fetchUser = async () => {
       try {
         if (auth?.user) {
@@ -29,7 +38,23 @@ const UserDetailsScreen = () => {
     };
 
     fetchUser();
-  }, [userId]);
+  }, [userId])
+  );
+
+  const handleDelete = async () => {
+     if (!auth?.user) {
+        Alert.alert("Erro", "Usuário não autenticado.");
+        return;
+      }
+    try {
+      await deleteUser(auth!.user.token, userId);
+      Alert.alert("Sucesso", "Usuário deletado com sucesso!", [
+        { text: "OK", onPress: () => navigation.goBack() },
+      ]);
+    } catch (error) {
+      Alert.alert("Erro", "Erro ao deletar o usuário.");
+    }
+  };
 
   if (loading) {
     return (
@@ -49,20 +74,45 @@ const UserDetailsScreen = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{user.name}</Text>
-      <Text style={styles.label}>Email: <Text style={styles.value}>{user.email}</Text></Text>
-      <Text style={styles.label}>Função: <Text style={styles.value}>{user.role}</Text></Text>
+    <View style={[styles.container, { backgroundColor: themeColors.background }]}>
+      <Text style={[styles.title, { color: themeColors.primary }]}>{user.name}</Text>
+      <View style={[styles.detailCard, { backgroundColor: themeColors.card }]}>
+        <Text style={[styles.detail, { color: themeColors.cardText }]}>
+          <Text style={styles.label}>Email: </Text>
+          {user.email}
+        </Text>
+        <Text style={[styles.detail, { color: themeColors.cardText }]}>
+          <Text style={styles.label}>Função: </Text>
+          {user.role}
+        </Text>
+      </View>
+
+      <View style={styles.buttonContainer}>
+        {auth?.user?.role === "MASTER" && (
+          <>
+            <TouchableOpacity
+              style={[styles.button, styles.warningButton]}
+              onPress={() => navigation.navigate("UserEditForm", { userId })}
+            >
+              <Text style={styles.buttonText}>Editar Usuário</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, styles.dangerButton]}
+              onPress={handleDelete}
+            >
+              <Text style={styles.buttonText}>Deletar Usuário</Text>
+            </TouchableOpacity>
+          </>
+        )}
+        <TouchableOpacity
+          style={[styles.button, styles.primaryButton]}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.buttonText}>Voltar</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  center: { flex: 1, justifyContent: "center", alignItems: "center" },
-  container: { padding: 20 },
-  title: { fontSize: 22, fontWeight: "bold", marginBottom: 10 },
-  label: { fontWeight: "bold", marginTop: 10 },
-  value: { fontWeight: "normal" },
-});
 
 export default UserDetailsScreen;

@@ -4,7 +4,8 @@ import HomeScreen from "../screens/HomeScreen";
 import EventScreen from "../screens/event/EventScreen";
 import CalendarScreen from "../screens/calendar/CalendarScreen";
 import PendingEventScreen from "../screens/pendingEvent/PendingEventScreen";
-import PendingUsersScreen from "../screens/pendingUser/PendingUsersScreen"
+import PendingUsersScreen from "../screens/pendingUser/PendingUsersScreen";
+import UsersScreen from "../screens/user/UserScreen";
 import RemoteSvgIcon from "../components/RemoteSvgIcon";
 import { AuthContext } from "../contexts/AuthContext";
 import AccountScreen from "../screens/account/AccountScreen";
@@ -22,11 +23,12 @@ export type BottomTabParamList = {
   Account: undefined;
   Search: undefined; 
   PendingUsers: undefined;
+  Users: undefined;
 };
 
 const BottomTabs = () => {
-  const auth = useContext(AuthContext);
-  const role = auth?.user?.role;
+const auth = useContext(AuthContext);
+const role = auth?.user?.role;
 
 const { theme } = useContext(ThemeContext);
 const isDark = theme === "dark";
@@ -43,10 +45,11 @@ const colors = getColors(theme);
       else if (route.name === "Events") uri = "https://www.svgrepo.com/show/362044/bullhorn.svg";
       else if (route.name === "Calendar") uri = "https://www.svgrepo.com/show/362042/calendar-clock.svg";
       else if (route.name === "PendingsEvents") uri = "https://www.svgrepo.com/show/434146/mailbox.svg";
-      else if (route.name === "Account") uri = "https://www.svgrepo.com/show/362140/profile-group.svg";
+      else if (route.name === "Account") uri = "https://www.svgrepo.com/show/362137/profile.svg";
       else if (route.name === "Search") uri = "https://www.svgrepo.com/show/362144/search.svg";
       else if (route.name === "PendingUsers") uri = "https://www.svgrepo.com/show/352629/user-check.svg";      
-
+      else if (route.name === "Users") uri = "https://www.svgrepo.com/show/53782/users.svg";
+      
       return <RemoteSvgIcon uri={uri} size={size} color={color} />;
     },
     headerShown: false,
@@ -71,8 +74,8 @@ const colors = getColors(theme);
       <Tab.Screen name="Events" component={EventScreen} options={{ title: "Eventos" }} />
       <Tab.Screen name="Calendar" component={CalendarScreen} options={{ title: "Calendário" }} />
       <Tab.Screen name="Account" component={AccountScreen} options={{ title: "Conta" }} />
-      <Tab.Screen name="Search" component={SearchScreen} options={{ title: "Buscar" }}
-      />
+      <Tab.Screen name="Search" component={SearchScreen} options={{ title: "Buscar" }} />
+      
       {role !== "USER" && (
         <Tab.Screen
           name="PendingsEvents"
@@ -85,6 +88,13 @@ const colors = getColors(theme);
           name="PendingUsers"
           component={PendingUsersScreen}
           options={{ title: "Usuários Pendentes" }}
+        />
+      )}
+      {role === "MASTER" && (
+        <Tab.Screen
+          name="Users"
+          component={UsersScreen}
+          options={{ title: "Usuários" }}
         />
       )}
     </Tab.Navigator>
