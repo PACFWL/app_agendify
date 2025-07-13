@@ -142,6 +142,15 @@ const UserScreen = () => {
         renderItem={({ item }) => <UserCard user={item} colors={colors} />}
         contentContainerStyle={{ paddingBottom: 80 }}
       />
+
+      {(user.role === "MASTER") && (
+        <TouchableOpacity
+          style={styles.fab}
+          onPress={() => navigation.navigate("Register")}
+        >
+          <Text style={styles.fabIcon}>＋</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

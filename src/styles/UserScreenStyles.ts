@@ -68,4 +68,46 @@ export default StyleSheet.create({
   borderWidth: 2,
   borderColor: "#6200ee", 
 },
+  fab: {
+    position: "absolute",
+    right: 20,
+    bottom: 20,
+    backgroundColor: "#6200ee",
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 6,
+  },
+  fabIcon: {
+    color: "#fff",
+    fontSize: 28,
+    lineHeight: 28,
+  },
 });
+
+
+/*
+fab: {
+  position: "absolute",
+  right: 20,
+  bottom: 20,
+  width: 60,
+  height: 60,
+  borderRadius: 30,
+  backgroundColor: "#6200ee",
+  justifyContent: "center",
+  alignItems: "center",
+  elevation: 5,
+  shadowColor: "#000",
+  shadowOpacity: 0.2,
+  shadowOffset: { width: 0, height: 2 },
+  shadowRadius: 4,
+},
+fabIcon: {
+  color: "#fff",
+  fontSize: 28,
+  fontWeight: "bold",
+},
+*/

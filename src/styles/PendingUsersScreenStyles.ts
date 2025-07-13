@@ -69,4 +69,68 @@ export default StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
   },
+   tabContainer: {
+    flexDirection: "row",
+    marginBottom: 16,
+    justifyContent: "space-between",
+  },
+  tabButton: {
+    flex: 1,
+    paddingVertical: 10,
+    marginHorizontal: 4,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  tabButtonActive: {
+    backgroundColor: "#6200ee",
+  },
+  tabButtonInactive: {
+    backgroundColor: "#e0e0e0",
+  },
+  tabButtonTextActive: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  tabButtonTextInactive: {
+    color: "#333",
+  },
+  fab: {
+    position: "absolute",
+    right: 20,
+    bottom: 20,
+    backgroundColor: "#6200ee",
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 6,
+  },
+  fabIcon: {
+    color: "#fff",
+    fontSize: 28,
+    lineHeight: 28,
+  },
 });
+
+/*
+
+  fab: {
+  position: "absolute",
+  bottom: 20,
+  right: 20,
+  backgroundColor: "#6200ee",
+  width: 56,
+  height: 56,
+  borderRadius: 28,
+  justifyContent: "center",
+  alignItems: "center",
+  elevation: 5,
+},
+fabIcon: {
+  color: "#fff",
+  fontSize: 24,
+  fontWeight: "bold",
+},
+
+ */

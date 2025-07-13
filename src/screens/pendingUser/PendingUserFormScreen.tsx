@@ -1,43 +1,82 @@
-import React, { useContext } from "react";
-import { View, Text, TextInput, ScrollView, TouchableOpacity } from "react-native";
+import React, { useState, useContext } from "react";
+import { View, TextInput, Text, Alert, ScrollView, TouchableOpacity } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../routes/Routes";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { getColors } from "../../styles/ThemeColors";
-import styles from "../../styles/UserEditFormScreenStyles";
-import { useUserEditForm } from "../../hooks/useUserEditForm";
+import createPendingUserFormScreenStyles from "../../styles/PendingUserFormScreen";
+import { registerPending } from "../../api/pendingUser";
 
-type Props = NativeStackScreenProps<RootStackParamList, "UserEditForm">;
+type Props = NativeStackScreenProps<RootStackParamList, "PendingUserForm">;
 
-const UserEditFormScreen = ({ route, navigation }: Props) => {
-  const { userId } = route.params;
+const PendingUserFormScreen = ({ navigation }: Props) => {
   const { theme } = useContext(ThemeContext);
   const colors = getColors(theme);
+  const styles = createPendingUserFormScreenStyles(theme);
 
-  const {
-    formData,
-    setFormData,
-    errors,
-    loading,
-    handleUpdate,
-    handleChange,
-  } = useUserEditForm(userId, navigation);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    role: "",
+  });
 
-  if (loading) {
-    return (
-      <View style={[styles.container, { backgroundColor: colors.background }]}>
-        <Text style={{ color: colors.text }}>Carregando...</Text>
-      </View>
-    );
-  }
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    password: "",
+    role: "",
+  });
+
+  const handleChange = (field: string, value: string) => {
+    setFormData({ ...formData, [field]: value });
+    setErrors({ ...errors, [field]: "" });
+  };
+
+  const handleRegisterPending = async () => {
+    const { name, email, password, role } = formData;
+
+    let hasError = false;
+    const newErrors = { name: "", email: "", password: "", role: "" };
+
+    if (!name.trim()) {
+      newErrors.name = "Nome é obrigatório.";
+      hasError = true;
+    }
+    if (!email.trim()) {
+      newErrors.email = "Email é obrigatório.";
+      hasError = true;
+    }
+    if (!password.trim()) {
+      newErrors.password = "Senha é obrigatória.";
+      hasError = true;
+    }
+    if (!role) {
+      newErrors.role = "Cargo é obrigatório.";
+      hasError = true;
+    }
+
+    if (hasError) {
+      setErrors(newErrors);
+      return;
+    }
+
+    try {
+      await registerPending(name, email, password, role);
+      Alert.alert("Sucesso", "Usuário pendente registrado com sucesso!");
+      navigation.goBack();
+    } catch (error) {
+      Alert.alert("Erro", "Falha ao registrar usuário pendente.");
+    }
+  };
 
   return (
     <ScrollView
       style={[styles.container, { backgroundColor: colors.background }]}
       contentContainerStyle={{ paddingBottom: 40 }}
     >
-      <Text style={[styles.title, { color: colors.primary }]}>Editar Usuário</Text>
+      <Text style={[styles.title, { color: colors.primary }]}>Novo Usuário Pendente</Text>
 
       <Text style={[styles.label, { color: colors.text }]}>Nome:</Text>
       <TextInput
@@ -46,26 +85,24 @@ const UserEditFormScreen = ({ route, navigation }: Props) => {
           {
             backgroundColor: errors.name
               ? colors.inputErrorBackground
-              : formData.name.trim()
+              : formData.name
               ? colors.inputFilledBackground
               : colors.card,
             borderColor: errors.name
               ? colors.error
-              : formData.name.trim()
+              : formData.name
               ? colors.success
               : colors.accent,
             color: colors.text,
           },
         ]}
-        placeholder="Nome"
+        placeholder="Digite o nome"
         placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
         value={formData.name}
         onChangeText={(text) => handleChange("name", text)}
       />
       {errors.name && <Text style={{ color: colors.error, marginBottom: 12 }}>{errors.name}</Text>}
-      {!errors.name && formData.name.trim() !== "" && (
-        <Text style={{ color: colors.success, marginBottom: 12 }}>✓ Nome válido</Text>
-      )}
+      {!errors.name && formData.name && <Text style={{ color: colors.success, marginBottom: 12 }}>✓ Nome válido</Text>}
 
       <Text style={[styles.label, { color: colors.text }]}>Email:</Text>
       <TextInput
@@ -74,18 +111,18 @@ const UserEditFormScreen = ({ route, navigation }: Props) => {
           {
             backgroundColor: errors.email
               ? colors.inputErrorBackground
-              : formData.email.trim()
+              : formData.email
               ? colors.inputFilledBackground
               : colors.card,
             borderColor: errors.email
               ? colors.error
-              : formData.email.trim()
+              : formData.email
               ? colors.success
               : colors.accent,
             color: colors.text,
           },
         ]}
-        placeholder="Email"
+        placeholder="Digite o email"
         placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
         keyboardType="email-address"
         autoCapitalize="none"
@@ -93,9 +130,7 @@ const UserEditFormScreen = ({ route, navigation }: Props) => {
         onChangeText={(text) => handleChange("email", text)}
       />
       {errors.email && <Text style={{ color: colors.error, marginBottom: 12 }}>{errors.email}</Text>}
-      {!errors.email && formData.email.trim() !== "" && (
-        <Text style={{ color: colors.success, marginBottom: 12 }}>✓ Email válido</Text>
-      )}
+      {!errors.email && formData.email && <Text style={{ color: colors.success, marginBottom: 12 }}>✓ Email válido</Text>}
 
       <Text style={[styles.label, { color: colors.text }]}>Senha:</Text>
       <TextInput
@@ -104,32 +139,25 @@ const UserEditFormScreen = ({ route, navigation }: Props) => {
           {
             backgroundColor: errors.password
               ? colors.inputErrorBackground
-              : formData.password.trim()
+              : formData.password
               ? colors.inputFilledBackground
               : colors.card,
             borderColor: errors.password
               ? colors.error
-              : formData.password.trim()
+              : formData.password
               ? colors.success
               : colors.accent,
             color: colors.text,
           },
         ]}
-        placeholder="Senha"
+        placeholder="Digite a senha"
         placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
-        secureTextEntry={false}
+        secureTextEntry
         value={formData.password}
-        onFocus={() => {
-          if (formData.password === "●●●●●●●●●") {
-            setFormData((prev) => ({ ...prev, password: "" }));
-          }
-        }}
         onChangeText={(text) => handleChange("password", text)}
       />
       {errors.password && <Text style={{ color: colors.error, marginBottom: 12 }}>{errors.password}</Text>}
-      {!errors.password && formData.password.trim() !== "" && (
-        <Text style={{ color: colors.success, marginBottom: 12 }}>✓ Senha válida</Text>
-      )}
+      {!errors.password && formData.password && <Text style={{ color: colors.success, marginBottom: 12 }}>✓ Senha válida</Text>}
 
       <Text style={[styles.label, { color: colors.text }]}>Cargo:</Text>
       <View
@@ -153,9 +181,7 @@ const UserEditFormScreen = ({ route, navigation }: Props) => {
           selectedValue={formData.role}
           style={{ color: colors.text }}
           dropdownIconColor={colors.text}
-          onValueChange={(itemValue) =>
-            handleChange("role", itemValue.toString())
-          }
+          onValueChange={(itemValue) => handleChange("role", itemValue.toString())}
         >
           <Picker.Item label="Selecione o cargo" value="" />
           <Picker.Item label="Master" value="MASTER" />
@@ -163,16 +189,14 @@ const UserEditFormScreen = ({ route, navigation }: Props) => {
           <Picker.Item label="Usuário" value="USER" />
         </Picker>
       </View>
-      {formData.role && (
-        <Text style={{ color: colors.success, marginBottom: 12 }}>✓ Cargo selecionado</Text>
-      )}
+      {formData.role && <Text style={{ color: colors.success, marginBottom: 12 }}>✓ Cargo selecionado</Text>}
       {errors.role && <Text style={{ color: colors.error, marginBottom: 12 }}>{errors.role}</Text>}
 
-      <TouchableOpacity style={styles.addButton} onPress={handleUpdate}>
-        <Text style={styles.addButtonText}>Salvar Alterações</Text>
+      <TouchableOpacity style={styles.addButton} onPress={handleRegisterPending}>
+        <Text style={styles.addButtonText}>Registrar Pendência</Text>
       </TouchableOpacity>
     </ScrollView>
   );
 };
 
-export default UserEditFormScreen;
+export default PendingUserFormScreen;

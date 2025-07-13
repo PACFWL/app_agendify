@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import {View,TextInput,Button,Text,Alert,ActivityIndicator,TouchableOpacity} from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../routes/Routes";
-import createStyles from "../../styles/RegisterScreenStyles";
+import createStyles from "../../styles/RegisterPendingScreenStyles";
 import { Picker } from "@react-native-picker/picker";
 import { useRegisterPending } from "../../hooks/useRegisterPending";
 import { ThemeContext } from "../../contexts/ThemeContext";

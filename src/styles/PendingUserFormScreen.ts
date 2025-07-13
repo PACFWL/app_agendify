@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 import { ThemeType } from "../contexts/ThemeContext";
 import { getColors } from "./ThemeColors";
 
-const createRegisterScreenStyles = (theme: ThemeType) => {
+const createPendingUserFormScreenStyles = (theme: ThemeType) => {
   const colors = getColors(theme);
 
   return StyleSheet.create({
@@ -53,12 +53,7 @@ const createRegisterScreenStyles = (theme: ThemeType) => {
       fontWeight: "bold",
       fontSize: 14,
     },
-    link: {
-      marginTop: 24,
-      textAlign: "center",
-      textDecorationLine: "underline",
-    },
   });
 };
 
-export default createRegisterScreenStyles;
+export default createPendingUserFormScreenStyles;

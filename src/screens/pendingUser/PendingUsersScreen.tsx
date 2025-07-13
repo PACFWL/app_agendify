@@ -85,6 +85,10 @@ const UserCard = ({
 };
 
 const PendingUsersScreen = () => {
+
+const navigation =
+  useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   const auth = useContext(AuthContext);
 
   if (!auth || !auth.user) {
@@ -101,6 +105,7 @@ const PendingUsersScreen = () => {
 
   const [pendingUsers, setPendingUsers] = useState<PendingUser[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<"USER" | "REQUESTER" | "MASTER">("USER");
 
   const fetchPendingUsers = async () => {
     try {
@@ -123,6 +128,8 @@ const PendingUsersScreen = () => {
     }, [])
   );
 
+const filteredUsers = pendingUsers.filter((u) => u.role === activeTab);
+
   if (loading) {
     return (
       <View style={[styles.loadingContainer, { backgroundColor: colors.background }]}>
@@ -138,14 +145,54 @@ const PendingUsersScreen = () => {
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Text style={[styles.title, { color: colors.primary }]}>Usuários Pendentes</Text>
 
+ 
+      <View style={styles.tabContainer}>
+        {["USER", "REQUESTER", "MASTER"].map((tab) => (
+          <TouchableOpacity
+            key={tab}
+            onPress={() => setActiveTab(tab as "USER" | "REQUESTER" | "MASTER")}
+            style={[
+              styles.tabButton,
+              activeTab === tab
+                ? styles.tabButtonActive
+                : styles.tabButtonInactive,
+            ]}
+          >
+            <Text
+              style={
+                activeTab === tab
+                  ? styles.tabButtonTextActive
+                  : styles.tabButtonTextInactive
+              }
+            >
+              {roleLabel(tab)}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
       <FlatList
-        data={pendingUsers}
+        data={filteredUsers}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <UserCard user={item} token={user.token} onAction={load} colors={colors} />
         )}
         contentContainerStyle={{ paddingBottom: 80 }}
+        ListEmptyComponent={
+          <Text style={{ color: colors.text, textAlign: "center", marginTop: 20 }}>
+            Nenhum usuário pendente encontrado.
+          </Text>
+        }
       />
+
+      {user.role === "MASTER" && (
+        <TouchableOpacity
+          style={styles.fab}
+          onPress={() => navigation.navigate("PendingUserForm")}
+        >
+          <Text style={styles.fabIcon}>＋</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

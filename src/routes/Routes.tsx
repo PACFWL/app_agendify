@@ -19,11 +19,13 @@ import RegisterPendingScreen from "../screens/pendingUser/RegisterPendingScreen"
 import PendingUserDetailsScreen from "../screens/pendingUser/PendingUserDetailsScreen";
 import PendingUserEditFormScreen from "../screens/pendingUser/PendingUserEditFormScreen";
 import UserEditFormScreen from "../screens/user/UserEditFormScreen";
+import PendingUserFormScreen from "../screens/pendingUser/PendingUserFormScreen"
 
 export type RootStackParamList = {
   Login: undefined;
   Register: undefined;
   RegisterPending: undefined;
+  PendingUserForm: undefined;
   Home: undefined;
   Events: undefined;
   PendingsEvents: undefined;
@@ -91,11 +93,12 @@ const Routes = () => {
     <Stack.Screen name="UserEditForm" component={UserEditFormScreen} />
     <Stack.Screen name="PendingUserDetails" component={PendingUserDetailsScreen} />
     <Stack.Screen name="PendingUserEditForm" component={PendingUserEditFormScreen} />
+    <Stack.Screen name="Register" component={RegisterScreen} />
+    <Stack.Screen name="PendingUserForm" component={PendingUserFormScreen} />
   </>
 ) : (
   <>
     <Stack.Screen name="Login" component={LoginScreen} />
-    <Stack.Screen name="Register" component={RegisterScreen} />
     <Stack.Screen name="RegisterPending" component={RegisterPendingScreen} />
   </>
 )}

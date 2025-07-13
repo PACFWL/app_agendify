@@ -166,7 +166,7 @@ const PendingUserEditFormScreen = ({ route, navigation }: Props) => {
         >
           <Picker.Item label="Selecione o cargo" value="" />
           <Picker.Item label="Master" value="MASTER" />
-          <Picker.Item label="Requisitor" value="REQUESTER" />
+          <Picker.Item label="Solicitante" value="REQUESTER" />
           <Picker.Item label="Usuário" value="USER" />
         </Picker>
       </View>
