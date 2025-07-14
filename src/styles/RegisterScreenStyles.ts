@@ -41,7 +41,7 @@ const createRegisterScreenStyles = (theme: ThemeType) => {
       overflow: "hidden",
     },
     addButton: {
-      backgroundColor: colors.primary,
+      backgroundColor: "#1976d2",
       marginTop: 10,
       borderRadius: 8,
       padding: 12,
@@ -57,6 +57,26 @@ const createRegisterScreenStyles = (theme: ThemeType) => {
       marginTop: 24,
       textAlign: "center",
       textDecorationLine: "underline",
+    },
+       passwordContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      borderColor: "#CCC",
+      borderWidth: 1,
+      borderRadius: 8,
+      backgroundColor: colors.card,
+      marginBottom: 16,
+      paddingHorizontal: 12,
+    },
+       toggle: {
+      marginLeft: 12,
+      color: colors.accent,
+      fontWeight: "500",
+    },
+       passwordInput: {
+      flex: 1,
+      height: 48,
+      color: colors.text,
     },
   });
 };

@@ -20,6 +20,8 @@ export const colors = {
     buttonPrimaryText: "#ffffff",
     buttonSecondaryBackground: "#e0e0e0",
     buttonSecondaryText: "#000000",
+    link: "#1976d2",
+    buttonText: "#ffffff",
   },
   dark: {
     background: "#121212",
@@ -40,6 +42,8 @@ export const colors = {
     buttonPrimaryText: "#000000",
     buttonSecondaryBackground: "#2c2c2c",
     buttonSecondaryText: "#ffffff",
+    link: "#90caf9",
+    buttonText: "#000000",
   },
 };
 

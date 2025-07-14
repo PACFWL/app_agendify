@@ -82,7 +82,7 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   tabButtonActive: {
-    backgroundColor: "#6200ee",
+    backgroundColor: "#1976d2",
   },
   tabButtonInactive: {
     backgroundColor: "#e0e0e0",
@@ -98,7 +98,7 @@ export default StyleSheet.create({
     position: "absolute",
     right: 20,
     bottom: 20,
-    backgroundColor: "#6200ee",
+    backgroundColor: "#1976d2",
     width: 56,
     height: 56,
     borderRadius: 28,

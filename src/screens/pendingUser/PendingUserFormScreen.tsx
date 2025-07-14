@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext, useState } from "react";
 import { View, TextInput, Text, Alert, ScrollView, TouchableOpacity } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -6,70 +6,24 @@ import { RootStackParamList } from "../../routes/Routes";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { getColors } from "../../styles/ThemeColors";
 import createPendingUserFormScreenStyles from "../../styles/PendingUserFormScreen";
-import { registerPending } from "../../api/pendingUser";
+import { usePendingUserForm } from "../../hooks/usePendingUserForm";
 
 type Props = NativeStackScreenProps<RootStackParamList, "PendingUserForm">;
 
 const PendingUserFormScreen = ({ navigation }: Props) => {
+  const [showPassword, setShowPassword] = useState(false);
+
   const { theme } = useContext(ThemeContext);
   const colors = getColors(theme);
   const styles = createPendingUserFormScreenStyles(theme);
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    role: "",
-  });
-
-  const [errors, setErrors] = useState({
-    name: "",
-    email: "",
-    password: "",
-    role: "",
-  });
-
-  const handleChange = (field: string, value: string) => {
-    setFormData({ ...formData, [field]: value });
-    setErrors({ ...errors, [field]: "" });
-  };
-
-  const handleRegisterPending = async () => {
-    const { name, email, password, role } = formData;
-
-    let hasError = false;
-    const newErrors = { name: "", email: "", password: "", role: "" };
-
-    if (!name.trim()) {
-      newErrors.name = "Nome é obrigatório.";
-      hasError = true;
-    }
-    if (!email.trim()) {
-      newErrors.email = "Email é obrigatório.";
-      hasError = true;
-    }
-    if (!password.trim()) {
-      newErrors.password = "Senha é obrigatória.";
-      hasError = true;
-    }
-    if (!role) {
-      newErrors.role = "Cargo é obrigatório.";
-      hasError = true;
-    }
-
-    if (hasError) {
-      setErrors(newErrors);
-      return;
-    }
-
-    try {
-      await registerPending(name, email, password, role);
-      Alert.alert("Sucesso", "Usuário pendente registrado com sucesso!");
-      navigation.goBack();
-    } catch (error) {
-      Alert.alert("Erro", "Falha ao registrar usuário pendente.");
-    }
-  };
+  const {
+    formData,
+    errors,
+    loading,
+    handleChange,
+    handleRegisterPending,
+  } = usePendingUserForm(navigation);
 
   return (
     <ScrollView
@@ -133,31 +87,40 @@ const PendingUserFormScreen = ({ navigation }: Props) => {
       {!errors.email && formData.email && <Text style={{ color: colors.success, marginBottom: 12 }}>✓ Email válido</Text>}
 
       <Text style={[styles.label, { color: colors.text }]}>Senha:</Text>
+     <View
+      style={[
+        styles.passwordContainer,
+        {
+          backgroundColor: errors.password
+            ? colors.inputErrorBackground
+            : formData.password
+            ? colors.inputFilledBackground
+            : colors.card,
+          borderColor: errors.password
+            ? colors.error
+            : formData.password
+            ? colors.success
+            : colors.accent,
+        },
+      ]}
+    >
       <TextInput
-        style={[
-          styles.input,
-          {
-            backgroundColor: errors.password
-              ? colors.inputErrorBackground
-              : formData.password
-              ? colors.inputFilledBackground
-              : colors.card,
-            borderColor: errors.password
-              ? colors.error
-              : formData.password
-              ? colors.success
-              : colors.accent,
-            color: colors.text,
-          },
-        ]}
+        style={styles.passwordInput}
         placeholder="Digite a senha"
         placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
-        secureTextEntry
+        secureTextEntry={!showPassword}
         value={formData.password}
         onChangeText={(text) => handleChange("password", text)}
       />
-      {errors.password && <Text style={{ color: colors.error, marginBottom: 12 }}>{errors.password}</Text>}
-      {!errors.password && formData.password && <Text style={{ color: colors.success, marginBottom: 12 }}>✓ Senha válida</Text>}
+      <Text
+        style={[styles.toggle, { color: colors.accent }]}
+        onPress={() => setShowPassword(!showPassword)}
+      >
+        {showPassword ? "Ocultar" : "Mostrar"}
+      </Text>
+    </View>
+    {errors.password && <Text style={{ color: colors.error, marginBottom: 12 }}>{errors.password}</Text>}
+    {!errors.password && formData.password && <Text style={{ color: colors.success, marginBottom: 12 }}>✓ Senha válida</Text>}
 
       <Text style={[styles.label, { color: colors.text }]}>Cargo:</Text>
       <View
@@ -189,11 +152,15 @@ const PendingUserFormScreen = ({ navigation }: Props) => {
           <Picker.Item label="Usuário" value="USER" />
         </Picker>
       </View>
-      {formData.role && <Text style={{ color: colors.success, marginBottom: 12 }}>✓ Cargo selecionado</Text>}
+      {formData.role && !errors.role && <Text style={{ color: colors.success, marginBottom: 12 }}>✓ Cargo selecionado</Text>}
       {errors.role && <Text style={{ color: colors.error, marginBottom: 12 }}>{errors.role}</Text>}
 
-      <TouchableOpacity style={styles.addButton} onPress={handleRegisterPending}>
-        <Text style={styles.addButtonText}>Registrar Pendência</Text>
+      <TouchableOpacity
+        style={[styles.addButton, { opacity: loading ? 0.6 : 1 }]}
+        onPress={handleRegisterPending}
+        disabled={loading}
+      >
+        <Text style={styles.addButtonText}>Registrar</Text>
       </TouchableOpacity>
     </ScrollView>
   );

@@ -254,9 +254,9 @@ const colors = getColors(theme);
 
       {auth?.user?.role === "MASTER" && (
        <TouchableOpacity
-  style={[styles.fab, { backgroundColor: colors.primary }]}
-  onPress={() => navigation.navigate("EventForm")}
->
+          style={styles.fab}
+          onPress={() => navigation.navigate("EventForm")}
+        >
   <Text style={[styles.fabIcon, { color: "#fff" }]}>＋</Text>
 </TouchableOpacity>
       )}

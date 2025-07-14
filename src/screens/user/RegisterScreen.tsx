@@ -1,82 +1,36 @@
-import React, { useState, useContext } from "react";
-import {View,TextInput,Text,Alert,ScrollView,TouchableOpacity} from "react-native";
+import React, { useContext, useState } from "react";
+import {View,TextInput,Text,Alert,ScrollView,TouchableOpacity } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../routes/Routes";
-import { register } from "../../api/auth";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { getColors } from "../../styles/ThemeColors";
 import createRegisterScreenStyles from "../../styles/RegisterScreenStyles";
+import { useRegister } from "../../hooks/useRegister";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Register">;
 
 const RegisterScreen = ({ navigation }: Props) => {
+  const [showPassword, setShowPassword] = useState(false);
+
   const { theme } = useContext(ThemeContext);
   const colors = getColors(theme);
   const styles = createRegisterScreenStyles(theme);
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    role: "",
-  });
-
-  const [errors, setErrors] = useState({
-    name: "",
-    email: "",
-    password: "",
-    role: "",
-  });
-
-  const handleChange = (field: string, value: string) => {
-    setFormData({ ...formData, [field]: value });
-    setErrors({ ...errors, [field]: "" }); 
-  };
-
-  const handleRegister = async () => {
-    const { name, email, password, role } = formData;
-
-    let hasError = false;
-    const newErrors = { name: "", email: "", password: "", role: "" };
-
-    if (!name.trim()) {
-      newErrors.name = "Nome é obrigatório.";
-      hasError = true;
-    }
-    if (!email.trim()) {
-      newErrors.email = "Email é obrigatório.";
-      hasError = true;
-    }
-    if (!password.trim()) {
-      newErrors.password = "Senha é obrigatória.";
-      hasError = true;
-    }
-    if (!role) {
-      newErrors.role = "Cargo é obrigatório.";
-      hasError = true;
-    }
-
-    if (hasError) {
-      setErrors(newErrors);
-      return;
-    }
-
-    try {
-      await register(name, email, password, role);
-      Alert.alert("Sucesso", "Cadastro realizado com sucesso!");
-      navigation.goBack();
-    } catch (error) {
-      Alert.alert("Erro", "Falha ao registrar usuário.");
-    }
-  };
+  const {
+    formData,
+    errors,
+    loading,
+    handleChange,
+    handleRegister,
+  } = useRegister(navigation);
 
   return (
     <ScrollView
       style={[styles.container, { backgroundColor: colors.background }]}
       contentContainerStyle={{ paddingBottom: 40 }}
     >
-      <Text style={[styles.title, { color: colors.primary }]}>Registro</Text>
+      <Text style={[styles.title, { color: colors.primary }]}>Novo Usuário</Text>
 
       <Text style={[styles.label, { color: colors.text }]}>Nome:</Text>
       <TextInput
@@ -149,9 +103,9 @@ const RegisterScreen = ({ navigation }: Props) => {
       )}
 
       <Text style={[styles.label, { color: colors.text }]}>Senha:</Text>
-      <TextInput
+      <View
         style={[
-          styles.input,
+          styles.passwordContainer,
           {
             backgroundColor: errors.password
               ? colors.inputErrorBackground
@@ -163,25 +117,26 @@ const RegisterScreen = ({ navigation }: Props) => {
               : formData.password
               ? colors.success
               : colors.accent,
-            color: colors.text,
           },
         ]}
-        placeholder="Digite sua senha"
-        placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
-        secureTextEntry
-        value={formData.password}
-        onChangeText={(text) => handleChange("password", text)}
-      />
-      {errors.password && (
-        <Text style={{ color: colors.error, marginBottom: 12 }}>
-          {errors.password}
+      >
+        <TextInput
+          style={styles.passwordInput}
+          placeholder="Digite a senha"
+          placeholderTextColor={theme === "dark" ? "#aaa" : "#666"}
+          secureTextEntry={!showPassword}
+          value={formData.password}
+          onChangeText={(text) => handleChange("password", text)}
+        />
+        <Text
+          style={[styles.toggle, { color: colors.accent }]}
+          onPress={() => setShowPassword(!showPassword)}
+        >
+          {showPassword ? "Ocultar" : "Mostrar"}
         </Text>
-      )}
-      {!errors.password && formData.password && (
-        <Text style={{ color: colors.success, marginBottom: 12 }}>
-          ✓ Senha válida
-        </Text>
-      )}
+      </View>
+      {errors.password && <Text style={{ color: colors.error, marginBottom: 12 }}>{errors.password}</Text>}
+      {!errors.password && formData.password && <Text style={{ color: colors.success, marginBottom: 12 }}>✓ Senha válida</Text>}
 
       <Text style={[styles.label, { color: colors.text }]}>Cargo:</Text>
       <View
@@ -215,7 +170,7 @@ const RegisterScreen = ({ navigation }: Props) => {
           <Picker.Item label="Usuário" value="USER" />
         </Picker>
       </View>
-      {formData.role && (
+      {formData.role && !errors.role && (
         <Text style={{ color: colors.success, marginBottom: 12 }}>
           ✓ Cargo selecionado
         </Text>
@@ -226,7 +181,11 @@ const RegisterScreen = ({ navigation }: Props) => {
         </Text>
       )}
 
-      <TouchableOpacity style={styles.addButton} onPress={handleRegister}>
+      <TouchableOpacity
+        style={[styles.addButton, { opacity: loading ? 0.6 : 1 }]}
+        onPress={handleRegister}
+        disabled={loading}
+      >
         <Text style={styles.addButtonText}>Registrar</Text>
       </TouchableOpacity>
     </ScrollView>
