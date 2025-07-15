@@ -24,6 +24,7 @@ type Event = {
   organizer: string;
  location: { name: string; floor: string };
   priority: string;
+  observation?: string;
 };
 
 const formatStatusText = (status: string): string => {
@@ -150,6 +151,18 @@ const HomeScreen = () => {
     return data >= startOfNextWeek && data <= endOfNextWeek;
   });
 
+const eventoEmDestaque = events
+  .filter(e => new Date(e.day) >= today)
+  .sort((a, b) => statusPriority[a.status] - statusPriority[b.status])[0];
+
+  const eventosComObservacao = events.filter(e => e.observation);
+
+  const contagemPorStatus = events.reduce((acc, e) => {
+  acc[e.status] = (acc[e.status] || 0) + 1;
+  return acc;
+}, {} as Record<string, number>);
+
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 30 }}>
       <View  style={{ flexDirection: "row", justifyContent: "flex-end", alignItems: "center", marginBottom: 10 }}>
@@ -165,6 +178,51 @@ const HomeScreen = () => {
       </View>
 
     <Text style={styles.welcome}>Bem-vindo, {auth?.user?.name}!</Text>
+<Text style={styles.summaryText}>
+  Hoje é {today.toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long" })}
+</Text>
+    <View style={styles.summaryContainer}>
+      <Text style={styles.summaryText}>Eventos hoje: {eventosDoDia.length}</Text>
+      <Text style={styles.summaryText}>Semana atual: {eventosDaSemana.length}</Text>
+      <Text style={styles.summaryText}>Semana que vem: {eventosProximaSemana.length}</Text>
+    </View>
+
+{eventoEmDestaque && (
+  <View style={[styles.card, { borderLeftColor: getStatusColor(eventoEmDestaque.status) }]}>
+    <Text style={styles.sectionTitle}>🎯 Evento em Destaque</Text>
+    <Text style={styles.cardTitle}>{eventoEmDestaque.name}</Text>
+    <Text style={styles.cardText}>Data: {new Date(eventoEmDestaque.day).toLocaleDateString("pt-BR")}</Text>
+    <Text style={styles.cardText}>Horário: {eventoEmDestaque.startTime} - {eventoEmDestaque.endTime}</Text>
+    <Text style={[styles.statusTag, { backgroundColor: getStatusColor(eventoEmDestaque.status) }]}>
+      {formatStatusText(eventoEmDestaque.status)}
+    </Text>
+  </View>
+)}
+
+
+{eventosComObservacao.length > 0 && (
+  <View style={styles.alertBox}>
+    <Text style={styles.alertTitle}>📢 Avisos</Text>
+    {eventosComObservacao.slice(0, 3).map(e => (
+      <Text key={e.id} style={styles.alertText}>
+        • {e.name}: {e.observation}
+      </Text>
+    ))}
+  </View>
+)}
+
+<View style={styles.statusSummaryContainer}>
+  <Text style={styles.sectionTitle}>📊 Eventos por Status</Text>
+
+  {Object.entries(contagemPorStatus).map(([status, count]) => (
+    <View key={status} style={styles.statusRow}>
+      <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(status) }]} />
+      <Text style={styles.statusLabel}>
+        {formatStatusText(status)}: {count}
+      </Text>
+    </View>
+  ))}
+</View>
 
       <Text style={styles.sectionTitle}>📅 Eventos de Hoje</Text>
       {eventosDoDia.length === 0 ? (

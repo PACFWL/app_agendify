@@ -65,6 +65,72 @@ const getHomeScreenStyles = (theme: ThemeType) => {
       marginLeft: 10,
       marginBottom: 10,
     },
+    summaryContainer: {
+  marginVertical: 12,
+  padding: 12,
+  borderRadius: 8,
+  backgroundColor: colors.card,
+  elevation: 2,
+  shadowColor: "#000",
+  shadowOffset: { width: 0, height: 1 },
+  shadowOpacity: 0.1,
+  shadowRadius: 4,
+},
+summaryText: {
+  fontSize: 14,
+  fontWeight: "600",
+  marginBottom: 4,
+  color: colors.cardText,
+},
+alertBox: {
+  backgroundColor: "#fff3cd",
+  borderLeftWidth: 4,
+  borderLeftColor: "#ffc107",
+  padding: 12,
+  borderRadius: 8,
+  marginVertical: 12,
+},
+alertTitle: {
+  fontWeight: "bold",
+  fontSize: 16,
+  marginBottom: 6,
+  color: "#856404",
+},
+alertText: {
+  fontSize: 14,
+  color: "#856404",
+  marginBottom: 4,
+},
+statusSummaryContainer: {
+  marginTop: 16,
+  marginBottom: 8,
+  padding: 12,
+  borderRadius: 8,
+  backgroundColor: colors.card,
+  elevation: 2,
+  shadowColor: "#000",
+  shadowOffset: { width: 0, height: 1 },
+  shadowOpacity: 0.1,
+  shadowRadius: 3,
+},
+
+statusRow: {
+  flexDirection: "row",
+  alignItems: "center",
+  marginBottom: 6,
+},
+
+statusIndicator: {
+  width: 12,
+  height: 12,
+  borderRadius: 6,
+  marginRight: 8,
+},
+
+statusLabel: {
+  fontSize: 14,
+  color: colors.cardText,
+},
   });
 };
 
