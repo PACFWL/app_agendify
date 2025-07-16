@@ -199,8 +199,6 @@ const EventCard = ({
   );
 };
 
-
-
 const EventScreen = () => {
   const auth = useContext(AuthContext);
   const { theme } = useContext(ThemeContext);
