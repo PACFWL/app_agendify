@@ -168,6 +168,13 @@ locationTag: {
   borderRadius: 12,
   overflow: "hidden",
 },
+dateText: {
+  fontSize: 16,
+  fontWeight: "500",
+  color: colors.cardText,
+  marginBottom: 12,
+  textAlign: "center",
+},
   });
 };
 

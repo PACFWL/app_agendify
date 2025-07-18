@@ -6,7 +6,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import { RootStackParamList } from "../routes/Routes";
 import getHomeScreenStyles from "../styles/HomeScreenStyles";
 import { getAllEvents } from "../api/event";
-import { ThemeContext } from "../contexts/ThemeContext";
+import { ThemeContext, ThemeType } from "../contexts/ThemeContext";
 import { getColors } from "../styles/ThemeColors";
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamList, "Home">;
@@ -28,6 +28,17 @@ type Event = {
   observation?: string;
 };
 
+const getThemeBackgroundColor = (theme: ThemeType): string => {
+  return theme === "dark" ? "#9575cd" : "#7e57c2";
+};
+
+const getOrganizerColor = (theme: ThemeType): string => {
+  return theme === "dark" ? "#1976d2" : "#90caf9";
+};
+
+const getTargetAudienceColor = (theme: ThemeType): string => {
+  return theme === "dark" ? "#fbc02d" : "#ffd54f";
+};
 
 const getPriorityColor = (priority: string) => {
   switch (priority) {
@@ -194,7 +205,7 @@ const HomeScreen = () => {
   const styles = getHomeScreenStyles(theme);
   const isDark = theme === "dark";
 
-    const colors = getColors(theme);
+  const colors = getColors(theme);
 
   const navigation = useNavigation<NavigationProps>();
   const [events, setEvents] = useState<Event[]>([]);
@@ -300,7 +311,7 @@ const HomeScreen = () => {
 
     <Text style={styles.welcome}>Bem-vindo, {auth?.user?.name}!</Text>
 
-    <Text style={styles.summaryText}>
+    <Text style={styles.dateText}>
       Hoje é {today.toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long" })}
     </Text>
 
@@ -314,74 +325,136 @@ const HomeScreen = () => {
   <View style={[styles.card, { borderLeftColor: getStatusColor(eventoEmDestaque.status) }]}>
     <Text style={styles.sectionTitle}>🎯 Evento em Destaque</Text>
     <Text style={styles.cardTitle}>{eventoEmDestaque.name}</Text>
-      <View style={styles.tagsRow}>
-<Text
-  style={[
-    styles.tag,
-    {
-      backgroundColor: getDateColorPorCategoria(
-        eventoEmDestaque.day,
-        eventoEmDestaque.day,
-        "destaque"
-      ),
-      color: colors.statusText
-    },
-  ]}
->
-  🗓 {new Date(eventoEmDestaque.day).toLocaleDateString("pt-BR")}
-</Text>
-      </View>
-      <View style={styles.tagsRow}>
-        <Text style={[styles.tag, { backgroundColor: "#37474f", color: colors.statusText }]}>
-        Início: {eventoEmDestaque.startTime}
+
+    <View style={styles.tagsRow}>
+      <Text
+        style={[
+          styles.tag,
+          {
+            backgroundColor: getDateColorPorCategoria(
+              eventoEmDestaque.day,
+              eventoEmDestaque.day,
+              "destaque"
+            ),
+            color: colors.statusText,
+          },
+        ]}
+      >
+        🗓 Data: {new Date(eventoEmDestaque.day).toLocaleDateString("pt-BR")}
       </Text>
-        <Text style={[styles.tag, { backgroundColor: "#37474f" }]}>
-            Término: {eventoEmDestaque.endTime}
-        </Text>
-      </View>
+    </View>
 
+    <View style={styles.tagsRow}>
+      <Text style={[styles.tag, { backgroundColor: "#37474f", color: colors.statusText }]}>
+        🕒 Início: {eventoEmDestaque.startTime}
+      </Text>
+      <Text style={[styles.tag, { backgroundColor: "#37474f", color: colors.statusText }]}>
+        🕓 Término: {eventoEmDestaque.endTime}
+      </Text>
+    </View>
 
-  <Text style={styles.cardText}>🎯 {eventoEmDestaque.theme}</Text>
+   
+    <View style={styles.tagsRow}>
+      <Text
+        style={[
+          styles.tag,
+          {
+            backgroundColor: getThemeBackgroundColor(theme),
+            color: colors.statusText,
+          },
+        ]}
+      >
+        🎨 Tema: {eventoEmDestaque.theme}
+      </Text>
+      <Text
+        style={[
+          styles.tag,
+          {
+            backgroundColor: getTargetAudienceColor(theme),
+            color: colors.statusText,
+          },
+        ]}
+      >
+        🎓 Público-Alvo: {eventoEmDestaque.targetAudience}
+      </Text>
+    </View>
+
+ 
+    <View style={styles.tagsRow}>
+      <Text
+        style={[
+          styles.tag,
+          styles.locationTag,
+          {
+            backgroundColor: getLocationColor(eventoEmDestaque.location.name),
+            borderWidth: eventoEmDestaque.location.name === "A definir" ? 1.5 : 0,
+            borderColor: eventoEmDestaque.location.name === "A definir" ? "#b71c1c" : "transparent",
+          },
+        ]}
+      >
+        📍 Localidade: {eventoEmDestaque.location.name}
+      </Text>
+      <Text
+        style={[
+          styles.tag,
+          styles.locationTag,
+          {
+            backgroundColor: getLocationColor(eventoEmDestaque.location.floor),
+            borderWidth: eventoEmDestaque.location.floor === "A definir" ? 1.5 : 0,
+            borderColor: eventoEmDestaque.location.floor === "A definir" ? "#b71c1c" : "transparent",
+          },
+        ]}
+      >
+        🗺 Piso: {eventoEmDestaque.location.floor}
+      </Text>
+    </View>
+
+   
+    <View style={styles.tagsRow}>
+      <Text
+        style={[
+          styles.tag,
+          {
+            backgroundColor: getOrganizerColor(theme),
+            color: colors.statusText,
+          },
+        ]}
+      >
+        🧑‍🏫 Organizador: {eventoEmDestaque.organizer}
+      </Text>
+    </View>
+
   
-
-  <Text style={styles.cardText}>🎓 {eventoEmDestaque.targetAudience}</Text>
-
-<View style={styles.locationRow}>
-   <Text
+    <View style={styles.tagsRow}>
+      {role === "MASTER" && (
+        <Text
           style={[
             styles.tag,
-            styles.locationTag,
-            {
-              backgroundColor: getLocationColor(eventoEmDestaque.location.name),
-              borderWidth: eventoEmDestaque.location.name === "A definir" ? 1.5 : 0,
-              borderColor: eventoEmDestaque.location.name === "A definir" ? "#b71c1c" : "transparent",
-            },
+            { backgroundColor: getPriorityColor(eventoEmDestaque.priority) },
           ]}
-        >📍 {eventoEmDestaque.location.name} </Text>
-         <Text
-          style={[
-            styles.tag,
-            styles.locationTag,
-            {
-              backgroundColor: getLocationColor(eventoEmDestaque.location.floor),
-              borderWidth: eventoEmDestaque.location.floor === "A definir" ? 1.5 : 0,
-              borderColor: eventoEmDestaque.location.floor === "A definir" ? "#b71c1c" : "transparent",
-            },
-          ]}
-        > 
-        Piso:  {eventoEmDestaque.location.floor}</Text>
-  </View>
-
-<Text style={styles.cardText}>🧑‍🏫 {eventoEmDestaque.organizer}</Text>
-
-     <View style={styles.tagsRow}>
-    <Text style={[styles.statusTag, { backgroundColor: getStatusColor(eventoEmDestaque.status) }]}>
-      {formatStatusText(eventoEmDestaque.status)}
-    </Text>
+        >
+          🔼 Prioridade: {formatPriority(eventoEmDestaque.priority)}
+        </Text>
+      )}
+      <Text
+        style={[
+          styles.tag,
+          { backgroundColor: getModeColor(eventoEmDestaque.mode) },
+        ]}
+      >
+        🛠 Modalidade: {formatMode(eventoEmDestaque.mode)}
+      </Text>
+      <Text
+        style={[
+          styles.statusTag,
+          { backgroundColor: getStatusColor(eventoEmDestaque.status) },
+        ]}
+      >
+        📌 Status: {formatStatusText(eventoEmDestaque.status)}
+      </Text>
     </View>
   </View>
 )}
-
 
 {eventosComObservacao.length > 0 && (
   <View style={styles.alertBox}>
@@ -408,98 +481,140 @@ const HomeScreen = () => {
   ))}
 </View>
 
-      <Text style={styles.sectionTitle}>📅 Eventos de Hoje</Text>
-      {eventosDoDia.length === 0 ? (
-        <Text style={styles.noEventText}>Nenhum evento hoje.</Text>
-      ) : (
-        eventosDoDia.map(event => (
-          <TouchableOpacity
-            key={event.id}
-            onPress={() => navigation.navigate("EventDetails", { eventId: event.id })}
-          >
-    <View style={[styles.card, { borderLeftColor: getStatusColor(event.status) }]}>
-  <Text style={styles.cardTitle}>{event.name}</Text>
-  
-  <View style={styles.tagsRow}>
-<Text
-  style={[
-    styles.tag,
-    {
-      backgroundColor: getDateColorPorCategoria(
-        event.day,
-        today.toISOString(),
-        "hoje"
-      ),
-      color: colors.statusText
-    },
-  ]}
->
-  🗓 {new Date(event.day).toLocaleDateString("pt-BR")}
-</Text>
-</View>
- <View style={styles.tagsRow}>
-        <Text style={[styles.tag, { backgroundColor: "#37474f", color: colors.statusText }]}>
-       ⏰ Início: {event.startTime}
-      </Text>
-        <Text style={[styles.tag, { backgroundColor: "#37474f" }]}>
-          ⏰ Término: {event.endTime}
-        </Text>
-      </View>
+ <Text style={styles.sectionTitle}>📅 Eventos de Hoje</Text>
 
-  
-  <Text style={styles.cardText}>🎯 {event.theme}</Text>
-  
-  
-  <Text style={styles.cardText}>🎓 {event.targetAudience}</Text>
+{eventosDoDia.length === 0 ? (
+  <Text style={styles.noEventText}>Nenhum evento hoje.</Text>
+) : (
+  eventosDoDia.map(event => (
+    <TouchableOpacity
+      key={event.id}
+      onPress={() => navigation.navigate("EventDetails", { eventId: event.id })}
+    >
+      <View style={[styles.card, { borderLeftColor: getStatusColor(event.status) }]}>
+        <Text style={styles.cardTitle}>{event.name}</Text>
 
-
-  <View style={styles.locationRow}>
-   <Text
-          style={[
-            styles.tag,
-            styles.locationTag,
-            {
-              backgroundColor: getLocationColor(event.location.name),
-              borderWidth: event.location.name === "A definir" ? 1.5 : 0,
-              borderColor: event.location.name === "A definir" ? "#b71c1c" : "transparent",
-            },
-          ]}
-        >📍 {event.location.name} </Text>
-         <Text
-          style={[
-            styles.tag,
-            styles.locationTag,
-            {
-              backgroundColor: getLocationColor(event.location.floor),
-              borderWidth: event.location.floor === "A definir" ? 1.5 : 0,
-              borderColor: event.location.floor === "A definir" ? "#b71c1c" : "transparent",
-            },
-          ]}
-        > 
-        Piso:  {event.location.floor}</Text>
-  </View>
-  <Text style={styles.cardText}>🧑‍🏫 {event.organizer}</Text>
-   <View style={styles.tagsRow}>
-        {role === "MASTER" && (
+        <View style={styles.tagsRow}>
           <Text
-            style={[styles.tag, { backgroundColor: getPriorityColor(event.priority) }]}
-          > 🔼 Prioridade: {formatPriority(event.priority)}   </Text>
-                  )}
-    <Text style={[styles.tag, { backgroundColor: getModeColor(event.mode) }]}>
-      🛠 Modalidade: {formatMode(event.mode)}
-        </Text>
+            style={[
+              styles.tag,
+              {
+                backgroundColor: getDateColorPorCategoria(
+                  event.day,
+                  today.toISOString(),
+                  "hoje"
+                ),
+                color: colors.statusText,
+              },
+            ]}
+          >
+            🗓 Data: {new Date(event.day).toLocaleDateString("pt-BR")}
+          </Text>
+        </View>
 
-    <Text style={[styles.tag, { backgroundColor: getStatusColor(event.status) }]}>
-          {formatStatus(event.status)}
-        </Text>
+       
+        <View style={styles.tagsRow}>
+          <Text style={[styles.tag, { backgroundColor: "#37474f", color: colors.statusText }]}>
+            ⏰ Início: {event.startTime}
+          </Text>
+          <Text style={[styles.tag, { backgroundColor: "#37474f", color: colors.statusText }]}>
+            ⏰ Término: {event.endTime}
+          </Text>
+        </View>
 
+     
+        <View style={styles.tagsRow}>
+       <Text
+        style={[
+          styles.tag,
+          {
+            backgroundColor: getThemeBackgroundColor(theme),
+            color: colors.statusText,
+          },
+        ]}
+      >
+        🎯 Tema: {event.theme}
+      </Text>
+
+       <Text
+        style={[
+          styles.tag,
+          {
+            backgroundColor: getTargetAudienceColor(theme),
+            color: colors.statusText,
+          },
+        ]}
+      >
+        🎓 Público-Alvo: {event.targetAudience}
+      </Text>
+        </View>
+
+       
+        <View style={styles.tagsRow}>
+          <Text
+            style={[
+              styles.tag,
+              styles.locationTag,
+              {
+                backgroundColor: getLocationColor(event.location.name),
+                borderWidth: event.location.name === "A definir" ? 1.5 : 0,
+                borderColor: event.location.name === "A definir" ? "#b71c1c" : "transparent",
+              },
+            ]}
+          >
+            📍 Localidade: {event.location.name}
+          </Text>
+          <Text
+            style={[
+              styles.tag,
+              styles.locationTag,
+              {
+                backgroundColor: getLocationColor(event.location.floor),
+                borderWidth: event.location.floor === "A definir" ? 1.5 : 0,
+                borderColor: event.location.floor === "A definir" ? "#b71c1c" : "transparent",
+              },
+            ]}
+          >
+            🗺 Piso: {event.location.floor}
+          </Text>
+        </View>
+    
+
+    <View style={styles.tagsRow}>
+      <Text
+        style={[
+          styles.tag,
+          {
+            backgroundColor: getOrganizerColor(theme),
+            color: colors.statusText,
+          },
+        ]}
+      >
+        🧑‍🏫 Organizador: {event.organizer}
+      </Text>
+    </View>
+
+
+        <View style={styles.tagsRow}>
+          {role === "MASTER" && (
+            <Text style={[styles.tag, { backgroundColor: getPriorityColor(event.priority) }]}>
+              🔼 Prioridade: {formatPriority(event.priority)}
+            </Text>
+          )}
+          <Text style={[styles.tag, { backgroundColor: getModeColor(event.mode) }]}>
+            🛠 Modalidade: {formatMode(event.mode)}
+          </Text>
+          <Text style={[styles.tag, { backgroundColor: getStatusColor(event.status) }]}>
+            📌 Status: {formatStatus(event.status)}
+          </Text>
         </View>
       </View>
-          </TouchableOpacity>
-        ))
-      )}
+    </TouchableOpacity>
+  ))
+)}
 
-      <Text style={styles.sectionTitle}>🗓️ Eventos da Semana</Text>
+   <Text style={styles.sectionTitle}>🗓️ Eventos da Semana</Text>
+
       {eventosDaSemana.length === 0 ? (
         <Text style={styles.noEventText}>Nenhum evento esta semana.</Text>
       ) : (
@@ -510,86 +625,124 @@ const HomeScreen = () => {
           >
          <View style={[styles.card, { borderLeftColor: getStatusColor(event.status) }]}>
   <Text style={styles.cardTitle}>{event.name}</Text>
-<View style={styles.tagsRow}>
-<Text
-  style={[
-    styles.tag,
-    {
-      backgroundColor: getDateColorPorCategoria(
-        event.day,
-        startOfWeek.toISOString(),
-        "semana"
-      ),
-      color: colors.statusText
-    },
-  ]}
->
-  🗓 {new Date(event.day).toLocaleDateString("pt-BR")}
-</Text>
-</View>
- <View style={styles.tagsRow}>
-        <Text style={[styles.tag, { backgroundColor: "#37474f", color: colors.statusText }]}>
-       ⏰ Início: {event.startTime}
+
+       <View style={styles.tagsRow}>
+          <Text
+            style={[
+              styles.tag,
+              {
+                backgroundColor: getDateColorPorCategoria(
+                  event.day,
+                  startOfWeek.toISOString(),
+                  "semana"
+                ),
+                color: colors.statusText,
+              },
+            ]}
+          >
+            🗓 Data: {new Date(event.day).toLocaleDateString("pt-BR")}
+          </Text>
+        </View>
+
+       
+        <View style={styles.tagsRow}>
+          <Text style={[styles.tag, { backgroundColor: "#37474f", color: colors.statusText }]}>
+            ⏰ Início: {event.startTime}
+          </Text>
+          <Text style={[styles.tag, { backgroundColor: "#37474f", color: colors.statusText }]}>
+            ⏰ Término: {event.endTime}
+          </Text>
+        </View>
+
+     
+    <View style={styles.tagsRow}>
+       <Text
+        style={[
+          styles.tag,
+          {
+            backgroundColor: getThemeBackgroundColor(theme),
+            color: colors.statusText,
+          },
+        ]}
+      >
+        🎯 Tema: {event.theme}
       </Text>
-        <Text style={[styles.tag, { backgroundColor: "#37474f" }]}>
-          ⏰ Término: {event.endTime}
-        </Text>
-      </View>
 
-  <Text style={styles.cardText}>🎯 {event.theme}</Text>
-  <Text style={styles.cardText}>🎓 {event.targetAudience}</Text>
-  
-   <View style={styles.locationRow}>
-   <Text
-          style={[
-            styles.tag,
-            styles.locationTag,
-            {
-              backgroundColor: getLocationColor(event.location.name),
-              borderWidth: event.location.name === "A definir" ? 1.5 : 0,
-              borderColor: event.location.name === "A definir" ? "#b71c1c" : "transparent",
-            },
-          ]}
-        >📍 {event.location.name} </Text>
-         <Text
-          style={[
-            styles.tag,
-            styles.locationTag,
-            {
-              backgroundColor: getLocationColor(event.location.floor),
-              borderWidth: event.location.floor === "A definir" ? 1.5 : 0,
-              borderColor: event.location.floor === "A definir" ? "#b71c1c" : "transparent",
-            },
-          ]}
-        > 
-        Piso:  {event.location.floor}</Text>
-  </View>
-  
-  <Text style={styles.cardText}>🧑‍🏫 {event.organizer}</Text>
+       <Text
+        style={[
+          styles.tag,
+          {
+            backgroundColor: getTargetAudienceColor(theme),
+            color: colors.statusText,
+          },
+        ]}
+      >
+        🎓 Público-Alvo: {event.targetAudience}
+      </Text>
+        </View>
 
+        <View style={styles.locationRow}>
+          <Text
+            style={[
+              styles.tag,
+              styles.locationTag,
+              {
+                backgroundColor: getLocationColor(event.location.name),
+                borderWidth: event.location.name === "A definir" ? 1.5 : 0,
+                borderColor: event.location.name === "A definir" ? "#b71c1c" : "transparent",
+              },
+            ]}
+          >
+            📍 Localidade: {event.location.name}
+          </Text>
+          <Text
+            style={[
+              styles.tag,
+              styles.locationTag,
+              {
+                backgroundColor: getLocationColor(event.location.floor),
+                borderWidth: event.location.floor === "A definir" ? 1.5 : 0,
+                borderColor: event.location.floor === "A definir" ? "#b71c1c" : "transparent",
+              },
+            ]}
+          >
+            🗺 Piso: {event.location.floor}
+          </Text>
+        </View>
+    
+    <View style={styles.tagsRow}>
+      <Text
+        style={[
+          styles.tag,
+          {
+            backgroundColor: getOrganizerColor(theme),
+            color: colors.statusText,
+          },
+        ]}
+      >
+        🧑‍🏫 Organizador: {event.organizer}
+      </Text>
+    </View>
 
         <View style={styles.tagsRow}>
-        {role === "MASTER" && (
-          <Text
-            style={[styles.tag, { backgroundColor: getPriorityColor(event.priority) }]}
-          > 🔼 Prioridade: {formatPriority(event.priority)}   </Text>
-                  )}
-    
-  
-        <Text style={[styles.tag, { backgroundColor: getModeColor(event.mode) }]}>
-      🛠 Modalidade: {formatMode(event.mode)}
-        </Text>
+          {role === "MASTER" && (
+            <Text style={[styles.tag, { backgroundColor: getPriorityColor(event.priority) }]}>
+              🔼 Prioridade: {formatPriority(event.priority)}
+            </Text>
+          )}
+          <Text style={[styles.tag, { backgroundColor: getModeColor(event.mode) }]}>
+            🛠 Modalidade: {formatMode(event.mode)}
+          </Text>
+          <Text style={[styles.tag, { backgroundColor: getStatusColor(event.status) }]}>
+            📌 Status: {formatStatus(event.status)}
+          </Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+  ))
+)}
 
-    <Text style={[styles.tag, { backgroundColor: getStatusColor(event.status) }]}>
-          {formatStatus(event.status)}
-        </Text>
-</View>
-</View>
-          </TouchableOpacity>
-        ))
-      )}
-
-      <Text style={styles.sectionTitle}>📆 Eventos da Semana que vem</Text>
+        <Text style={styles.sectionTitle}>📆 Eventos da Semana que vem</Text>
       {eventosProximaSemana.length === 0 ? (
         <Text style={styles.noEventText}>Nenhum evento na semana que vem.</Text>
       ) : (
@@ -600,83 +753,124 @@ const HomeScreen = () => {
           >
       <View style={[styles.card, { borderLeftColor: getStatusColor(event.status) }]}>
   <Text style={styles.cardTitle}>{event.name}</Text>
-<View style={styles.tagsRow}>
-<Text
-  style={[
-    styles.tag,
-    {
-      backgroundColor: getDateColorPorCategoria(
-        event.day,
-        startOfNextWeek.toISOString(),
-        "proxima"
-      ),
-      color: colors.statusText
-    },
-  ]}
->
-  🗓 {new Date(event.day).toLocaleDateString("pt-BR")}
-</Text>
-</View>
- <View style={styles.tagsRow}>
-        <Text style={[styles.tag, { backgroundColor: "#37474f", color: colors.statusText }]}>
-       ⏰ Início: {event.startTime}
-      </Text>
-        <Text style={[styles.tag, { backgroundColor: "#37474f" }]}>
-          ⏰ Término: {event.endTime}
-        </Text>
-      </View>
 
-  <Text style={styles.cardText}>🎯 {event.theme}</Text>
-  <Text style={styles.cardText}>🎓 {event.targetAudience}</Text>
-  <View style={styles.locationRow}>
-   <Text
-          style={[
-            styles.tag,
-            styles.locationTag,
-            {
-              backgroundColor: getLocationColor(event.location.name),
-              borderWidth: event.location.name === "A definir" ? 1.5 : 0,
-              borderColor: event.location.name === "A definir" ? "#b71c1c" : "transparent",
-            },
-          ]}
-        >📍 {event.location.name} </Text>
-         <Text
-          style={[
-            styles.tag,
-            styles.locationTag,
-            {
-              backgroundColor: getLocationColor(event.location.floor),
-              borderWidth: event.location.floor === "A definir" ? 1.5 : 0,
-              borderColor: event.location.floor === "A definir" ? "#b71c1c" : "transparent",
-            },
-          ]}
-        > 
-        Piso:  {event.location.floor}</Text>
-  </View>
-  <Text style={styles.cardText}>🧑‍🏫 {event.organizer}</Text>
-   
-
-      <View style={styles.tagsRow}>
-        {role === "MASTER" && (
+       <View style={styles.tagsRow}>
           <Text
-            style={[styles.tag, { backgroundColor: getPriorityColor(event.priority) }]}
-          > 🔼 Prioridade: {formatPriority(event.priority)}   </Text>
-                  )}
-    <Text style={[styles.tag, { backgroundColor: getModeColor(event.mode) }]}>
-      🛠 Modalidade: {formatMode(event.mode)}
-        </Text>
+            style={[
+              styles.tag,
+              {
+                backgroundColor: getDateColorPorCategoria(
+                  event.day,
+                  startOfNextWeek.toISOString(),
+                  "proxima"
+                ),
+                color: colors.statusText,
+              },
+            ]}
+          >
+            🗓 Data: {new Date(event.day).toLocaleDateString("pt-BR")}
+          </Text>
+        </View>
 
-    <Text style={[styles.tag, { backgroundColor: getStatusColor(event.status) }]}>
-          {formatStatus(event.status)}
-        </Text>
+       
+        <View style={styles.tagsRow}>
+          <Text style={[styles.tag, { backgroundColor: "#37474f", color: colors.statusText }]}>
+            ⏰ Início: {event.startTime}
+          </Text>
+          <Text style={[styles.tag, { backgroundColor: "#37474f", color: colors.statusText }]}>
+            ⏰ Término: {event.endTime}
+          </Text>
+        </View>
 
-  </View>
-</View>
-          </TouchableOpacity>
-        ))
-      )}
+     <View style={styles.tagsRow}>
+       <Text
+        style={[
+          styles.tag,
+          {
+            backgroundColor: getThemeBackgroundColor(theme),
+            color: colors.statusText,
+          },
+        ]}
+      >
+        🎯 Tema: {event.theme}
+      </Text>
+
+       <Text
+        style={[
+          styles.tag,
+          {
+            backgroundColor: getTargetAudienceColor(theme),
+            color: colors.statusText,
+          },
+        ]}
+      >
+        🎓 Público-Alvo: {event.targetAudience}
+      </Text>
+        </View>
+       
+        <View style={styles.locationRow}>
+          <Text
+            style={[
+              styles.tag,
+              styles.locationTag,
+              {
+                backgroundColor: getLocationColor(event.location.name),
+                borderWidth: event.location.name === "A definir" ? 1.5 : 0,
+                borderColor: event.location.name === "A definir" ? "#b71c1c" : "transparent",
+              },
+            ]}
+          >
+            📍 Localidade: {event.location.name}
+          </Text>
+          <Text
+            style={[
+              styles.tag,
+              styles.locationTag,
+              {
+                backgroundColor: getLocationColor(event.location.floor),
+                borderWidth: event.location.floor === "A definir" ? 1.5 : 0,
+                borderColor: event.location.floor === "A definir" ? "#b71c1c" : "transparent",
+              },
+            ]}
+          >
+            🗺 Piso: {event.location.floor}
+          </Text>
+        </View>
+    
+    <View style={styles.tagsRow}>
+      <Text
+        style={[
+          styles.tag,
+          {
+            backgroundColor: getOrganizerColor(theme),
+            color: colors.statusText,
+          },
+        ]}
+      >
+        🧑‍🏫 Organizador: {event.organizer}
+      </Text>
+    </View>
+
+        <View style={styles.tagsRow}>
+          {role === "MASTER" && (
+            <Text style={[styles.tag, { backgroundColor: getPriorityColor(event.priority) }]}>
+              🔼 Prioridade: {formatPriority(event.priority)}
+            </Text>
+          )}
+          <Text style={[styles.tag, { backgroundColor: getModeColor(event.mode) }]}>
+            🛠 Modalidade: {formatMode(event.mode)}
+          </Text>
+          <Text style={[styles.tag, { backgroundColor: getStatusColor(event.status) }]}>
+            📌 Status: {formatStatus(event.status)}
+          </Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+  ))
+)}
     </ScrollView>
   );
 };
+
 
 export default HomeScreen;
