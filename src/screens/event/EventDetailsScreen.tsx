@@ -161,30 +161,37 @@ const themeColors = getColors(theme);
   return (
     <ScrollView style={[styles.container, { backgroundColor: themeColors.background }]}>
       <Text style={[styles.title, { color: themeColors.primary }]}>{event.name}</Text>
-      <View style={[styles.detailCard, { backgroundColor: themeColors.card }]}>
-        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Data:</Text> {new Date(event.day).toLocaleDateString("pt-BR")}</Text>
-        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Horário:</Text> {event.startTime} - {event.endTime}</Text>
-        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Tema:</Text> {event.theme}</Text>
-        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Público-alvo:</Text> {event.targetAudience}</Text>
-        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Modalidade:</Text> {formatMode(event.mode)}</Text>
-        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Ambiente:</Text> {event.environment}</Text>
-        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Organizador:</Text> {event.organizer}</Text>
-        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Recursos:</Text> {event.resourcesDescription.join(", ")}</Text>
-        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Divulgação:</Text> {event.disclosureMethod}</Text>
-        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Assuntos Relacionados:</Text> {event.relatedSubjects.join(", ")}</Text>
-        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Estratégia de Ensino:</Text> {event.teachingStrategy}</Text>
-        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Autores:</Text> {event.authors.join(", ")}</Text>
-        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Cursos:</Text> {event.courses.join(", ")}</Text>
-        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Vínculo Disciplinar:</Text> {event.disciplinaryLink}</Text>
-        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Localização:</Text> {event.location.name} - {event.location.floor}</Text>
-        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Observação:</Text> {event.observation}</Text>
-        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Status:</Text> {formatStatus(event.status)}</Text>
-        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Status Administrativo:</Text> {formatAdministrativeStatus(event.administrativeStatus)}</Text>
-        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Prioridade:</Text> {formatPriority(event.priority)}</Text>
-        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Duração da Limpeza:</Text> {formatDuration(event.cleanupDuration)}</Text>
-        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Criado em:</Text> {new Date(event.createdAt).toLocaleString("pt-BR")}</Text>
-        <Text style={[styles.detail, { color: themeColors.cardText }]}><Text style={[styles.label, { color: themeColors.cardText }]}>Última Modificação:</Text> {new Date(event.lastModifiedAt).toLocaleString("pt-BR")}</Text>
+    <View style={[styles.detailCard, { backgroundColor: themeColors.card }]}>
+    {[
+      ["Data", new Date(event.day).toLocaleDateString("pt-BR")],
+      ["Horário", `${event.startTime} - ${event.endTime}`],
+      ["Tema", event.theme],
+      ["Público-alvo", event.targetAudience],
+      ["Modalidade", formatMode(event.mode)],
+      ["Ambiente", event.environment],
+      ["Organizador", event.organizer],
+      ["Recursos", event.resourcesDescription.join(", ")],
+      ["Divulgação", event.disclosureMethod],
+      ["Assuntos Relacionados", event.relatedSubjects.join(", ")],
+      ["Estratégia de Ensino", event.teachingStrategy],
+      ["Autores", event.authors.join(", ")],
+      ["Cursos", event.courses.join(", ")],
+      ["Vínculo Disciplinar", event.disciplinaryLink],
+      ["Localização", `${event.location.name} - ${event.location.floor}`],
+      ["Status", formatStatus(event.status)],
+      ["Status Administrativo", formatAdministrativeStatus(event.administrativeStatus)],
+      ["Prioridade", formatPriority(event.priority)],
+      ["Observação", event.observation],
+      ["Duração da Limpeza", formatDuration(event.cleanupDuration)],
+      ["Criado em", new Date(event.createdAt).toLocaleString("pt-BR")],
+      ["Última Modificação", new Date(event.lastModifiedAt).toLocaleString("pt-BR")],
+    ].map(([label, value], idx) => (
+      <View key={idx} style={styles.detailRow}>
+        <Text style={[styles.label, { color: themeColors.primary }]}>{label}:</Text>
+        <Text style={[styles.value, { color: themeColors.cardText }]}>{value}</Text>
       </View>
+    ))}
+  </View>
       
       <View style={styles.buttonContainer}>
         {auth?.user?.role === "MASTER" && (

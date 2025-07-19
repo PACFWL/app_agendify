@@ -33,7 +33,7 @@ const getThemeBackgroundColor = (theme: ThemeType): string => {
 };
 
 const getOrganizerColor = (theme: ThemeType): string => {
-  return theme === "dark" ? "#1976d2" : "#90caf9";
+  return theme === "dark" ? "#f877c3ff" : "#fb0996ff";
 };
 
 const getTargetAudienceColor = (theme: ThemeType): string => {
@@ -130,7 +130,7 @@ const getDateColorPorCategoria = (
  
   const colorBases: Record<typeof categoria, { hue: number; saturation: number; lightness: number }> = {
     destaque: { hue: 220, saturation: 80, lightness: 50 }, 
-    hoje: { hue: 170, saturation: 70, lightness: 45 },    
+    hoje: { hue: 190, saturation: 70, lightness: 45 },    
     semana: { hue: 40, saturation: 80, lightness: 50 },    
     proxima: { hue: 300, saturation: 65, lightness: 50 }, 
   };
@@ -316,9 +316,9 @@ const HomeScreen = () => {
     </Text>
 
     <View style={styles.summaryContainer}>
-      <Text style={styles.summaryText}>Eventos hoje: {eventosDoDia.length}</Text>
-      <Text style={styles.summaryText}>Semana atual: {eventosDaSemana.length}</Text>
-      <Text style={styles.summaryText}>Semana que vem: {eventosProximaSemana.length}</Text>
+      <Text style={styles.summaryText}>Eventos de hoje: {eventosDoDia.length}</Text>
+      <Text style={styles.summaryText}>Eventos da semana atual: {eventosDaSemana.length}</Text>
+      <Text style={styles.summaryText}>Eventos da próxima emana: {eventosProximaSemana.length}</Text>
     </View>
 
 {eventoEmDestaque && (
@@ -352,7 +352,6 @@ const HomeScreen = () => {
         🕓 Término: {eventoEmDestaque.endTime}
       </Text>
     </View>
-
    
     <View style={styles.tagsRow}>
       <Text
@@ -378,7 +377,6 @@ const HomeScreen = () => {
         🎓 Público-Alvo: {eventoEmDestaque.targetAudience}
       </Text>
     </View>
-
  
     <View style={styles.tagsRow}>
       <Text
@@ -408,7 +406,6 @@ const HomeScreen = () => {
         🗺 Piso: {eventoEmDestaque.location.floor}
       </Text>
     </View>
-
    
     <View style={styles.tagsRow}>
       <Text
@@ -424,7 +421,6 @@ const HomeScreen = () => {
       </Text>
     </View>
 
-  
     <View style={styles.tagsRow}>
       {role === "MASTER" && (
         <Text
@@ -511,7 +507,6 @@ const HomeScreen = () => {
             🗓 Data: {new Date(event.day).toLocaleDateString("pt-BR")}
           </Text>
         </View>
-
        
         <View style={styles.tagsRow}>
           <Text style={[styles.tag, { backgroundColor: "#37474f", color: colors.statusText }]}>
@@ -521,7 +516,6 @@ const HomeScreen = () => {
             ⏰ Término: {event.endTime}
           </Text>
         </View>
-
      
         <View style={styles.tagsRow}>
        <Text
@@ -548,7 +542,6 @@ const HomeScreen = () => {
         🎓 Público-Alvo: {event.targetAudience}
       </Text>
         </View>
-
        
         <View style={styles.tagsRow}>
           <Text
@@ -578,7 +571,6 @@ const HomeScreen = () => {
             🗺 Piso: {event.location.floor}
           </Text>
         </View>
-    
 
     <View style={styles.tagsRow}>
       <Text
@@ -593,7 +585,6 @@ const HomeScreen = () => {
         🧑‍🏫 Organizador: {event.organizer}
       </Text>
     </View>
-
 
         <View style={styles.tagsRow}>
           {role === "MASTER" && (
@@ -643,8 +634,7 @@ const HomeScreen = () => {
             🗓 Data: {new Date(event.day).toLocaleDateString("pt-BR")}
           </Text>
         </View>
-
-       
+  
         <View style={styles.tagsRow}>
           <Text style={[styles.tag, { backgroundColor: "#37474f", color: colors.statusText }]}>
             ⏰ Início: {event.startTime}
@@ -654,7 +644,6 @@ const HomeScreen = () => {
           </Text>
         </View>
 
-     
     <View style={styles.tagsRow}>
        <Text
         style={[
@@ -741,7 +730,6 @@ const HomeScreen = () => {
     </TouchableOpacity>
   ))
 )}
-
         <Text style={styles.sectionTitle}>📆 Eventos da Semana que vem</Text>
       {eventosProximaSemana.length === 0 ? (
         <Text style={styles.noEventText}>Nenhum evento na semana que vem.</Text>

@@ -91,4 +91,10 @@ export default StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
   },
+  detailRow: {
+  marginBottom: 12,
+  borderBottomWidth: 0.6,
+  borderBottomColor: "#ccc",
+  paddingBottom: 8,
+  },
 });

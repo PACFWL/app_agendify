@@ -48,5 +48,3 @@ export const colors = {
 };
 
 export const getColors = (theme: ThemeType) => colors[theme];
-
-

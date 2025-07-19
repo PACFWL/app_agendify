@@ -125,7 +125,7 @@ const EventCard = ({
     >
    
    <Text style={[styles.eventDate, { color: colors.accent }]}>
-  {formatDateToBR(event.day)}
+  Data: {formatDateToBR(event.day)}
 </Text>
 
   <Text style={[styles.eventName, { color: colors.cardTitle }]}>{event.name}</Text>
@@ -183,16 +183,16 @@ const EventCard = ({
           <Text
             style={[styles.tag, { backgroundColor: getPriorityColor(event.priority) }]}
           >
-            {formatPriority(event.priority)}
+          Prioridade: {formatPriority(event.priority)}
           </Text>
         )}
 
         <Text style={[styles.tag, { backgroundColor: getModeColor(event.mode) }]}>
-          {formatMode(event.mode)}
+          Modalidade: {formatMode(event.mode)}
         </Text>
 
         <Text style={[styles.tag, { backgroundColor: getStatusColor(event.status) }]}>
-          {formatStatus(event.status)}
+          Status: {formatStatus(event.status)}
         </Text>
       </View>
     </TouchableOpacity>

@@ -13,7 +13,6 @@ import { getColors } from "../../styles/ThemeColors";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
 
-
 type NavigationProps = NativeStackNavigationProp<RootStackParamList>;
 
 type EventType = {
@@ -99,8 +98,6 @@ const formatMonthYear = (dateString: string): string => {
     month: "long",
   });
 };
-
-
 
 const CalendarScreen = () => {
   const auth = useContext(AuthContext);
@@ -230,8 +227,9 @@ return (
       <Text style={styles.titleToday}>{nowInBrazil}</Text>
 
       <Calendar
+        key={theme} 
         markingType="custom"
-      theme={{
+        theme={{
           calendarBackground: getColors(theme).background,
           dayTextColor: getColors(theme).text,
           monthTextColor: getColors(theme).primary,

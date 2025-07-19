@@ -100,16 +100,17 @@ const PendingUserDetailsScreen = () => {
   return (
     <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
       <Text style={[styles.title, { color: colors.primary }]}>{pendingUser.name}</Text>
-      <View style={[styles.detailCard, { backgroundColor: colors.card }]}>
-     
-      <Text style={[styles.detail, { color: colors.cardText }]}>
-        <Text style={[styles.label, { color: colors.cardText }]}>Email:</Text> {pendingUser.email}
-      </Text>
-
-        <Text style={[styles.detail, { color: colors.cardText }]}>
-        <Text style={[styles.label, { color: colors.cardText }]}>Cargo:</Text> {roleLabel(pendingUser.role)}
-      </Text>
-      </View>
+<View style={[styles.detailCard, { backgroundColor: colors.card }]}>
+  {[
+    ["Email", pendingUser.email],
+    ["Cargo", roleLabel(pendingUser.role)],
+  ].map(([label, value], idx) => (
+    <View key={idx} style={styles.detailRow}>
+      <Text style={[styles.label, { color: colors.primary }]}>{label}:</Text>
+      <Text style={[styles.value, { color: colors.cardText }]}>{value}</Text>
+    </View>
+  ))}
+</View>
 
       <View style={styles.buttonContainer}>
         {auth.user.role === "MASTER" && (

@@ -12,6 +12,19 @@ import styles from "../../styles/UserDetailsScreenStyles";
 type UserDetailsRouteProp = RouteProp<RootStackParamList, "UserDetails">;
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, "UserDetails">;
 
+const roleLabel = (role: string) => {
+  switch (role) {
+    case "MASTER":
+      return "Administrador";
+    case "REQUESTER":
+      return "Solicitante";
+    case "USER":
+      return "Usuário";
+    default:
+      return role;
+  }
+};
+
 const UserDetailsScreen = () => {
   const route = useRoute<UserDetailsRouteProp>();
   const navigation = useNavigation<NavigationProp>();
@@ -76,16 +89,17 @@ const UserDetailsScreen = () => {
   return (
     <View style={[styles.container, { backgroundColor: themeColors.background }]}>
       <Text style={[styles.title, { color: themeColors.primary }]}>{user.name}</Text>
-      <View style={[styles.detailCard, { backgroundColor: themeColors.card }]}>
-        <Text style={[styles.detail, { color: themeColors.cardText }]}>
-          <Text style={styles.label}>Email: </Text>
-          {user.email}
-        </Text>
-        <Text style={[styles.detail, { color: themeColors.cardText }]}>
-          <Text style={styles.label}>Função: </Text>
-          {user.role}
-        </Text>
-      </View>
+ <View style={[styles.detailCard, { backgroundColor: themeColors.card }]}>
+  {[
+    ["Email", user.email],
+    ["Função", roleLabel(user.role)],
+  ].map(([label, value], idx) => (
+    <View key={idx} style={styles.detailRow}>
+      <Text style={[styles.label, { color: themeColors.primary }]}>{label}:</Text>
+      <Text style={[styles.value, { color: themeColors.cardText }]}>{value}</Text>
+    </View>
+  ))}
+</View>
 
       <View style={styles.buttonContainer}>
         {auth?.user?.role === "MASTER" && (

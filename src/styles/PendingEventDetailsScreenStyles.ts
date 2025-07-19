@@ -34,20 +34,10 @@ export default StyleSheet.create({
     marginBottom: 8,
   },
   requesterLink: {
-    backgroundColor: "#f2f2f2",
-    color: "#6200ee",
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 8,
-    marginBottom: 8,
-    alignSelf: "flex-start",
-    fontWeight: "bold",
-    elevation: 1,
-    shadowColor: "#000", 
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-  },
+  fontSize: 16,
+  marginTop: 4,
+  marginBottom: 4,
+},
   buttonContainer: {
     marginTop: 20,
     paddingHorizontal: 16,
@@ -90,5 +80,11 @@ export default StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontWeight: "bold",
+  },
+  detailRow: {
+  marginBottom: 12,
+  borderBottomWidth: 0.6,
+  borderBottomColor: "#ccc",
+  paddingBottom: 8,
   },
 });

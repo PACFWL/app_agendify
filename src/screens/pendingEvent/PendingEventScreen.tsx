@@ -81,7 +81,7 @@ const getStatusColor = (status: string) => {
     case "EM_ANDAMENTO": return "#43a047";   
     case "EM_PAUSA": return "#f57c00";      
     case "FINALIZADO": return "#455a64";    
-    case "EM_ANALISE": return "#7b1fa2";    
+    case "EM_ANALISE": return "#ff1f48ff";    
     default: return "#90a4ae";
   }
 };
@@ -160,7 +160,7 @@ const EventCard = ({
          style={[styles.eventCard, { backgroundColor: colors.card }]}
       >
          <Text style={[styles.eventDate, { color: colors.accent }]}>
-  {formatDateToBR(event.day)}
+  Data: {formatDateToBR(event.day)}
 </Text>
         <Text style={[styles.eventName, { color: colors.cardTitle }]}>{event.name}</Text>
         
@@ -217,17 +217,16 @@ const EventCard = ({
       { backgroundColor: getPriorityColor(event.priority) },
     ]}
   >
-    {formatPriority(event.priority)}
+    Prioridade: {formatPriority(event.priority)}
   </Text>
 )}
 
-
-  <Text style={[styles.tag, { backgroundColor: getModeColor(event.mode) }]}>
-  {formatMode(event.mode)}
-      </Text>
+    <Text style={[styles.tag, { backgroundColor: getModeColor(event.mode) }]}>
+    Modalidade: {formatMode(event.mode)}
+    </Text>
 
       <Text style={[styles.tag, { backgroundColor: getStatusColor(event.status) }]}>
-        {formatStatus(event.status)}
+        Status: {formatStatus(event.status)}
       </Text>
       </View>
       </TouchableOpacity>
