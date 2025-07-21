@@ -31,35 +31,12 @@ export default StyleSheet.create({
     fontSize: 14,
     marginBottom: 8,
   },
-  label: {
-    fontWeight: "bold",
-  },
-  value: {
-    fontWeight: "normal",
-  },
+
   buttonContainer: {
     marginTop: 20,
     paddingHorizontal: 16,
     gap: 10,
     marginBottom: 30,
-  },
-  button: {
-    padding: 12,
-    borderRadius: 8,
-    alignItems: "center",
-  },
-  primaryButton: {
-    backgroundColor: "#1E88E5",
-  },
-  warningButton: {
-    backgroundColor: "#FFA726",
-  },
-  dangerButton: {
-    backgroundColor: "#E53935",
-  },
-  buttonText: {
-    color: "#fff",
-    fontWeight: "bold",
   },
   detailRow: {
   marginBottom: 12,
@@ -67,4 +44,46 @@ export default StyleSheet.create({
   borderBottomColor: "#ccc",
   paddingBottom: 8,
   },
+    label: {
+      fontWeight: "600",
+      fontSize: 14,
+      marginBottom: 2,
+    },
+
+  value: {
+    fontSize: 14,
+    lineHeight: 18,
+  },
+
+  button: {
+    paddingVertical: 14,
+    paddingHorizontal: 18,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOpacity: 0.15,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    marginBottom: 8,
+  },
+  primaryButton: {
+    backgroundColor: "#1976d2",
+  },
+
+  warningButton: {
+    backgroundColor: "#FFA726",
+  },
+
+  dangerButton: {
+    backgroundColor: "#E53935",
+  },
+
+  buttonText: {
+    color: "#fff",
+    fontWeight: "600",
+    fontSize: 16,
+  },
+
 });
