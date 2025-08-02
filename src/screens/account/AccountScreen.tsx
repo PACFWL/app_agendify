@@ -2,7 +2,21 @@ import React, { useContext } from "react";
 import { View, Text, Alert, TouchableOpacity } from "react-native";
 import { AuthContext } from "../../contexts/AuthContext";
 import { ThemeContext } from "../../contexts/ThemeContext";
-import { getColors } from "../../styles/ThemeColors";
+import { getColors } from "../../styles/ThemeColors.styles";
+
+
+const roleLabel = (role: string) => {
+  switch (role) {
+    case "MASTER":
+      return "Administrador";
+    case "REQUESTER":
+      return "Solicitante";
+    case "USER":
+      return "Usuário";
+    default:
+      return role;
+  }
+};
 
 const AccountScreen = () => {
   const auth = useContext(AuthContext);
@@ -57,7 +71,7 @@ const AccountScreen = () => {
           textAlign: "center",
         }}>
           <Text style={{ fontWeight: "600" }}>Função: </Text>
-          {auth?.user?.role || "N/A"}
+          {auth?.user?.role ? roleLabel(auth.user.role) : "N/A"}
         </Text>
       </View>
 

@@ -4,14 +4,14 @@ import { Picker } from "@react-native-picker/picker";
 import { AuthContext } from "../../contexts/AuthContext";
 import { searchEvents } from "../../api/event";
 import RemoteSvgIcon from "../../components/RemoteSvgIcon";
-import styles from "../../styles/SearchScreenStyles";
+import styles from "./SearchScreen.styles";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../routes/Routes";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { ThemeContext } from "../../contexts/ThemeContext";
-import { getColors } from "../../styles/ThemeColors";
+import { getColors } from "../../styles/ThemeColors.styles";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Search">;
 

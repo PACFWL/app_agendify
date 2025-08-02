@@ -1,25 +1,25 @@
 import React, { useContext, useState, useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { AuthContext } from "../contexts/AuthContext";
-import LoginScreen from "../screens/user/LoginScreen";
-import RegisterScreen from "../screens/user/RegisterScreen";
+import LoginScreen from "../screens/user/login/LoginScreen";
+import RegisterScreen from "../screens/user/register/RegisterScreen";
 import SplashScreen from "../screens/SplashScreen";
-import EventDetailsScreen from "../screens/event/EventDetailsScreen";
-import EventFormScreen from "../screens/event/EventFormScreen";
-import EventEditFormScreen from "../screens/event/EventEditFormScreen";
-import UserDetailsScreen from "../screens/user/UserDetailsScreen";
+import EventDetailsScreen from "../screens/event/details/EventDetailsScreen";
+import EventFormScreen from "../screens/event/form/EventFormScreen";
+import EventEditFormScreen from "../screens/event/form/EventEditFormScreen";
+import UserDetailsScreen from "../screens/user/details/UserDetailsScreen";
 import BottomTabs from "./BottomTabs";
-import PendingEventDetailsScreen from "../screens/pendingEvent/PendingEventDetailsScreen";
-import PendingEventFormScreen from "../screens/pendingEvent/PendingEventFormScreen";
-import PendingEventEditFormScreen from "../screens/pendingEvent/PendingEventEditFormScreen";
-import ConflictResolutionScreen from "../screens/event/ConflictResolutionScreen";
-import UpdateConflictResolutionScreen from "../screens/event/UpdateConflictResolutionScreen";
-import PendingConflictResolutionScreen from "../screens/pendingEvent/PendingConflictResolutionScreen";
-import RegisterPendingScreen from "../screens/pendingUser/RegisterPendingScreen";
-import PendingUserDetailsScreen from "../screens/pendingUser/PendingUserDetailsScreen";
-import PendingUserEditFormScreen from "../screens/pendingUser/PendingUserEditFormScreen";
-import UserEditFormScreen from "../screens/user/UserEditFormScreen";
-import PendingUserFormScreen from "../screens/pendingUser/PendingUserFormScreen"
+import PendingEventDetailsScreen from "../screens/pendingEvent/details/PendingEventDetailsScreen";
+import PendingEventFormScreen from "../screens/pendingEvent/form/PendingEventFormScreen";
+import PendingEventEditFormScreen from "../screens/pendingEvent/form/PendingEventEditFormScreen";
+import ConflictResolutionScreen from "../screens/event/conflict/ConflictResolutionScreen";
+import UpdateConflictResolutionScreen from "../screens/event/conflict/UpdateConflictResolutionScreen";
+import PendingConflictResolutionScreen from "../screens/pendingEvent/conflict/PendingConflictResolutionScreen";
+import RegisterPendingScreen from "../screens/pendingUser/register/RegisterPendingScreen";
+import PendingUserDetailsScreen from "../screens/pendingUser/details/PendingUserDetailsScreen";
+import PendingUserEditFormScreen from "../screens/pendingUser/form/PendingUserEditFormScreen";
+import UserEditFormScreen from "../screens/user/form/UserEditFormScreen";
+import PendingUserFormScreen from "../screens/pendingUser/form/PendingUserFormScreen"
 
 export type RootStackParamList = {
   Login: undefined;

@@ -8,8 +8,8 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../routes/Routes";
 import { useNavigation } from "@react-navigation/native";
 import { LocaleConfig } from "react-native-calendars";
-import getCalendarScreenStyles from "../../styles/CalendarScreenStyles";
-import { getColors } from "../../styles/ThemeColors";
+import getCalendarScreenStyles from "./CalendarScreen.styles";
+import { getColors } from "../../styles/ThemeColors.styles";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
 

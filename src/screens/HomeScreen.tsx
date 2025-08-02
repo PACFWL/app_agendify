@@ -4,10 +4,10 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { AuthContext } from "../contexts/AuthContext";
 import { RootStackParamList } from "../routes/Routes";
-import getHomeScreenStyles from "../styles/HomeScreenStyles";
+import getHomeScreenStyles from "./HomeScreen.styles";
 import { getAllEvents } from "../api/event";
 import { ThemeContext, ThemeType } from "../contexts/ThemeContext";
-import { getColors } from "../styles/ThemeColors";
+import { getColors } from "../styles/ThemeColors.styles";
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamList, "Home">;
 

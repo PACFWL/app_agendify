@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import { View, Text, Image } from "react-native";
 import { ThemeContext } from "../contexts/ThemeContext";
-import { getColors } from "../styles/ThemeColors";
-import createStyles from "../styles/SplashScreenStyles";
+import { getColors } from "../styles/ThemeColors.styles";
+import createStyles from "./SplashScreen.styles";
 
 const SplashScreen = () => {
   const { theme } = useContext(ThemeContext);

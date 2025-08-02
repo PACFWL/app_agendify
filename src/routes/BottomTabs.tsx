@@ -1,16 +1,16 @@
 import React, { useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/HomeScreen";
-import EventScreen from "../screens/event/EventScreen";
+import EventScreen from "../screens/event/details/EventScreen";
 import CalendarScreen from "../screens/calendar/CalendarScreen";
-import PendingEventScreen from "../screens/pendingEvent/PendingEventScreen";
-import PendingUsersScreen from "../screens/pendingUser/PendingUsersScreen";
-import UsersScreen from "../screens/user/UserScreen";
+import PendingEventScreen from "../screens/pendingEvent/details/PendingEventScreen";
+import PendingUsersScreen from "../screens/pendingUser/details/PendingUsersScreen";
+import UsersScreen from "../screens/user/details/UserScreen";
 import RemoteSvgIcon from "../components/RemoteSvgIcon";
 import { AuthContext } from "../contexts/AuthContext";
 import AccountScreen from "../screens/account/AccountScreen";
 import SearchScreen from "../screens/search/SearchScreen";
-import { getColors } from "../styles/ThemeColors";
+import { getColors } from "../styles/ThemeColors.styles";
 import { ThemeContext } from "../contexts/ThemeContext";
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
