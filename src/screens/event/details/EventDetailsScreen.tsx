@@ -103,6 +103,11 @@ const formatDuration = (isoDuration: string): string => {
   return parts.length ? parts.join(" e ") : "0 minuto";
 };
 
+const formatDateToBR = (isoDate: string) => {
+  const [year, month, day] = isoDate.split("-");
+  return `${day}/${month}/${year}`;
+};
+
 const EventDetailsScreen = ({ route, navigation }: Props) => {
   const { eventId } = route.params;
   const auth = useContext(AuthContext);
@@ -163,7 +168,7 @@ const themeColors = getColors(theme);
       <Text style={[styles.title, { color: themeColors.primary }]}>{event.name}</Text>
     <View style={[styles.detailCard, { backgroundColor: themeColors.card }]}>
     {[
-      ["Data", new Date(event.day).toLocaleDateString("pt-BR")],
+      ["Data", formatDateToBR(event.day)],
       ["Horário", `${event.startTime} - ${event.endTime}`],
       ["Tema", event.theme],
       ["Público-alvo", event.targetAudience],

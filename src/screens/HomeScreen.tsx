@@ -228,7 +228,7 @@ const HomeScreen = () => {
     }, [auth])
   );
 
-  const today = new Date();
+ const today = new Date();
 
  const role = auth?.user?.role;
 
@@ -249,25 +249,75 @@ const HomeScreen = () => {
   endOfNextWeek.setHours(23, 59, 59, 999);
 
   const eventosDoDia = events.filter(e => {
-    const data = new Date(e.day);
+    const [year, month, day] = e.day.split("-");
+    const data = new Date(Number(year), Number(month) - 1, Number(day));
     return isSameDay(data, today);
   });
 
   const eventosDaSemana = events.filter(e => {
-    const data = new Date(e.day);
+    const [year, month, day] = e.day.split("-");
+    const data = new Date(Number(year), Number(month) - 1, Number(day));
     return data >= startOfWeek && data <= endOfWeek && !isSameDay(data, today);
   });
 
   const eventosProximaSemana = events.filter(e => {
-    const data = new Date(e.day);
+    const [year, month, day] = e.day.split("-");
+    const data = new Date(Number(year), Number(month) - 1, Number(day));
     return data >= startOfNextWeek && data <= endOfNextWeek;
   });
 
   const eventosVisiveis = [...eventosDoDia, ...eventosDaSemana, ...eventosProximaSemana];
 
-  const eventoEmDestaque = eventosVisiveis
-    .filter(e => new Date(e.day) >= today)
-    .sort((a, b) => statusPriority[a.status] - statusPriority[b.status])[0];
+const agruparEventosPorDia = (eventos: Event[]): Record<string, Event[]> => {
+  return eventos.reduce((acc, evento) => {
+    if (!acc[evento.day]) acc[evento.day] = [];
+    acc[evento.day].push(evento);
+    return acc;
+  }, {} as Record<string, Event[]>);
+};
+
+const eventosAgrupados = agruparEventosPorDia(eventosVisiveis);
+
+
+const hojeStr = today.toISOString().split("T")[0];
+
+
+const eventosHoje = eventosAgrupados[hojeStr] || [];
+const todosFinalizadosHoje = eventosHoje.length > 0 && eventosHoje.every(e => e.status === "FINALIZADO");
+
+let eventosDestaque: Event[] = [];
+
+if (!todosFinalizadosHoje && eventosHoje.length > 0) {
+  
+  eventosDestaque = eventosHoje;
+} else {
+ 
+  const datasFuturas = Object.keys(eventosAgrupados)
+    .filter(dataStr => dataStr > hojeStr)
+    .sort();
+
+  for (const dataStr of datasFuturas) {
+    const eventosDoDia = eventosAgrupados[dataStr];
+    if (eventosDoDia && eventosDoDia.length > 0) {
+      eventosDestaque = eventosDoDia;
+      break;
+    }
+  }
+}
+
+const eventosEmDestaque = eventosDestaque
+  .slice()
+  .sort((a, b) => statusPriority[a.status] - statusPriority[b.status])
+  .slice(0, 4);
+
+  /**const eventosEmDestaque = eventosVisiveis
+    .filter(e => {
+    const [year, month, day] = e.day.split("-");
+    const eventDate = new Date(Number(year), Number(month) - 1, Number(day));
+    return eventDate >= new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  })
+    .sort((a, b) => statusPriority[a.status] - statusPriority[b.status])
+    .slice(0, 3);**/
 
   const eventoJaPassou = (evento: Event): boolean => {
     const agora = new Date();
@@ -318,138 +368,157 @@ const HomeScreen = () => {
     <View style={styles.summaryContainer}>
       <Text style={styles.summaryText}>Eventos de hoje: {eventosDoDia.length}</Text>
       <Text style={styles.summaryText}>Eventos da semana atual: {eventosDaSemana.length}</Text>
-      <Text style={styles.summaryText}>Eventos da próxima emana: {eventosProximaSemana.length}</Text>
+      <Text style={styles.summaryText}>Eventos da próxima semana: {eventosProximaSemana.length}</Text>
     </View>
 
-{eventoEmDestaque && (
-  <View style={[styles.card, { borderLeftColor: getStatusColor(eventoEmDestaque.status) }]}>
-    <Text style={styles.sectionTitle}>🎯 Evento em Destaque</Text>
-    <Text style={styles.cardTitle}>{eventoEmDestaque.name}</Text>
+{eventosEmDestaque.length > 0 && (
+  <>
+    <Text style={styles.sectionTitle}>🎯 Eventos em Destaque</Text>
+    {eventosEmDestaque.map((evento, index) => (
+      <View
+        key={evento.id}
+        style={[styles.card, { borderLeftColor: getStatusColor(evento.status) }]}
+      >
+        <Text style={styles.cardTitle}>{evento.name}</Text>
 
-    <View style={styles.tagsRow}>
-      <Text
-        style={[
-          styles.tag,
-          {
-            backgroundColor: getDateColorPorCategoria(
-              eventoEmDestaque.day,
-              eventoEmDestaque.day,
-              "destaque"
-            ),
-            color: colors.statusText,
-          },
-        ]}
-      >
-        🗓 Data: {new Date(eventoEmDestaque.day).toLocaleDateString("pt-BR")}
-      </Text>
-    </View>
+        <View style={styles.tagsRow}>
+          <Text
+            style={[
+              styles.tag,
+              {
+                backgroundColor: getDateColorPorCategoria(
+                  evento.day,
+                  evento.day,
+                  "destaque"
+                ),
+                color: colors.statusText,
+              },
+            ]}
+          >
+            🗓 Data: {formatDateToBR(evento.day)}
+          </Text>
+        </View>
 
-    <View style={styles.tagsRow}>
-      <Text style={[styles.tag, { backgroundColor: "#37474f", color: colors.statusText }]}>
-        🕒 Início: {eventoEmDestaque.startTime}
-      </Text>
-      <Text style={[styles.tag, { backgroundColor: "#37474f", color: colors.statusText }]}>
-        🕓 Término: {eventoEmDestaque.endTime}
-      </Text>
-    </View>
-   
-    <View style={styles.tagsRow}>
-      <Text
-        style={[
-          styles.tag,
-          {
-            backgroundColor: getThemeBackgroundColor(theme),
-            color: colors.statusText,
-          },
-        ]}
-      >
-        🎨 Tema: {eventoEmDestaque.theme}
-      </Text>
-      <Text
-        style={[
-          styles.tag,
-          {
-            backgroundColor: getTargetAudienceColor(theme),
-            color: colors.statusText,
-          },
-        ]}
-      >
-        🎓 Público-Alvo: {eventoEmDestaque.targetAudience}
-      </Text>
-    </View>
- 
-    <View style={styles.tagsRow}>
-      <Text
-        style={[
-          styles.tag,
-          styles.locationTag,
-          {
-            backgroundColor: getLocationColor(eventoEmDestaque.location.name),
-            borderWidth: eventoEmDestaque.location.name === "A definir" ? 1.5 : 0,
-            borderColor: eventoEmDestaque.location.name === "A definir" ? "#b71c1c" : "transparent",
-          },
-        ]}
-      >
-        📍 Localidade: {eventoEmDestaque.location.name}
-      </Text>
-      <Text
-        style={[
-          styles.tag,
-          styles.locationTag,
-          {
-            backgroundColor: getLocationColor(eventoEmDestaque.location.floor),
-            borderWidth: eventoEmDestaque.location.floor === "A definir" ? 1.5 : 0,
-            borderColor: eventoEmDestaque.location.floor === "A definir" ? "#b71c1c" : "transparent",
-          },
-        ]}
-      >
-        🗺 Piso: {eventoEmDestaque.location.floor}
-      </Text>
-    </View>
-   
-    <View style={styles.tagsRow}>
-      <Text
-        style={[
-          styles.tag,
-          {
-            backgroundColor: getOrganizerColor(theme),
-            color: colors.statusText,
-          },
-        ]}
-      >
-        🧑‍🏫 Organizador: {eventoEmDestaque.organizer}
-      </Text>
-    </View>
+        <View style={styles.tagsRow}>
+          <Text
+            style={[
+              styles.tag,
+              { backgroundColor: "#37474f", color: colors.statusText },
+            ]}
+          >
+            🕒 Início: {evento.startTime}
+          </Text>
+          <Text
+            style={[
+              styles.tag,
+              { backgroundColor: "#37474f", color: colors.statusText },
+            ]}
+          >
+            🕓 Término: {evento.endTime}
+          </Text>
+        </View>
 
-    <View style={styles.tagsRow}>
-      {role === "MASTER" && (
-        <Text
-          style={[
-            styles.tag,
-            { backgroundColor: getPriorityColor(eventoEmDestaque.priority) },
-          ]}
-        >
-          🔼 Prioridade: {formatPriority(eventoEmDestaque.priority)}
-        </Text>
-      )}
-      <Text
-        style={[
-          styles.tag,
-          { backgroundColor: getModeColor(eventoEmDestaque.mode) },
-        ]}
-      >
-        🛠 Modalidade: {formatMode(eventoEmDestaque.mode)}
-      </Text>
-      <Text
-        style={[
-          styles.statusTag,
-          { backgroundColor: getStatusColor(eventoEmDestaque.status) },
-        ]}
-      >
-        📌 Status: {formatStatusText(eventoEmDestaque.status)}
-      </Text>
-    </View>
-  </View>
+        <View style={styles.tagsRow}>
+          <Text
+            style={[
+              styles.tag,
+              {
+                backgroundColor: getThemeBackgroundColor(theme),
+                color: colors.statusText,
+              },
+            ]}
+          >
+            🎨 Tema: {evento.theme}
+          </Text>
+          <Text
+            style={[
+              styles.tag,
+              {
+                backgroundColor: getTargetAudienceColor(theme),
+                color: colors.statusText,
+              },
+            ]}
+          >
+            🎓 Público-Alvo: {evento.targetAudience}
+          </Text>
+        </View>
+
+        <View style={styles.tagsRow}>
+          <Text
+            style={[
+              styles.tag,
+              styles.locationTag,
+              {
+                backgroundColor: getLocationColor(evento.location.name),
+                borderWidth: evento.location.name === "A definir" ? 1.5 : 0,
+                borderColor:
+                  evento.location.name === "A definir" ? "#b71c1c" : "transparent",
+              },
+            ]}
+          >
+            📍 Localidade: {evento.location.name}
+          </Text>
+          <Text
+            style={[
+              styles.tag,
+              styles.locationTag,
+              {
+                backgroundColor: getLocationColor(evento.location.floor),
+                borderWidth: evento.location.floor === "A definir" ? 1.5 : 0,
+                borderColor:
+                  evento.location.floor === "A definir" ? "#b71c1c" : "transparent",
+              },
+            ]}
+          >
+            🗺 Piso: {evento.location.floor}
+          </Text>
+        </View>
+
+        <View style={styles.tagsRow}>
+          <Text
+            style={[
+              styles.tag,
+              {
+                backgroundColor: getOrganizerColor(theme),
+                color: colors.statusText,
+              },
+            ]}
+          >
+            🧑‍🏫 Organizador: {evento.organizer}
+          </Text>
+        </View>
+
+        <View style={styles.tagsRow}>
+          {role === "MASTER" && (
+            <Text
+              style={[
+                styles.tag,
+                { backgroundColor: getPriorityColor(evento.priority) },
+              ]}
+            >
+              🔼 Prioridade: {formatPriority(evento.priority)}
+            </Text>
+          )}
+          <Text
+            style={[
+              styles.tag,
+              { backgroundColor: getModeColor(evento.mode) },
+            ]}
+          >
+            🛠 Modalidade: {formatMode(evento.mode)}
+          </Text>
+          <Text
+            style={[
+              styles.statusTag,
+              { backgroundColor: getStatusColor(evento.status) },
+            ]}
+          >
+            📌 Status: {formatStatusText(evento.status)}
+          </Text>
+        </View>
+      </View>
+    ))}
+  </>
 )}
 
 {eventosComObservacao.length > 0 && (
@@ -504,7 +573,7 @@ const HomeScreen = () => {
               },
             ]}
           >
-            🗓 Data: {new Date(event.day).toLocaleDateString("pt-BR")}
+            🗓 Data: {formatDateToBR(event.day)}
           </Text>
         </View>
        
@@ -631,7 +700,7 @@ const HomeScreen = () => {
               },
             ]}
           >
-            🗓 Data: {new Date(event.day).toLocaleDateString("pt-BR")}
+            🗓 Data: {formatDateToBR(event.day)}
           </Text>
         </View>
   
@@ -756,7 +825,7 @@ const HomeScreen = () => {
               },
             ]}
           >
-            🗓 Data: {new Date(event.day).toLocaleDateString("pt-BR")}
+            🗓 Data: {formatDateToBR(event.day)}
           </Text>
         </View>
 

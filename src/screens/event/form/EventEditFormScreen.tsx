@@ -58,6 +58,12 @@ const floorValueByDescription: Record<string, string> = {
   "Inexistente": "4"
 };
 
+const formatDateFromISO = (iso: string): string => {
+  const [year, month, day] = iso.split("T")[0].split("-");
+  const date = new Date(`${year}-${month}-${day}T12:00:00`);
+  return format(date, "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
+};
+
 const EventEditFormScreen = ({ route, navigation }: Props) => {
   const { eventId } = route.params;
   const auth = useContext(AuthContext); 
@@ -117,7 +123,7 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
         const event = await getEventById(auth.user.token, eventId);
         setEventData({
           name: event.name,
-          day: format(new Date(event.day), "dd 'de' MMMM 'de' yyyy", { locale: ptBR }),
+          day: formatDateFromISO(event.day),
           startTime: format(new Date(`${event.day}T${event.startTime}`), "HH:mm"),
           endTime: format(new Date(`${event.day}T${event.endTime}`), "HH:mm"),
           theme: event.theme,
@@ -147,14 +153,15 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
         setCleanupHours(hoursMatch ? hoursMatch[1] : "");
         setCleanupMinutes(minutesMatch ? minutesMatch[1] : "");
         
-        setSelectedDay(new Date(event.day));
+        const [year, month, day] = event.day.split("-").map(Number);
+        setSelectedDay(new Date(year, month - 1, day));
         setStartTimeDate(new Date(`${event.day}T${event.startTime}`));
         setEndTimeDate(new Date(`${event.day}T${event.endTime}`));
 
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        const eventDate = new Date(event.day);
+        const eventDate = new Date(year, month - 1, day);
         eventDate.setHours(0, 0, 0, 0);
 
         setErrors((prev) => {
@@ -245,7 +252,7 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
           handleChange("name", text);
         }}
       />
-       {errors.name && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.name}</Text>}
+     {errors.name && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.name}</Text>}
      {!errors.name && eventData.name.trim() !== "" && (
   <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Nome válido</Text>
 )}
@@ -374,7 +381,7 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
       placeholder="Tema"
       placeholderTextColor={theme === "dark" ? "#aaa" : "#666"} 
       onChangeText={(text) => handleChange("theme", text)} />
-     {errors.theme && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.theme}</Text>}
+          {errors.theme && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.theme}</Text>}
           {!errors.theme && eventData.theme.trim() !== "" && (
             <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Tema válido</Text>
           )}
