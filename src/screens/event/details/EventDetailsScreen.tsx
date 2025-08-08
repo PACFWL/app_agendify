@@ -56,7 +56,8 @@ const formatStatus = (status: string) => {
     EM_ANDAMENTO: "Em Andamento",
     EM_PAUSA: "Em Pausa",
     FINALIZADO: "Finalizado",
-    EM_ANALISE: "Em Análise"
+    EM_ANALISE: "Em Análise",
+    ABANDONADO: "Abandonado"
   };
   return map[status] || status;
 };
@@ -184,12 +185,16 @@ const themeColors = getColors(theme);
       ["Vínculo Disciplinar", event.disciplinaryLink],
       ["Localização", `${event.location.name} - ${event.location.floor}`],
       ["Status", formatStatus(event.status)],
-      ["Status Administrativo", formatAdministrativeStatus(event.administrativeStatus)],
-      ["Prioridade", formatPriority(event.priority)],
       ["Observação", event.observation],
       ["Duração da Limpeza", formatDuration(event.cleanupDuration)],
-      ["Criado em", new Date(event.createdAt).toLocaleString("pt-BR")],
-      ["Última Modificação", new Date(event.lastModifiedAt).toLocaleString("pt-BR")],
+      ...(auth?.user?.role === "MASTER"
+    ? [
+        ["Status Administrativo", formatAdministrativeStatus(event.administrativeStatus)],
+        ["Prioridade", formatPriority(event.priority)],
+        ["Criado em", new Date(event.createdAt).toLocaleString("pt-BR")],
+        ["Última Modificação", new Date(event.lastModifiedAt).toLocaleString("pt-BR")],
+      ]
+    : []),
     ].map(([label, value], idx) => (
       <View key={idx} style={styles.detailRow}>
         <Text style={[styles.label, { color: themeColors.primary }]}>{label}:</Text>

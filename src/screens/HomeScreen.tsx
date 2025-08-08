@@ -68,7 +68,8 @@ const formatStatus = (status: string) => {
     EM_ANDAMENTO: "Em Andamento",
     EM_PAUSA: "Em Pausa",
     FINALIZADO: "Finalizado",
-    EM_ANALISE: "Em Análise"
+    EM_ANALISE: "Em Análise",
+    ABANDONADO: "Abandonado",
   };
   return map[status] || status;
 };
@@ -144,27 +145,36 @@ const getDateColorPorCategoria = (
 
 const getStatusColor = (status: string): string => {
   switch (status) {
+    case "EM_BREVE":
+      return "#e8b91eff";    
     case "PLANEJADO":
-      return "#2196f3";
+      return "#03A9F4";     
     case "EM_ANDAMENTO":
-      return "#4caf50";
-    case "FINALIZADO":
-      return "#9e9e9e";
-    case "EM_ANALISE":
-      return "#ff9800";
+      return "#4CAF50";    
     case "EM_PAUSA":
-      return "#f44336";
+      return "#FF5722";     
+    case "EM_ANALISE":
+      return "#9C27B0";    
+    case "FINALIZADO":
+      return "#607D8B";   
+    case "INDETERMINADO":
+      return "#B0BEC5";     
+    case "ABANDONADO":
+      return "#004093ff";     
     default:
-      return "#607d8b";
+      return "#90A4AE";  
   }
 };
 
 const statusPriority: Record<string, number> = {
-  "EM_ANDAMENTO": 1,
-  "EM_ANALISE": 2,
-  "EM_PAUSA": 3,
-  "PLANEJADO": 4,
-  "FINALIZADO": 5
+  "EM_BREVE": 1,
+  "EM_ANDAMENTO": 2,
+  "EM_ANALISE": 3,
+  "EM_PAUSA": 4,
+  "PLANEJADO": 5,
+  "FINALIZADO": 6,
+  "INDETERMINADO": 7,
+  "ABANDONADO": 8,
 };
 
 const isSameDay = (dateA: Date, dateB: Date): boolean => {
@@ -309,15 +319,6 @@ const eventosEmDestaque = eventosDestaque
   .slice()
   .sort((a, b) => statusPriority[a.status] - statusPriority[b.status])
   .slice(0, 4);
-
-  /**const eventosEmDestaque = eventosVisiveis
-    .filter(e => {
-    const [year, month, day] = e.day.split("-");
-    const eventDate = new Date(Number(year), Number(month) - 1, Number(day));
-    return eventDate >= new Date(today.getFullYear(), today.getMonth(), today.getDate());
-  })
-    .sort((a, b) => statusPriority[a.status] - statusPriority[b.status])
-    .slice(0, 3);**/
 
   const eventoJaPassou = (evento: Event): boolean => {
     const agora = new Date();

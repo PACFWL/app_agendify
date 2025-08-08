@@ -60,13 +60,15 @@ const formatStatus = (status: string) => {
     EM_PAUSA: "Em Pausa",
     FINALIZADO: "Finalizado",
     EM_ANALISE: "Em Análise",
-    INDETERMINADO: "Indeterminado"
+    INDETERMINADO: "Indeterminado",
+    ABANDONADO: "Abandonado"
   };
   return map[status] || status;
 };
 
 const formatAdministrativeStatus = (status: string) => {
   const map: { [key: string]: string } = {
+    NORMAL: "Normal",
     CANCELADO: "Cancelado",
     URGENTE: "Urgente",
     ADIADO: "Adiado",
@@ -90,6 +92,11 @@ const formatPriority = (priority: string) => {
     CRITICA: "Crítica"
   };
   return map[priority] || priority;
+};
+
+const formatDateToBR = (isoDate: string) => {
+  const [year, month, day] = isoDate.split("-");
+  return `${day}/${month}/${year}`;
 };
 
 const formatDuration = (isoDuration: string): string => {
@@ -211,7 +218,7 @@ const requesterValue = pendingEvent.eventRequesterId ? (
 
       <View style={[styles.detailCard, { backgroundColor: themeColors.card }]}>
     {[
-      ["Data", new Date(pendingEvent.day).toLocaleDateString("pt-BR")],
+      ["Data", formatDateToBR(pendingEvent.day)],
       ["Horário", `${pendingEvent.startTime} - ${pendingEvent.endTime}`],
       ["Tema", pendingEvent.theme],
       ["Público-alvo", pendingEvent.targetAudience],
@@ -227,13 +234,23 @@ const requesterValue = pendingEvent.eventRequesterId ? (
       ["Vínculo Disciplinar", pendingEvent.disciplinaryLink],
       ["Localização", `${pendingEvent.location.name} - ${pendingEvent.location.floor}`],
       ["Status", formatStatus(pendingEvent.status)],
-      ["Status Administrativo", formatAdministrativeStatus(pendingEvent.administrativeStatus)],
-      ["Prioridade", formatPriority(pendingEvent.priority)],
       ["Observação", pendingEvent.observation],
       ["Solicitante", requesterValue],
       ["Duração da Limpeza", formatDuration(pendingEvent.cleanupDuration)],
-      ["Criado em", new Date(pendingEvent.createdAt).toLocaleString("pt-BR")],
-      ["Última Modificação", new Date(pendingEvent.lastModifiedAt).toLocaleString("pt-BR")],
+
+      ...(["MASTER", "REQUESTER"].includes(auth?.user?.role || "")
+        ? [
+            ["Status Administrativo", formatAdministrativeStatus(pendingEvent.administrativeStatus)],
+            ["Prioridade", formatPriority(pendingEvent.priority)],
+            ["Criado em", new Date(pendingEvent.createdAt).toLocaleString("pt-BR")],
+          ]
+        : []),
+
+      ...(auth?.user?.role === "MASTER"
+      ? [
+          ["Última Modificação", new Date(pendingEvent.lastModifiedAt).toLocaleString("pt-BR")],
+        ]
+      : []),
     ].map(([label, value], idx) => (
       <View key={idx} style={styles.detailRow}>
         <Text style={[styles.label, { color: themeColors.primary }]}>{label}:</Text>

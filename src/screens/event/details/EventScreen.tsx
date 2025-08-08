@@ -32,6 +32,7 @@ const getPriorityColor = (priority: string) => {
     case "MEDIA": return "#fbc02d";
     case "BAIXA": return "#388e3c";
     case "MUITO_BAIXA": return "#0288d1";
+    case "INDEFINIDO": return "#141a5fff";
     default: return "#90a4ae";
   }
 };
@@ -53,7 +54,8 @@ const formatStatus = (status: string) => {
     EM_ANDAMENTO: "Em Andamento",
     EM_PAUSA: "Em Pausa",
     FINALIZADO: "Finalizado",
-    EM_ANALISE: "Em Análise"
+    EM_ANALISE: "Em Análise",
+    ABANDONADO: "Abandonado"
   };
   return map[status] || status;
 };
@@ -69,14 +71,24 @@ const getModeColor = (mode: string) => {
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case "INDETERMINADO": return "#9e9e9e";
-    case "PLANEJADO": return "#0288d1";
-    case "EM_BREVE": return "#fbc02d";
-    case "EM_ANDAMENTO": return "#43a047";
-    case "EM_PAUSA": return "#f57c00";
-    case "FINALIZADO": return "#455a64";
-    case "EM_ANALISE": return "#7b1fa2";
-    default: return "#90a4ae";
+     case "EM_BREVE":
+      return "#e8b91eff";    
+    case "PLANEJADO":
+      return "#03A9F4";     
+    case "EM_ANDAMENTO":
+      return "#4CAF50";    
+    case "EM_PAUSA":
+      return "#FF5722";     
+    case "EM_ANALISE":
+      return "#9C27B0";    
+    case "FINALIZADO":
+      return "#607D8B";   
+    case "INDETERMINADO":
+      return "#B0BEC5";     
+    case "ABANDONADO":
+      return "#004093ff";     
+    default:
+      return "#90A4AE";  
   }
 };
 

@@ -770,6 +770,7 @@ const EventFormScreen = ({ navigation }: Props) => {
     >
       <Picker.Item label="Selecione o status" value="" />
       <Picker.Item label="Planejado" value="PLANEJADO" />
+      <Picker.Item label="Indeterminado" value="INDETERMINADO" />
     </Picker>
     </View>
       {errors.status && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.status}</Text>}

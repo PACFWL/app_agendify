@@ -49,7 +49,22 @@ const floorOptionsByMode: Record<string, { label: string; value: string }[]> = {
 
 const PendingEventFormScreen = ({ navigation }: Props) => {
   const auth = useContext(AuthContext);
-const { theme } = useContext(ThemeContext);
+  
+const isMaster = auth?.user?.role === "MASTER";
+
+  const { theme } = useContext(ThemeContext);
+
+  const priorityOptions = isMaster
+  ? [
+      { label: "Indefinido", value: "INDEFINIDO" },
+      { label: "Muito Baixa", value: "MUITO_BAIXA" },
+      { label: "Baixa", value: "BAIXA" },
+      { label: "Média", value: "MEDIA" },
+      { label: "Alta", value: "ALTA" },
+      { label: "Crítica", value: "CRITICA" },
+    ]
+  : [{ label: "Indefinido", value: "INDEFINIDO" }];
+  
   const colors = getColors(theme);
   const {
    handleAuthorChange,
@@ -791,8 +806,10 @@ const { theme } = useContext(ThemeContext);
         dropdownIconColor={colors.text}
       onValueChange={(itemValue) => handleChange("priority", itemValue)}
     >
-      <Picker.Item label="Selecione a prioridade" value="" />
-      <Picker.Item label="Indefinido" value="INDEFINIDO" />
+   <Picker.Item label="Selecione a prioridade" value="" />
+{priorityOptions.map((option) => (
+  <Picker.Item key={option.value} label={option.label} value={option.value} />
+))}
     </Picker>
     </View>
         {errors.priority && (

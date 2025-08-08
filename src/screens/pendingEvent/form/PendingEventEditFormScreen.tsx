@@ -58,11 +58,31 @@ const floorValueByDescription: Record<string, string> = {
   "Inexistente": "4"
 };
 
+const formatDateFromISO = (iso: string): string => {
+  const [year, month, day] = iso.split("T")[0].split("-");
+  const date = new Date(`${year}-${month}-${day}T12:00:00`);
+  return format(date, "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
+};
+
 const PendingEventEditFormScreen = ({ navigation, route }: Props) => {
     const { eventId } = route.params;
     const auth = useContext(AuthContext);
 
+    const isMaster = auth?.user?.role === "MASTER";
+
     const {  theme } = useContext(ThemeContext);
+    
+    const priorityOptions = isMaster
+    ? [
+        { label: "Indefinido", value: "INDEFINIDO" },
+        { label: "Muito Baixa", value: "MUITO_BAIXA" },
+        { label: "Baixa", value: "BAIXA" },
+        { label: "Média", value: "MEDIA" },
+        { label: "Alta", value: "ALTA" },
+        { label: "Crítica", value: "CRITICA" },
+      ]
+    : [{ label: "Indefinido", value: "INDEFINIDO" }];
+
     const colors = getColors(theme);
 
   const {
@@ -116,7 +136,7 @@ const PendingEventEditFormScreen = ({ navigation, route }: Props) => {
           const event = await getPendingEventById(auth.user.token, eventId);
           setEventData({
             name: event.name,
-            day: format(new Date(event.day), "dd 'de' MMMM 'de' yyyy", { locale: ptBR }),
+            day: formatDateFromISO(event.day),
             startTime: format(new Date(`${event.day}T${event.startTime}`), "HH:mm"),
             endTime: format(new Date(`${event.day}T${event.endTime}`), "HH:mm"),
             theme: event.theme,
@@ -146,14 +166,15 @@ const PendingEventEditFormScreen = ({ navigation, route }: Props) => {
           setCleanupHours(hoursMatch ? hoursMatch[1] : "");
           setCleanupMinutes(minutesMatch ? minutesMatch[1] : "");
 
-          setSelectedDay(new Date(event.day));
+          const [year, month, day] = event.day.split("-").map(Number);
+          setSelectedDay(new Date(year, month - 1, day));
           setStartTimeDate(new Date(`${event.day}T${event.startTime}`));
           setEndTimeDate(new Date(`${event.day}T${event.endTime}`));
           
           const today = new Date();
           today.setHours(0, 0, 0, 0);
 
-          const eventDate = new Date(event.day);
+          const eventDate = new Date(year, month - 1, day);
           eventDate.setHours(0, 0, 0, 0);
 
           setErrors((prev) => {
@@ -802,10 +823,12 @@ const PendingEventEditFormScreen = ({ navigation, route }: Props) => {
       >
         <Picker.Item label="Em Análise" value="EM_ANALISE" />
         <Picker.Item label="Indeterminado" value="INDETERMINADO" />
+        <Picker.Item label="Abandonado" value="ABANDONADO" />
+
       </Picker>
-</View>
-{errors.status && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.status}</Text>}
-            {!errors.status && eventData.status !== "" && (
+      </View>
+      {errors.status && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.status}</Text>}
+                  {!errors.status && eventData.status !== "" && (
         <Text style={{ color: colors.success, marginBottom: 5 }}>✓ Status válido</Text>
       )}
 
@@ -832,6 +855,7 @@ const PendingEventEditFormScreen = ({ navigation, route }: Props) => {
       >
         <Picker.Item label="Selecione o status administrativo" value="" />
         <Picker.Item label="Aguardando" value="AGUARDANDO" />
+        <Picker.Item label="Recusado" value="RECUSADO" />
       </Picker>
 </View>
    {errors.administrativeStatus && (
@@ -864,13 +888,10 @@ const PendingEventEditFormScreen = ({ navigation, route }: Props) => {
         style={[styles.picker, { color: colors.text }]}
         dropdownIconColor={colors.text}
       >
-        <Picker.Item label="Selecione a prioridade" value="" />
-        <Picker.Item label="Indefinido" value="INDEFINIDO" />
-        <Picker.Item label="Muito Baixa" value="MUITO_BAIXA" />
-        <Picker.Item label="Baixa" value="BAIXA" />
-        <Picker.Item label="Média" value="MEDIA" />
-        <Picker.Item label="Alta" value="ALTA" />
-        <Picker.Item label="Crítica" value="CRITICA" />
+   <Picker.Item label="Selecione a prioridade" value="" />
+      {priorityOptions.map((option) => (
+        <Picker.Item key={option.value} label={option.label} value={option.value} />
+      ))}
       </Picker>
       </View>
          {errors.priority && (

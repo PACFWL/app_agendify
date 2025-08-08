@@ -844,12 +844,13 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
         dropdownIconColor={colors.text}
       > 
         <Picker.Item label="Indeterminado" value="INDETERMINADO" />
+        <Picker.Item label="Em Análise" value="EM_ANALISE" />
         <Picker.Item label="Planejado" value="PLANEJADO" />
         <Picker.Item label="Em Breve" value="EM_BREVE" />
         <Picker.Item label="Em Andamento" value="EM_ANDAMENTO" />
         <Picker.Item label="Em Pausa" value="EM_PAUSA" />
         <Picker.Item label="Finalizado" value="FINALIZADO" />
-        <Picker.Item label="Aprovado" value="APROVADO" />
+        <Picker.Item label="Abandonado" value="ABANDONADO" />
       </Picker>
 </View>
       {errors.status && <Text style={{ color: colors.error, marginBottom: 5 }}>{errors.status}</Text>}
@@ -887,6 +888,7 @@ const EventEditFormScreen = ({ route, navigation }: Props) => {
         <Picker.Item label="Adiado" value="ADIADO" />
         <Picker.Item label="Atrasado" value="ATRASADO" />
         <Picker.Item label="Indefinido" value="INDEFINIDO" />
+        <Picker.Item label="Recusado" value="RECUSADO" />
       </Picker>
 </View>
           {errors.administrativeStatus && (
