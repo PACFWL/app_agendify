@@ -34,7 +34,12 @@ type Event = {
   priority: string;
   observation: string;
 };
- 
+
+const formatDateToBR = (isoDate: string) => {
+  const [year, month, day] = isoDate.split("-");
+  return `${day}/${month}/${year}`;
+};
+
 const SearchScreen = ({ navigation }: Props) => {
   const auth = useContext(AuthContext);
 
@@ -72,7 +77,7 @@ const SearchScreen = ({ navigation }: Props) => {
   const {  theme: currentTheme } = useContext(ThemeContext);
   const colors = getColors(currentTheme);
 
-const [name, setName] = useState("");
+  const [name, setName] = useState("");
   const [organizer, setOrganizer] = useState("");
   const [status, setStatus] = useState("");
   const [theme, setTheme] = useState("");
@@ -247,12 +252,14 @@ const showPicker = (type: "date" | "start" | "end") => {
     itemStyle={{ color: colors.text }} 
               >
                 <Picker.Item label="Selecione o status" value="" />
+                <Picker.Item label="Indeterminado" value="INDETERMINADO" />
+                <Picker.Item label="Em Análise" value="EM_ANALISE" />
                 <Picker.Item label="Planejado" value="PLANEJADO" />
                 <Picker.Item label="Em Breve" value="EM_BREVE" />
                 <Picker.Item label="Em Andamento" value="EM_ANDAMENTO" />
                 <Picker.Item label="Em Pausa" value="EM_PAUSA" />
                 <Picker.Item label="Finalizado" value="FINALIZADO" />
-                <Picker.Item label="Aprovado" value="APROVADO" />
+                <Picker.Item label="Abandonado" value="ABANDONADO" />
               </Picker>
             </View>
             <TextInput style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}
@@ -283,6 +290,7 @@ const showPicker = (type: "date" | "start" | "end") => {
                 itemStyle={{ color: colors.text }} 
               >
                 <Picker.Item label="Selecione a prioridade" value="" />
+                <Picker.Item label="Indefinido" value="INDEFINIDO" />
                 <Picker.Item label="Muito Baixa" value="MUITO_BAIXA" />
                 <Picker.Item label="Baixa" value="BAIXA" />
                 <Picker.Item label="Média" value="MEDIA" />
@@ -333,6 +341,7 @@ const showPicker = (type: "date" | "start" | "end") => {
                 <Picker.Item label="Adiado" value="ADIADO" />
                 <Picker.Item label="Atrasado" value="ATRASADO" />
                 <Picker.Item label="Indefinido" value="INDEFINIDO" />
+                <Picker.Item label="Recusado" value="RECUSADO" />
               </Picker>
             </View>
             <TextInput style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.accent }]}
@@ -379,6 +388,7 @@ const showPicker = (type: "date" | "start" | "end") => {
               ))}
             </Picker>
             </View>
+            
             <Text  style={[styles.label, { color: colors.text }]}>Data:</Text>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <TouchableOpacity onPress={() => showPicker("date")} style={{ flex: 1 }}>
@@ -440,8 +450,7 @@ const showPicker = (type: "date" | "start" | "end") => {
                 />
               )}
           <View style={{ flexDirection: "row", alignItems: "center", marginVertical: 10 }}>
-            <Text  style={[styles.label, { color: colors.text }, { marginRight: 10 }]}       >Busca por intervalo?</Text>
-          
+            <Text  style={[styles.label, { color: colors.text }, { marginRight: 10 }]}>Busca por intervalo?</Text>   
   <Switch
         value={intervalSearch}
        onValueChange={setIntervalSearch}
@@ -468,7 +477,6 @@ const showPicker = (type: "date" | "start" | "end") => {
             </View>
           </>
         )}
-
           <TouchableOpacity
             style={[
               styles.button,
@@ -503,7 +511,7 @@ const showPicker = (type: "date" | "start" | "end") => {
           >
             <Text style={[styles.eventTitle, { color: colors.primary }]}>{item.name}</Text>
             <Text style={{ color: colors.cardText }}>
-             {new Date(item.day).toLocaleDateString("pt-BR")} - {item.startTime} às {item.endTime}
+             {formatDateToBR(item.day)} - {item.startTime} às {item.endTime}
             </Text>
             <Text style={{ color: colors.cardText }}>Tema: {item.theme}</Text>
             <Text style={{ color: colors.cardText }}>Organizador: {item.organizer}</Text>

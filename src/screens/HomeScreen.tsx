@@ -343,7 +343,7 @@ const eventosEmDestaque = eventosDestaque
       .replace(/_/g, " ")
       .replace(/(^\w{1}|\s+\w{1})/g, letter => letter.toUpperCase());
 
-    return status.endsWith("_PASSADO") ? `${texto} (Já ocorreu)` : texto;
+    return status.endsWith("_PASSADO") ? `${texto} (Ocorrido)` : texto;
   };
 
   return (
@@ -522,157 +522,157 @@ const eventosEmDestaque = eventosDestaque
   </>
 )}
 
-{eventosComObservacao.length > 0 && (
-  <View style={styles.alertBox}>
-    <Text style={styles.alertTitle}>📢 Avisos</Text>
-{[...eventosComObservacaoFuturos, ...eventosComObservacaoPassados].slice(0, 10).map(e => (
-  <Text key={e.id} style={styles.alertText}>
-    • {e.name}: {e.observation}
-    {eventoJaPassou(e) && " (já ocorreu)"}
-  </Text>
-))}
-  </View>
-)}
-
-<View style={styles.statusSummaryContainer}>
-  <Text style={styles.sectionTitle}>📊 Eventos por Status</Text>
-
-  {Object.entries(contagemPorStatus).map(([status, count]) => (
-    <View key={status} style={styles.statusRow}>
-      <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(status) }]} />
-      <Text style={styles.statusLabel}>
-        {formatStatusText(status)}: {count}
-      </Text>
-    </View>
-  ))}
-</View>
-
- <Text style={styles.sectionTitle}>📅 Eventos de Hoje</Text>
-
-{eventosDoDia.length === 0 ? (
-  <Text style={styles.noEventText}>Nenhum evento hoje.</Text>
-) : (
-  eventosDoDia.map(event => (
-    <TouchableOpacity
-      key={event.id}
-      onPress={() => navigation.navigate("EventDetails", { eventId: event.id })}
-    >
-      <View style={[styles.card, { borderLeftColor: getStatusColor(event.status) }]}>
-        <Text style={styles.cardTitle}>{event.name}</Text>
-
-        <View style={styles.tagsRow}>
-          <Text
-            style={[
-              styles.tag,
-              {
-                backgroundColor: getDateColorPorCategoria(
-                  event.day,
-                  today.toISOString(),
-                  "hoje"
-                ),
-                color: colors.statusText,
-              },
-            ]}
-          >
-            🗓 Data: {formatDateToBR(event.day)}
-          </Text>
-        </View>
-       
-        <View style={styles.tagsRow}>
-          <Text style={[styles.tag, { backgroundColor: "#37474f", color: colors.statusText }]}>
-            ⏰ Início: {event.startTime}
-          </Text>
-          <Text style={[styles.tag, { backgroundColor: "#37474f", color: colors.statusText }]}>
-            ⏰ Término: {event.endTime}
-          </Text>
-        </View>
-     
-        <View style={styles.tagsRow}>
-       <Text
-        style={[
-          styles.tag,
-          {
-            backgroundColor: getThemeBackgroundColor(theme),
-            color: colors.statusText,
-          },
-        ]}
-      >
-        🎯 Tema: {event.theme}
-      </Text>
-
-       <Text
-        style={[
-          styles.tag,
-          {
-            backgroundColor: getTargetAudienceColor(theme),
-            color: colors.statusText,
-          },
-        ]}
-      >
-        🎓 Público-Alvo: {event.targetAudience}
-      </Text>
-        </View>
-       
-        <View style={styles.tagsRow}>
-          <Text
-            style={[
-              styles.tag,
-              styles.locationTag,
-              {
-                backgroundColor: getLocationColor(event.location.name),
-                borderWidth: event.location.name === "A definir" ? 1.5 : 0,
-                borderColor: event.location.name === "A definir" ? "#b71c1c" : "transparent",
-              },
-            ]}
-          >
-            📍 Localidade: {event.location.name}
-          </Text>
-          <Text
-            style={[
-              styles.tag,
-              styles.locationTag,
-              {
-                backgroundColor: getLocationColor(event.location.floor),
-                borderWidth: event.location.floor === "A definir" ? 1.5 : 0,
-                borderColor: event.location.floor === "A definir" ? "#b71c1c" : "transparent",
-              },
-            ]}
-          >
-            🗺 Piso: {event.location.floor}
-          </Text>
-        </View>
-
-    <View style={styles.tagsRow}>
-      <Text
-        style={[
-          styles.tag,
-          {
-            backgroundColor: getOrganizerColor(theme),
-            color: colors.statusText,
-          },
-        ]}
-      >
-        🧑‍🏫 Organizador: {event.organizer}
-      </Text>
-    </View>
-
-        <View style={styles.tagsRow}>
-          {role === "MASTER" && (
-            <Text style={[styles.tag, { backgroundColor: getPriorityColor(event.priority) }]}>
-              🔼 Prioridade: {formatPriority(event.priority)}
+          {eventosComObservacao.length > 0 && (
+            <View style={styles.alertBox}>
+              <Text style={styles.alertTitle}>📢 Avisos</Text>
+          {[...eventosComObservacaoFuturos, ...eventosComObservacaoPassados].slice(0, 10).map(e => (
+            <Text key={e.id} style={styles.alertText}>
+              • {e.name}: {e.observation}
+              {eventoJaPassou(e) && " (Ocorrido)"}
             </Text>
+          ))}
+            </View>
           )}
-          <Text style={[styles.tag, { backgroundColor: getModeColor(event.mode) }]}>
-            🛠 Modalidade: {formatMode(event.mode)}
-          </Text>
-          <Text style={[styles.tag, { backgroundColor: getStatusColor(event.status) }]}>
-            📌 Status: {formatStatus(event.status)}
-          </Text>
-        </View>
-      </View>
-    </TouchableOpacity>
-  ))
-)}
+
+          <View style={styles.statusSummaryContainer}>
+            <Text style={styles.sectionTitle}>📊 Eventos por Status</Text>
+
+            {Object.entries(contagemPorStatus).map(([status, count]) => (
+              <View key={status} style={styles.statusRow}>
+                <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(status) }]} />
+                <Text style={styles.statusLabel}>
+                  {formatStatusText(status)}: {count}
+                </Text>
+              </View>
+            ))}
+          </View>
+
+          <Text style={styles.sectionTitle}>📅 Eventos de Hoje</Text>
+
+        {eventosDoDia.length === 0 ? (
+          <Text style={styles.noEventText}>Nenhum evento hoje.</Text>
+        ) : (
+          eventosDoDia.map(event => (
+            <TouchableOpacity
+              key={event.id}
+              onPress={() => navigation.navigate("EventDetails", { eventId: event.id })}
+            >
+              <View style={[styles.card, { borderLeftColor: getStatusColor(event.status) }]}>
+                <Text style={styles.cardTitle}>{event.name}</Text>
+
+                <View style={styles.tagsRow}>
+                  <Text
+                    style={[
+                      styles.tag,
+                      {
+                        backgroundColor: getDateColorPorCategoria(
+                          event.day,
+                          today.toISOString(),
+                          "hoje"
+                        ),
+                        color: colors.statusText,
+                      },
+                    ]}
+                  >
+                    🗓 Data: {formatDateToBR(event.day)}
+                  </Text>
+                </View>
+              
+                <View style={styles.tagsRow}>
+                  <Text style={[styles.tag, { backgroundColor: "#37474f", color: colors.statusText }]}>
+                    ⏰ Início: {event.startTime}
+                  </Text>
+                  <Text style={[styles.tag, { backgroundColor: "#37474f", color: colors.statusText }]}>
+                    ⏰ Término: {event.endTime}
+                  </Text>
+                </View>
+            
+                <View style={styles.tagsRow}>
+              <Text
+                style={[
+                  styles.tag,
+                  {
+                    backgroundColor: getThemeBackgroundColor(theme),
+                    color: colors.statusText,
+                  },
+                ]}
+              >
+                🎯 Tema: {event.theme}
+              </Text>
+
+              <Text
+                style={[
+                  styles.tag,
+                  {
+                    backgroundColor: getTargetAudienceColor(theme),
+                    color: colors.statusText,
+                  },
+                ]}
+              >
+                🎓 Público-Alvo: {event.targetAudience}
+              </Text>
+                </View>
+              
+                <View style={styles.tagsRow}>
+                  <Text
+                    style={[
+                      styles.tag,
+                      styles.locationTag,
+                      {
+                        backgroundColor: getLocationColor(event.location.name),
+                        borderWidth: event.location.name === "A definir" ? 1.5 : 0,
+                        borderColor: event.location.name === "A definir" ? "#b71c1c" : "transparent",
+                      },
+                    ]}
+                  >
+                    📍 Localidade: {event.location.name}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.tag,
+                      styles.locationTag,
+                      {
+                        backgroundColor: getLocationColor(event.location.floor),
+                        borderWidth: event.location.floor === "A definir" ? 1.5 : 0,
+                        borderColor: event.location.floor === "A definir" ? "#b71c1c" : "transparent",
+                      },
+                    ]}
+                  >
+                    🗺 Piso: {event.location.floor}
+                  </Text>
+                </View>
+
+            <View style={styles.tagsRow}>
+              <Text
+                style={[
+                  styles.tag,
+                  {
+                    backgroundColor: getOrganizerColor(theme),
+                    color: colors.statusText,
+                  },
+                ]}
+              >
+                🧑‍🏫 Organizador: {event.organizer}
+              </Text>
+            </View>
+
+                <View style={styles.tagsRow}>
+                  {role === "MASTER" && (
+                    <Text style={[styles.tag, { backgroundColor: getPriorityColor(event.priority) }]}>
+                      🔼 Prioridade: {formatPriority(event.priority)}
+                    </Text>
+                  )}
+                  <Text style={[styles.tag, { backgroundColor: getModeColor(event.mode) }]}>
+                    🛠 Modalidade: {formatMode(event.mode)}
+                  </Text>
+                  <Text style={[styles.tag, { backgroundColor: getStatusColor(event.status) }]}>
+                    📌 Status: {formatStatus(event.status)}
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          ))
+        )}
 
    <Text style={styles.sectionTitle}>🗓️ Eventos da Semana</Text>
 
