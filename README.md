@@ -1,97 +1,128 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# 📅 Agendify - Frontend
 
-# Getting Started
+**Agendify** é um aplicativo mobile desenvolvido em **React Native** com **TypeScript**, voltado para o gerenciamento de eventos, usuários e calendário.  
+O app permite criar, visualizar, editar e excluir **Eventos**, **Eventos Pendentes**, **Usuários** e **Usuários Pendentes**, além de oferecer funcionalidades de **Login**, **Logout** e **Cadastro** de usuários.  
+O projeto é otimizado para ser compilado e exportado para **Android (.apk)** utilizando **Android Studio**.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+---
 
-## Step 1: Start Metro
+## 🚀 Funcionalidades
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+### 📆 Eventos
+- Criar, visualizar, editar e excluir eventos.
+- Gerenciar conflitos de agendamento.
+- Visualizar detalhes de eventos.
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+### ⏳ Eventos Pendentes
+- Aprovar ou rejeitar eventos enviados para validação.
+- Editar ou remover eventos pendentes.
+- Resolver conflitos de eventos pendentes.
 
-```sh
-# Using npm
-npm start
+### 👤 Usuários
+- CRUD completo de usuários.
+- Visualizar perfil e detalhes.
+- Editar informações do usuário.
 
-# OR using Yarn
-yarn start
+### 🕒 Usuários Pendentes
+- Aprovar ou rejeitar novos cadastros.
+- Editar dados antes da aprovação.
+
+### 📅 Calendário
+- Visualização de eventos no calendário.
+- Navegação por dias, semanas e meses.
+- Integração com dados de eventos e eventos pendentes.
+
+### 🔐 Autenticação
+- Login e Logout.
+- Cadastro de novos usuários.
+- Controle de acesso baseado em permissões.
+
+---
+
+## 📂 Estrutura de Pastas
+
 ```
 
-## Step 2: Build and run your app
+src/
+├── api/                 # Integração com a API backend via Fetch API
+├── components/          # Componentes reutilizáveis
+├── contexts/            # Contextos globais (Auth, Tema, etc.)
+├── hooks/               # Hooks customizados para formulários e lógica
+├── routes/              # Configuração de navegação
+├── screens/             # Telas do aplicativo
+├── styles/              # Estilos globais
+└── App.tsx              # Arquivo principal
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+````
 
-### Android
+---
 
-```sh
-# Using npm
-npm run android
+## 🛠️ Tecnologias Utilizadas
 
-# OR using Yarn
-yarn android
-```
+- **React Native** (com **TypeScript**)
+- **Context API** para gerenciamento de estado global
+- **React Navigation** para rotas
+- **Fetch API** para requisições HTTP
+- **Styled Components** / Stylesheets para estilização
+- **Android Studio** para build e exportação `.apk`
 
-### iOS
+---
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+## 📦 Como Rodar o Projeto
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+### Pré-requisitos
+- **Node.js** (>= 18)
+- **npm** ou **yarn**
+- **Java JDK** (>= 17)
+- **Android Studio** (com SDK configurado)
+- **Emulador Android** ou dispositivo físico
 
-```sh
-bundle install
-```
+### Passos para execução
+```bash
+# Clonar o repositório
+git clone https://github.com/seu-usuario/agendify-frontend.git
 
-Then, and every time you update your native dependencies, run:
+# Entrar na pasta
+cd agendify-frontend
 
-```sh
-bundle exec pod install
-```
+# Instalar dependências
+npm install
+# ou
+yarn install
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+# Rodar no emulador/dispositivo
+npx react-native run-android
+````
 
-```sh
-# Using npm
-npm run ios
+---
 
-# OR using Yarn
-yarn ios
-```
+## 📤 Exportando .apk pelo Android Studio
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+1. Abra o projeto no **Android Studio** (`/android`).
+2. Vá em **Build > Build Bundle(s) / APK(s) > Build APK(s)**.
+3. O `.apk` será gerado na pasta `android/app/build/outputs/apk/release/`.
+4. Transfira para o dispositivo e instale.
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+---
 
-## Step 3: Modify your app
+## 🤝 Contribuindo
 
-Now that you have successfully run the app, let's make changes!
+1. Faça um **fork** do projeto.
+2. Crie uma branch para sua feature:
+   `git checkout -b minha-feature`
+3. Commit suas alterações:
+   `git commit -m 'Minha nova feature'`
+4. Envie para o repositório remoto:
+   `git push origin minha-feature`
+5. Abra um **Pull Request**.
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+---
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+## 📜 Licença
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+Este projeto está sob a licença MIT.
+Sinta-se livre para usar, modificar e distribuir.
 
-## Congratulations! :tada:
+---
 
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+💡 *Agendify - Simplificando a organização do seu tempo!*
